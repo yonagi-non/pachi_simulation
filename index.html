@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>10機種 確率シミュレーター v7.9</title>
+<title>10機種 確率シミュレーター v8.0</title>
 <style>
 :root{
   color-scheme:dark;
@@ -49,6 +49,24 @@ svg{width:100%;height:auto;background:#0f1622;border:1px solid var(--line);borde
 .history>div{border:1px solid var(--line);background:var(--panel2);border-radius:12px;padding:9px;font-size:13px}
 .history-main{line-height:1.45}
 .history-breakdown{display:block;margin-top:5px;color:var(--muted);line-height:1.45}
+.result-history-head{justify-content:space-between;align-items:center}
+.saved-session-list{display:grid;gap:9px;margin-top:10px}
+.saved-session{border:1px solid var(--line);border-radius:14px;background:var(--panel2);overflow:hidden}
+.saved-session>summary{list-style:none;cursor:pointer;padding:11px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.saved-session>summary::-webkit-details-marker{display:none}
+.saved-session-title{min-width:0}
+.saved-session-title strong{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.saved-session-title small{display:block;margin-top:3px}
+.saved-session-net{font-size:17px;font-weight:900;white-space:nowrap}
+.saved-session-body{border-top:1px solid var(--line);padding:11px}
+.saved-session-quick{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:10px}
+.saved-session-quick>div{border:1px solid var(--line);border-radius:11px;padding:7px;text-align:center;background:var(--panel)}
+.saved-session-quick b{display:block;margin-top:2px;font-size:15px}
+.saved-session-stats{grid-template-columns:1fr 1fr;gap:6px 10px;font-size:13px}
+.saved-session-stats>div:nth-child(even){text-align:right;font-weight:700}
+.saved-session-actions{display:flex;justify-content:flex-end;margin-top:10px}
+.saved-session-actions button{min-height:34px;padding:6px 10px}
+.storage-note{display:block;margin-top:7px;line-height:1.45}
 .resultgrid{grid-template-columns:1fr 1fr}
 .result-graph-metrics{grid-template-columns:repeat(3,minmax(0,1fr));margin:10px 0}
 .result-graph-metrics>div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:9px;text-align:center}
@@ -316,6 +334,7 @@ button.busy{opacity:.58;cursor:wait}
 
 @media(max-width:430px){
   .achievement-grid{grid-template-columns:1fr}
+  .saved-session-quick{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 </style>
 </head>
@@ -348,7 +367,7 @@ button.busy{opacity:.58;cursor:wait}
       </div>
     </div>
   </div>
-  <h1>10機種 確率シミュレーター <span class="muted">v7.9 全10機種監査修正版</span></h1>
+  <h1>10機種 確率シミュレーター <span class="muted">v8.0 リザルト・プレー履歴版</span></h1>
 
   <section class="card">
     <div class="grid top">
@@ -400,6 +419,20 @@ button.busy{opacity:.58;cursor:wait}
       <button id="resetAchievements" type="button" class="secondary" style="min-height:38px;padding:7px 11px">リセット</button>
     </summary>
     <div id="achievementGrid" class="achievement-groups"></div>
+  </details>
+
+  <details class="card" style="margin-top:12px">
+    <summary class="row" style="justify-content:space-between">
+      <div>
+        <h2>過去のプレー履歴 <span id="playHistoryCount" class="badge">0件</span></h2>
+        <small>遊技終了時に、この端末へ最大50件保存</small>
+      </div>
+      <button id="clearPlayHistory" type="button" class="secondary" style="min-height:38px;padding:7px 11px">全削除</button>
+    </summary>
+    <small class="storage-note">ブラウザのデータを消すと履歴も消えます。ほかの端末とは共有されません。</small>
+    <div id="playHistoryList" class="saved-session-list">
+      <small>まだ保存されたプレー履歴はありません</small>
+    </div>
   </details>
 
   <section id="seatArea" style="margin-top:12px">
@@ -521,6 +554,18 @@ button.busy{opacity:.58;cursor:wait}
       </div>
     </div>
 
+    <div class="card" style="margin-top:10px">
+      <div class="row result-history-head">
+        <div>
+          <h2>今回の大当たり履歴 <span id="resultHitCount" class="badge">0件</span></h2>
+          <small id="resultSavedNote">遊技終了時に端末へ保存されます</small>
+        </div>
+      </div>
+      <div id="resultHistory" class="history" style="margin-top:9px">
+        <small>まだ大当たりなし</small>
+      </div>
+    </div>
+
     <div id="sessionAchievementCard" class="card hidden" style="margin-top:10px">
       <h2>今回解除した実績</h2>
       <div id="sessionAchievements" class="grid session-achievements" style="margin-top:8px"></div>
@@ -534,7 +579,7 @@ button.busy{opacity:.58;cursor:wait}
 
   <p class="muted" style="font-size:12px;line-height:1.5">
     現金・換金要素のない確率ゲームです。機種名と演出名はオリジナルです。
-    10機種すべてオリジナル名称で、現金・換金要素のない確率シミュレーターです。紅月ひきこもりCZは、CZ消化中の玉使用を投資へ反映し、公表の成功約33%・継続約77%から1回転確率を逆算しています。基準回転率は16.8回/250玉です。 終了成績では、その日の差玉推移をスランプグラフで確認できます。 仮面継承199と爆速職人RUSHは、元スペック表に合わせて出玉・LT残保留・上乗せループを再監査済みです。 白角覚醒RUSHと閃光ストライクSTも、基準回転率と3000玉の1500玉×2回集計を再監査済みです。 南国マリンは基準17.8回/250玉とし、STを含む電サポ中を左打ち2玉/回転の消費で再監査済みです。 王道暴走ST・黄金7500バトル・喰壊ラッシュ・恋神カフェタイムも、基準回転率、複数大当たり集計、右打ち削り、特殊上乗せを再監査済みです。
+    10機種すべてオリジナル名称で、現金・換金要素のない確率シミュレーターです。紅月ひきこもりCZは、CZ消化中の玉使用を投資へ反映し、公表の成功約33%・継続約77%から1回転確率を逆算しています。基準回転率は16.8回/250玉です。 終了成績では、その日の差玉推移をスランプグラフで確認できます。 仮面継承199と爆速職人RUSHは、元スペック表に合わせて出玉・LT残保留・上乗せループを再監査済みです。 白角覚醒RUSHと閃光ストライクSTも、基準回転率と3000玉の1500玉×2回集計を再監査済みです。 南国マリンは基準17.8回/250玉とし、STを含む電サポ中を左打ち2玉/回転の消費で再監査済みです。 王道暴走ST・黄金7500バトル・喰壊ラッシュ・恋神カフェタイムも、基準回転率、複数大当たり集計、右打ち削り、特殊上乗せを再監査済みです。終了リザルトでは今回の大当たり履歴を確認でき、終了したプレー結果は最大50件までこの端末に保存されます。
   </p>
 </div>
 
@@ -595,6 +640,8 @@ const ui={
  invested:$('invested'),lossLabel:$('lossLabel'),rightLoss:$('rightLoss'),paid:$('paid'),hits:$('hits'),
  peak:$('peak'),graph:$('graph'),dot:$('dot'),history:$('history'),
  headline:$('headline'),stats:$('stats'),reveal:$('reveal'),again:$('again'),
+ resultHistory:$('resultHistory'),resultHitCount:$('resultHitCount'),resultSavedNote:$('resultSavedNote'),
+ playHistoryList:$('playHistoryList'),playHistoryCount:$('playHistoryCount'),clearPlayHistory:$('clearPlayHistory'),
  resultGraph:$('resultGraph'),resultDot:$('resultDot'),resultZeroLine:$('resultZeroLine'),
  resultGraphStatus:$('resultGraphStatus'),resultGraphHigh:$('resultGraphHigh'),
  resultGraphLow:$('resultGraphLow'),resultGraphMY:$('resultGraphMY'),
@@ -621,6 +668,27 @@ let hall=[],s=null;
 
 const ACHIEVEMENT_STORAGE_KEY='pachiSimulatorAchievementsV2';
 const OLD_ACHIEVEMENT_STORAGE_KEY='pachiSimulatorAchievementsV1';
+const PLAY_HISTORY_STORAGE_KEY='pachiSimulatorPlayHistoryV1';
+const MAX_PLAY_HISTORY=50;
+
+function loadPlayHistory(){
+ try{
+  const value=JSON.parse(localStorage.getItem(PLAY_HISTORY_STORAGE_KEY)||'[]');
+  return Array.isArray(value)?value:[];
+ }catch(_){
+  return [];
+ }
+}
+let playHistoryData=loadPlayHistory();
+
+function savePlayHistory(){
+ try{
+  localStorage.setItem(PLAY_HISTORY_STORAGE_KEY,JSON.stringify(playHistoryData));
+  return true;
+ }catch(_){
+  return false;
+ }
+}
 
 const ACHIEVEMENT_GROUPS=[
  {
@@ -1620,7 +1688,8 @@ function start(machine){
   preAlertMode:ui.preAlertMode.value,
   silentHitEnabled:ui.silentHitEnabled.checked,
   preAlerts:0,preAlertSuccess:0,
-  sessionUnlocked:[]
+  sessionUnlocked:[],
+  savedSessionId:null
  };
  ui.spec.disabled=true;
  ui.preAlertMode.disabled=false;
@@ -2598,11 +2667,9 @@ function breakdownText(breakdown={}){
  });
  return entries.map(([label,count])=>`${label}×${count}`).join('／');
 }
-function appendHistory(h){
- s.log.push(h);
- if(s.log.length===1)ui.history.innerHTML='';
+function createHitHistoryEntry(h,type){
  const d=document.createElement('div');
- d.className=`hit-${s.sp.type}`;
+ d.className=`hit-${type}`;
 
  const main=document.createElement('div');
  main.className='history-main';
@@ -2617,7 +2684,28 @@ function appendHistory(h){
   d.appendChild(sub);
  }
 
- ui.history.prepend(d);
+ return d;
+}
+
+function renderHitHistory(container,log,type,newestFirst=true){
+ container.textContent='';
+ const items=Array.isArray(log)?[...log]:[];
+
+ if(!items.length){
+  const empty=document.createElement('small');
+  empty.textContent='まだ大当たりなし';
+  container.appendChild(empty);
+  return;
+ }
+
+ if(newestFirst)items.reverse();
+ items.forEach(h=>container.appendChild(createHitHistoryEntry(h,type)));
+}
+
+function appendHistory(h){
+ s.log.push(h);
+ if(s.log.length===1)ui.history.textContent='';
+ ui.history.prepend(createHitHistoryEntry(h,s.sp.type));
 }
 function closeHit(result){
  const carriedSpins=s.right&&s.right.kind!=='gold'?(s.right.segmentSpins||0):0;
@@ -2709,6 +2797,202 @@ function drawResultGraph(){
   ?'折れ線は通常投入と電サポ中消費を差し引いた推移です。'
   :'折れ線は通常投入と右打ち削りを差し引いた推移です。';
 }
+function formatSavedDate(value){
+ try{
+  return new Intl.DateTimeFormat('ja-JP',{
+   year:'numeric',month:'2-digit',day:'2-digit',
+   hour:'2-digit',minute:'2-digit'
+  }).format(new Date(value));
+ }catch(_){
+  return String(value||'日時不明');
+ }
+}
+
+function newSavedSessionId(){
+ if(typeof crypto!=='undefined'&&typeof crypto.randomUUID==='function'){
+  return crypto.randomUUID();
+ }
+ return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function makeSessionRecord(reason){
+ const actual=s.invested?s.normalSpins/s.invested*250:0;
+ return {
+  id:newSavedSessionId(),
+  endedAt:new Date().toISOString(),
+  reason,
+  machineType:s.sp.type,
+  machineName:s.sp.name,
+  seat:s.machine.no,
+  internalRate:Number(s.machine.rate.toFixed(2)),
+  rateCategory:s.machine.category,
+  finalNet:net(),
+  normalSpins:s.normalSpins,
+  totalSpins:s.totalSpins,
+  currentSpins:s.sinceHit,
+  initialHits:s.initialHits,
+  charges:s.charges,
+  rushEntries:s.rushEntries,
+  rightHits:s.rightHits,
+  rightPaid:s.rightPaid,
+  invested:s.invested,
+  supportCost:s.rightLoss,
+  supportCostLabel:s.sp.type==='marine'?'電サポ中消費':'右打ち削り',
+  paid:s.paid,
+  maxHamari:s.maxHamari,
+  maxChain:s.maxChain,
+  peak:s.peak,
+  low:s.low,
+  maxMY:s.peak-s.low,
+  actualRate:Number(actual.toFixed(2)),
+  roundTime:s.roundTime,
+  preAlertMode:preAlertDisplayLabel(s.preAlertMode,s.sp.type),
+  log:s.log.map(h=>({
+   spin:h.spin,
+   result:h.result,
+   chain:h.chain,
+   payout:h.payout,
+   breakdown:{...(h.breakdown||{})}
+  }))
+ };
+}
+
+function saveCurrentSession(reason){
+ if(!s||s.savedSessionId)return true;
+
+ const record=makeSessionRecord(reason);
+ const previous=playHistoryData;
+ playHistoryData=[record,...playHistoryData].slice(0,MAX_PLAY_HISTORY);
+
+ const saved=savePlayHistory();
+ if(saved){
+  s.savedSessionId=record.id;
+ }else{
+  playHistoryData=previous;
+ }
+
+ renderPlayHistory();
+ return saved;
+}
+
+function statPair(label,value){
+ const left=document.createElement('div');
+ left.className='muted';
+ left.textContent=label;
+
+ const right=document.createElement('div');
+ right.textContent=value;
+ return [left,right];
+}
+
+function renderPlayHistory(){
+ if(!ui.playHistoryList||!ui.playHistoryCount)return;
+
+ ui.playHistoryCount.textContent=`${playHistoryData.length}件`;
+ ui.playHistoryList.textContent='';
+
+ if(!playHistoryData.length){
+  const empty=document.createElement('small');
+  empty.textContent='まだ保存されたプレー履歴はありません';
+  ui.playHistoryList.appendChild(empty);
+  return;
+ }
+
+ playHistoryData.forEach(record=>{
+  const details=document.createElement('details');
+  details.className='saved-session';
+
+  const summary=document.createElement('summary');
+
+  const title=document.createElement('div');
+  title.className='saved-session-title';
+  const strong=document.createElement('strong');
+  strong.textContent=`${record.machineName}｜${record.seat}番台`;
+  const small=document.createElement('small');
+  small.textContent=`${formatSavedDate(record.endedAt)}｜${fmt(record.normalSpins)}回転`;
+  title.append(strong,small);
+
+  const netText=document.createElement('div');
+  netText.className=`saved-session-net ${record.finalNet>=0?'good':'bad'}`;
+  netText.textContent=`${signed(record.finalNet)}玉`;
+
+  summary.append(title,netText);
+  details.appendChild(summary);
+
+  const body=document.createElement('div');
+  body.className='saved-session-body';
+
+  const quick=document.createElement('div');
+  quick.className='grid saved-session-quick';
+  [
+   ['初当たり',`${record.initialHits}回`],
+   ['RUSH・LT',`${record.rushEntries}回`],
+   ['最高連',`${record.maxChain}連`],
+   ['最大MY',`${fmt(record.maxMY)}玉`]
+  ].forEach(([label,value])=>{
+   const box=document.createElement('div');
+   const a=document.createElement('small');
+   const b=document.createElement('b');
+   a.textContent=label;
+   b.textContent=value;
+   box.append(a,b);
+   quick.appendChild(box);
+  });
+  body.appendChild(quick);
+
+  const stats=document.createElement('div');
+  stats.className='grid saved-session-stats';
+  [
+   ['終了理由',record.reason||'遊技終了'],
+   ['通常回転',`${fmt(record.normalSpins)}回`],
+   ['実測回転率',`${Number(record.actualRate||0).toFixed(1)}回/250玉`],
+   ['内部回転率',`${Number(record.internalRate||0).toFixed(1)}回/250玉`],
+   ['通常投入',`${fmt(record.invested)}玉`],
+   [record.supportCostLabel||'右打ち削り',`${fmt(record.supportCost)}玉`],
+   ['総獲得',`${fmt(record.paid)}玉`],
+   ['右打ち獲得',`${fmt(record.rightPaid)}玉`],
+   ['右打ちBONUS',`${record.rightHits}回`],
+   ['最大ハマり',`${fmt(record.maxHamari)}回`],
+   ['先バレ設定',record.preAlertMode||'不明']
+  ].forEach(([label,value])=>{
+   const [left,right]=statPair(label,value);
+   stats.append(left,right);
+  });
+  body.appendChild(stats);
+
+  const historyTitle=document.createElement('h3');
+  historyTitle.textContent=`大当たり履歴（${Array.isArray(record.log)?record.log.length:0}件）`;
+  historyTitle.style.margin='13px 0 7px';
+  historyTitle.style.fontSize='14px';
+  body.appendChild(historyTitle);
+
+  const history=document.createElement('div');
+  history.className='history';
+  renderHitHistory(history,record.log,record.machineType,true);
+  body.appendChild(history);
+
+  const actions=document.createElement('div');
+  actions.className='saved-session-actions';
+  const remove=document.createElement('button');
+  remove.type='button';
+  remove.className='secondary';
+  remove.textContent='この履歴を削除';
+  remove.addEventListener('click',event=>{
+   event.preventDefault();
+   event.stopPropagation();
+   if(!confirm(`${record.machineName}の履歴を削除しますか？`))return;
+   playHistoryData=playHistoryData.filter(item=>item.id!==record.id);
+   savePlayHistory();
+   renderPlayHistory();
+  });
+  actions.appendChild(remove);
+  body.appendChild(actions);
+
+  details.appendChild(body);
+  ui.playHistoryList.appendChild(details);
+ });
+}
+
 function finish(reason){
  if(!s||s.finished)return;s.finished=true;
 
@@ -2716,6 +3000,7 @@ function finish(reason){
   appendHistory({spin:s.pendingSpin,result:'営業時間終了・取り切れず',chain:Math.max(1,s.chain),payout:s.currentEarned,breakdown:{...s.currentBreakdown}});
  }
  const actual=s.invested?s.normalSpins/s.invested*250:0;
+ const sessionSaved=saveCurrentSession(reason);
  playFx('end','遊技終了',`最終差玉 ${signed(net())}玉`);
  ui.play.classList.add('hidden');ui.result.classList.remove('hidden');
  ui.headline.textContent=`${reason}。最終差玉 ${signed(net())}玉`;
@@ -2759,6 +3044,13 @@ function finish(reason){
  }
 
  ui.reveal.innerHTML=hall.map(x=>`<div><small>${x.no}番台</small><b style="display:block;font-size:18px">${x.rate.toFixed(1)}回</b><small>${rateLabel(x)}</small></div>`).join('');
+
+ ui.resultHitCount.textContent=`${s.log.length}件`;
+ ui.resultSavedNote.textContent=sessionSaved
+  ?'このプレー結果を端末へ保存しました'
+  :'端末への保存に失敗しました。ブラウザの保存設定をご確認ください';
+ renderHitHistory(ui.resultHistory,s.log,s.sp.type,true);
+
  drawResultGraph();
 }
 ui.main.addEventListener('click',()=>{
@@ -2788,6 +3080,16 @@ ui.silentHitEnabled.addEventListener('change',()=>{
 ui.playSilentHitEnabled.addEventListener('change',()=>{
  applySilentHitSetting(ui.playSilentHitEnabled.checked);
 });
+ui.clearPlayHistory.addEventListener('click',event=>{
+ event.preventDefault();
+ event.stopPropagation();
+ if(!playHistoryData.length)return;
+ if(!confirm('保存されているプレー履歴をすべて削除しますか？'))return;
+ playHistoryData=[];
+ savePlayHistory();
+ renderPlayHistory();
+});
+
 ui.resetAchievements.addEventListener('click',event=>{
  event.preventDefault();
  event.stopPropagation();
@@ -2805,6 +3107,7 @@ ui.vibrationEnabled.addEventListener('change',()=>{
  }
 });
 renderAchievements();
+renderPlayHistory();
 build();
 })();
 </script>
