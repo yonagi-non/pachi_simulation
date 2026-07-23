@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>10機種 確率シミュレーター v8.0</title>
+<title>13機種 確率シミュレーター v9.0</title>
 <style>
 :root{
   color-scheme:dark;
@@ -99,6 +99,9 @@ body[data-theme="crimson"]{--machine:#ff587a;--machine2:#85203c;--machine-soft:r
 body[data-theme="craft"]{--machine:#ff9a3d;--machine2:#8b4711;--machine-soft:rgba(255,154,61,.18)}
 body[data-theme="horn"]{--machine:#79aaff;--machine2:#315b9d;--machine-soft:rgba(121,170,255,.18)}
 body[data-theme="strike"]{--machine:#72e69a;--machine2:#247a48;--machine-soft:rgba(114,230,154,.18)}
+body[data-theme="ocean"]{--machine:#38bdf8;--machine2:#075985;--machine-soft:rgba(56,189,248,.18)}
+body[data-theme="symph"]{--machine:#f472b6;--machine2:#831843;--machine-soft:rgba(244,114,182,.18)}
+body[data-theme="agnes"]{--machine:#22d3ee;--machine2:#0e7490;--machine-soft:rgba(34,211,238,.18)}
 body{--machine:var(--accent);--machine2:#315f9b;--machine-soft:rgba(98,168,255,.18);transition:background .35s ease}
 body[data-theme="marine"]{background:radial-gradient(circle at 50% -20%,#123d50 0,#0b1521 38%,#0b1018 100%)}
 body[data-theme="bousou"]{background:radial-gradient(circle at 50% -20%,#4b1520 0,#181019 38%,#0b1018 100%)}
@@ -110,6 +113,9 @@ body[data-theme="crimson"]{background:radial-gradient(circle at 50% -20%,#51152a
 body[data-theme="craft"]{background:radial-gradient(circle at 50% -20%,#512b10 0,#1d150e 38%,#0b1018 100%)}
 body[data-theme="horn"]{background:radial-gradient(circle at 50% -20%,#183255 0,#101824 38%,#0b1018 100%)}
 body[data-theme="strike"]{background:radial-gradient(circle at 50% -20%,#173f2b 0,#101c16 38%,#0b1018 100%)}
+body[data-theme="ocean"]{background:radial-gradient(circle at 50% -20%,#0c4a6e 0,#0d1b29 38%,#0b1018 100%)}
+body[data-theme="symph"]{background:radial-gradient(circle at 50% -20%,#4a1635 0,#1f111b 38%,#0b1018 100%)}
+body[data-theme="agnes"]{background:radial-gradient(circle at 50% -20%,#164e63 0,#10202a 38%,#0b1018 100%)}
 .seat.selected{border-color:var(--machine);background:var(--machine-soft)}
 .badge{border-color:color-mix(in srgb,var(--machine) 58%,#243247);background:var(--machine-soft);color:var(--text)}
 .main{background:linear-gradient(135deg,var(--machine2),var(--machine))}
@@ -308,6 +314,9 @@ body[data-theme="strike"]{background:radial-gradient(circle at 50% -20%,#173f2b 
 .history .hit-craft{border-left:4px solid #ff9a3d}
 .history .hit-horn{border-left:4px solid #79aaff}
 .history .hit-strike{border-left:4px solid #72e69a}
+.history .hit-ocean{border-left:4px solid #38bdf8}
+.history .hit-symph{border-left:4px solid #f472b6}
+.history .hit-agnes{border-left:4px solid #22d3ee}
 button.busy{opacity:.58;cursor:wait}
 @keyframes ring{to{transform:rotate(360deg) scale(1.08)}}
 @keyframes stageFlash{0%,100%{filter:none}45%{filter:brightness(2.2)}}
@@ -367,7 +376,7 @@ button.busy{opacity:.58;cursor:wait}
       </div>
     </div>
   </div>
-  <h1>10機種 確率シミュレーター <span class="muted">v8.0 リザルト・プレー履歴版</span></h1>
+  <h1>13機種 確率シミュレーター <span class="muted">v9.0 海・絶唱・甘海追加版</span></h1>
 
   <section class="card">
     <div class="grid top">
@@ -384,6 +393,9 @@ button.busy{opacity:.58;cursor:wait}
           <option value="craft">爆速職人RUSH</option>
           <option value="horn">白角覚醒RUSH</option>
           <option value="strike">閃光ストライクST</option>
+          <option value="ocean">蒼海ループ319</option>
+          <option value="symph">絶唱バトル199</option>
+          <option value="agnes">甘海ハピネス99</option>
         </select>
       </label>
       <button id="replace" class="secondary">10台を入れ替える</button>
@@ -413,8 +425,8 @@ button.busy{opacity:.58;cursor:wait}
   <details class="card achievement-section" style="margin-top:12px">
     <summary class="row" style="justify-content:space-between">
       <div>
-        <h2>機種別実績 <span id="achievementCount" class="badge">0/70</span></h2>
-        <small>10機種×7個・進捗はこの端末に保存</small>
+        <h2>機種別実績 <span id="achievementCount" class="badge">0/91</span></h2>
+        <small>13機種×7個・進捗はこの端末に保存</small>
       </div>
       <button id="resetAchievements" type="button" class="secondary" style="min-height:38px;padding:7px 11px">リセット</button>
     </summary>
@@ -579,7 +591,7 @@ button.busy{opacity:.58;cursor:wait}
 
   <p class="muted" style="font-size:12px;line-height:1.5">
     現金・換金要素のない確率ゲームです。機種名と演出名はオリジナルです。
-    10機種すべてオリジナル名称で、現金・換金要素のない確率シミュレーターです。紅月ひきこもりCZは、CZ消化中の玉使用を投資へ反映し、公表の成功約33%・継続約77%から1回転確率を逆算しています。基準回転率は16.8回/250玉です。 終了成績では、その日の差玉推移をスランプグラフで確認できます。 仮面継承199と爆速職人RUSHは、元スペック表に合わせて出玉・LT残保留・上乗せループを再監査済みです。 白角覚醒RUSHと閃光ストライクSTも、基準回転率と3000玉の1500玉×2回集計を再監査済みです。 南国マリンは基準17.8回/250玉とし、STを含む電サポ中を左打ち2玉/回転の消費で再監査済みです。 王道暴走ST・黄金7500バトル・喰壊ラッシュ・恋神カフェタイムも、基準回転率、複数大当たり集計、右打ち削り、特殊上乗せを再監査済みです。終了リザルトでは今回の大当たり履歴を確認でき、終了したプレー結果は最大50件までこの端末に保存されます。
+    13機種すべてオリジナル名称で、現金・換金要素のない確率シミュレーターです。紅月ひきこもりCZは、CZ消化中の玉使用を投資へ反映し、公表の成功約33%・継続約77%から1回転確率を逆算しています。基準回転率は16.8回/250玉です。 終了成績では、その日の差玉推移をスランプグラフで確認できます。 仮面継承199と爆速職人RUSHは、元スペック表に合わせて出玉・LT残保留・上乗せループを再監査済みです。 白角覚醒RUSHと閃光ストライクSTも、基準回転率と3000玉の1500玉×2回集計を再監査済みです。 南国マリンは基準17.8回/250玉とし、STを含む電サポ中を左打ち2玉/回転の消費で再監査済みです。 王道暴走ST・黄金7500バトル・喰壊ラッシュ・恋神カフェタイムも、基準回転率、複数大当たり集計、右打ち削り、特殊上乗せを再監査済みです。終了リザルトでは今回の大当たり履歴を確認でき、終了したプレー結果は最大50件までこの端末に保存されます。 蒼海ループ319、絶唱バトル199、甘海ハピネス99を追加し、確変ループ・最終決戦・低確率遊タイムをそれぞれ再現しています。
   </p>
 </div>
 
@@ -628,6 +640,18 @@ const SPECS={
  strike:{
   name:'閃光ストライクST',type:'strike',base:17.6,
   summary:'通常約1/319.7。20%が1500玉×2回の3000玉＋ST120、40%が300玉＋ST120、40%が300玉＋時短100。右は80%が1500玉、15%が1500玉×2回の3000玉、5%が1500玉＋ST10000回。'
+ },
+ ocean:{
+  name:'蒼海ループ319',type:'ocean',base:17.7,
+  summary:'通常約1/319.6、確変中約1/31.9。全大当たり1500玉で54%が次回まで確変、46%が通常。通常・確変中の通常当たり後は時短100回、時短・遊タイム中の通常当たり後は時短200回。低確率950回で遊タイム350回。電サポ中は出玉の5%相当を削りへ反映。'
+ },
+ symph:{
+  name:'絶唱バトル199',type:'symph',base:18.9,
+  summary:'通常約1/199.8。初当たり99%は390玉＋最終決戦1回＋残保留4、1%は1300玉＋時短99回。右は約1/7.6で、520・780・910・1300玉。時短7・11・99回＋残保留4の振り分け。電サポ中の出玉増減なし。'
+ },
+ agnes:{
+  name:'甘海ハピネス99',type:'agnes',base:18.3,
+  summary:'通常約1/99.9、ST中約1/19.5。全大当たり後にST10回＋時短。通常状態は電サポ25・50・120回、10Rでハピネス120回へ。ハピネス中は全当たりで120回継続。低確率299回で遊タイム379回。電サポ中は出玉の10%相当を削りへ反映。'
  }
 };
 
@@ -810,6 +834,42 @@ const ACHIEVEMENT_GROUPS=[
    {key:'special',icon:'♾️',name:'次回濃厚ST',desc:'ST10000回振り分けを獲得する'},
    {key:'complete_my',icon:'🏆',name:'閃光コンプリート級',desc:'最大MY64,000玉に到達する'}
   ]
+ },
+ {
+  type:'ocean',icon:'🐋',name:'蒼海ループ319',
+  items:[
+   {key:'first_hit',icon:'🎯',name:'蒼海初当たり',desc:'図柄揃い初当たりを引く'},
+   {key:'right_hit',icon:'🌊',name:'電サポ引き戻し',desc:'電サポ中に初めて当てる'},
+   {key:'chain5',icon:'🔥',name:'蒼海5連',desc:'蒼海ループ319で5連達成'},
+   {key:'chain10',icon:'👑',name:'蒼海10連',desc:'蒼海ループ319で10連達成'},
+   {key:'one_shot',icon:'💎',name:'蒼海一撃万発',desc:'1回の履歴で10,000玉以上獲得'},
+   {key:'special',icon:'⏳',name:'蒼海遊タイム',desc:'低確率950回で遊タイムを発動する'},
+   {key:'complete_my',icon:'🏆',name:'蒼海コンプリート級',desc:'最大MY64,000玉に到達する'}
+  ]
+ },
+ {
+  type:'symph',icon:'🎤',name:'絶唱バトル199',
+  items:[
+   {key:'first_hit',icon:'🎯',name:'絶唱初当たり',desc:'図柄揃い初当たりを引く'},
+   {key:'right_hit',icon:'⚔️',name:'最終決戦突破',desc:'最終決戦・右打ち中に初めて当てる'},
+   {key:'chain5',icon:'🔥',name:'絶唱5連',desc:'絶唱バトル199で5連達成'},
+   {key:'chain10',icon:'👑',name:'絶唱10連',desc:'絶唱バトル199で10連達成'},
+   {key:'one_shot',icon:'💎',name:'絶唱一撃万発',desc:'1回の履歴で10,000玉以上獲得'},
+   {key:'special',icon:'♾️',name:'絶唱99回',desc:'時短99回振り分けを獲得する'},
+   {key:'complete_my',icon:'🏆',name:'絶唱コンプリート級',desc:'最大MY64,000玉に到達する'}
+  ]
+ },
+ {
+  type:'agnes',icon:'🐠',name:'甘海ハピネス99',
+  items:[
+   {key:'first_hit',icon:'🎯',name:'甘海初当たり',desc:'図柄揃い初当たりを引く'},
+   {key:'right_hit',icon:'🐚',name:'甘海連チャン',desc:'電サポ中に初めて当てる'},
+   {key:'chain5',icon:'🔥',name:'甘海5連',desc:'甘海ハピネス99で5連達成'},
+   {key:'chain10',icon:'👑',name:'甘海10連',desc:'甘海ハピネス99で10連達成'},
+   {key:'one_shot',icon:'💎',name:'甘海一撃万発',desc:'1回の履歴で10,000玉以上獲得'},
+   {key:'special',icon:'⏳',name:'幸福遊タイム',desc:'低確率299回で遊タイムを発動する'},
+   {key:'complete_my',icon:'🏆',name:'甘海コンプリート級',desc:'最大MY31,000玉に到達する'}
+  ]
  }
 ];
 
@@ -972,7 +1032,10 @@ const THEMES={
  crimson:{icon:'🩸',idle:'紅月の城',spin:'紅い月が揺らめく…',hit:'紅月BONUS！',rush:'紅月RUSH突入！'},
  craft:{icon:'🔨',idle:'工房待機',spin:'超速施工中…',hit:'職人BONUS！',rush:'爆速RUSH突入！'},
  horn:{icon:'🦄',idle:'白角待機',spin:'可能性を解析中…',hit:'白角FEVER！',rush:'覚醒RUSH突入！'},
- strike:{icon:'💫',idle:'発進待機',spin:'光の軌道を追跡中…',hit:'閃光FEVER！',rush:'ストライクST突入！'}
+ strike:{icon:'💫',idle:'発進待機',spin:'光の軌道を追跡中…',hit:'閃光FEVER！',rush:'ストライクST突入！'},
+ ocean:{icon:'🐋',idle:'蒼海を航行中',spin:'波間を探索中…',hit:'蒼海大当たり！',rush:'確変ループ突入！'},
+ symph:{icon:'🎤',idle:'装者待機',spin:'歌の力を高めている…',hit:'絶唱FEVER！',rush:'絶唱チャンス突入！'},
+ agnes:{icon:'🐠',idle:'甘海を遊泳中',spin:'魚群を探している…',hit:'甘海大当たり！',rush:'ハピネスチャンス！'}
 };
 const NORMAL_EFFECTS={
  marine:{
@@ -1024,6 +1087,21 @@ const NORMAL_EFFECTS={
   reach:['出撃予告','機体反応あり'],
   super:['種子覚醒！','閃光決戦へ'],
   hot:['自由の翼！','激アツ演出']
+ },
+ ocean:{
+  reach:['泡予告','波がざわめく…'],
+  super:['蒼海魚群！','海底リーチへ'],
+  hot:['巨大クジラ接近！','激アツ演出']
+ },
+ symph:{
+  reach:['歌唱予告','装者反応あり'],
+  super:['絶唱共鳴！','決戦リーチへ'],
+  hot:['黄金絶唱！','激アツ演出']
+ },
+ agnes:{
+  reach:['泡予告','小魚が集まる…'],
+  super:['幸福魚群！','甘海リーチへ'],
+  hot:['ハピネスフラッシュ！','激アツ演出']
  }
 };
 const HIT_ROUTES={
@@ -1076,6 +1154,21 @@ const HIT_ROUTES={
   {weight:20,type:'direct',start:'種子発光',finish:'閃光直撃！',sub:'光が走り大当たり'},
   {weight:55,type:'super',start:'出撃準備',develop:'舞い降りる翼！',finish:'目標撃破！',sub:'作戦成功で大当たり'},
   {weight:25,type:'revival',start:'自由の翼',develop:'最終攻防！',miss:'機体損傷……',finish:'再出撃！',sub:'復活大当たり'}
+ ],
+ ocean:[
+  {weight:22,type:'direct',start:'パール点灯',finish:'蒼海直撃！',sub:'一発告知で大当たり'},
+  {weight:53,type:'super',start:'泡予告',develop:'蒼海魚群！',finish:'大海原大当たり！',sub:'魚群が図柄を揃えた'},
+  {weight:25,type:'revival',start:'巨大波接近',develop:'クジラ決戦！',miss:'波が静まる……',finish:'クジラ復活！',sub:'逆転大当たり'}
+ ],
+ symph:[
+  {weight:20,type:'direct',start:'絶唱ランプ点灯',finish:'絶唱直撃！',sub:'歌の力で大当たり'},
+  {weight:55,type:'super',start:'装者集結',develop:'最終絶唱！',finish:'勝機を掴んだ！',sub:'決戦勝利で大当たり'},
+  {weight:25,type:'revival',start:'共鳴上昇',develop:'限界絶唱！',miss:'歌が途切れる……',finish:'アンコール復活！',sub:'復活大当たり'}
+ ],
+ agnes:[
+  {weight:22,type:'direct',start:'幸福ランプ点灯',finish:'甘海直撃！',sub:'一発告知で大当たり'},
+  {weight:53,type:'super',start:'泡予告',develop:'幸福魚群！',finish:'ハピネス大当たり！',sub:'魚群が図柄を揃えた'},
+  {weight:25,type:'revival',start:'大波接近',develop:'ハピネスリーチ！',miss:'波が引いていく……',finish:'幸福復活！',sub:'逆転大当たり'}
  ]
 };
 const MISS_ROUTES={
@@ -1128,6 +1221,21 @@ const MISS_ROUTES={
   {weight:66,type:'normal',start:'出撃予告',finish:'発進中止……',sub:'ノーマルリーチハズレ'},
   {weight:27,type:'super',start:'種子覚醒',develop:'閃光決戦',finish:'目標離脱',sub:'決戦リーチハズレ'},
   {weight:7,type:'hot',start:'自由の翼',develop:'最終攻防',finish:'翼が折れる',sub:'激アツ演出ハズレ'}
+ ],
+ ocean:[
+  {weight:66,type:'normal',start:'泡予告',finish:'泡が消えた……',sub:'ノーマルリーチハズレ'},
+  {weight:27,type:'super',start:'魚影接近',develop:'小魚群通過',finish:'図柄すれ違い',sub:'海底リーチハズレ'},
+  {weight:7,type:'hot',start:'巨大クジラ接近',develop:'蒼海魚群',finish:'波に飲まれた……',sub:'激アツ演出ハズレ'}
+ ],
+ symph:[
+  {weight:66,type:'normal',start:'歌唱予告',finish:'共鳴せず……',sub:'ノーマルリーチハズレ'},
+  {weight:27,type:'super',start:'装者反応',develop:'絶唱決戦',finish:'攻撃届かず',sub:'決戦リーチハズレ'},
+  {weight:7,type:'hot',start:'黄金絶唱',develop:'最終絶唱',finish:'歌が途切れた',sub:'激アツ演出ハズレ'}
+ ],
+ agnes:[
+  {weight:66,type:'normal',start:'泡予告',finish:'泡が消えた……',sub:'ノーマルリーチハズレ'},
+  {weight:27,type:'super',start:'魚影接近',develop:'小魚群通過',finish:'図柄すれ違い',sub:'甘海リーチハズレ'},
+  {weight:7,type:'hot',start:'ハピネスフラッシュ',develop:'幸福魚群',finish:'波に飲まれた……',sub:'激アツ演出ハズレ'}
  ]
 };
 let fxTimer=null;
@@ -1234,13 +1342,17 @@ function updateStage(){
    setStage('rush','次回濃厚','ST10000回');
    return;
   }
-  const total=s.right.kind==='marine'?s.right.tier:
+  if(s.right.kind==='oceanKaku'){
+   setStage('rush','次回まで','確変 約1/31.9');
+   return;
+  }
+  const total=s.right.total||(s.right.kind==='marine'?s.right.tier:
     s.right.kind==='bousouST'?163:s.right.kind==='bousouTime'?100:
     s.right.kind==='ghoul'?130:s.right.kind==='cafe'?100:
     s.right.kind==='mask'||s.right.kind==='maskSuper'?15:
     s.right.kind==='crimson'?144:s.right.kind==='crimsonCZ'?10:
     s.right.kind==='craft'?3:s.right.kind==='strikeST'?120:
-    s.right.kind==='strikeTime'?100:1;
+    s.right.kind==='strikeTime'?100:1);
   const remaining=Math.max(0,s.right.remaining);
   const progress=total?100*(1-remaining/total):0;
   setStage('rush',`${remaining} 回`,`残り回転`,progress);
@@ -1447,7 +1559,10 @@ const FIGURE_PROBABILITY={
  crimson:1/129,
  craft:1/318.13,
  horn:1/319.7,
- strike:1/319.7
+ strike:1/319.7,
+ ocean:1/319.6,
+ symph:1/199.8,
+ agnes:1/99.9
 };
 const NO_ALERT_EVENT_PROBABILITY={
  marine:1-1/99.9,
@@ -1459,7 +1574,10 @@ const NO_ALERT_EVENT_PROBABILITY={
  crimson:1-(1/348)-(1/129-(1/348)*.20),
  craft:1-1/318.13,
  horn:1-1/319.7,
- strike:1-1/319.7
+ strike:1-1/319.7,
+ ocean:1-1/319.6,
+ symph:1-1/199.8,
+ agnes:1-1/99.9
 };
 function currentPreAlertMode(){
  return s&&!s.finished?s.preAlertMode:ui.preAlertMode.value;
@@ -1482,9 +1600,12 @@ function preAlertNoteHTML(mode,silentEnabled){
   return `<span class="prealert-chip">先バレOFF</span>`;
  }
  if(mode==='rush100'){
+  const guarantee=type==='ocean'?'確変突入確定':
+   type==='symph'?'時短99回直行確定':
+   type==='agnes'?'ハピネス120回確定':'RUSH・LT突入確定';
   return [
    `<span class="prealert-chip primary">鳴れば${target}</span>`,
-   `<span class="prealert-chip warn">RUSH・LT突入確定</span>`,
+   `<span class="prealert-chip warn">${guarantee}</span>`,
    `<span class="prealert-chip">対象占有率 ${occupancy}</span>`,
    silentChip
   ].join('');
@@ -1555,7 +1676,10 @@ function updatePreAlertOptions(){
  if(type==='gold'){
   options.push({value:'judge100',label:'ジャッジ到達確定 100%'});
  }else if(type!=='marine'){
-  options.push({value:'rush100',label:'RUSH確定 100%'});
+  const label=type==='ocean'?'確変確定 100%':
+   type==='symph'?'時短99回直行 100%':
+   type==='agnes'?'ハピネス確定 100%':'RUSH確定 100%';
+  options.push({value:'rush100',label});
  }
 
  const html=options
@@ -1573,7 +1697,12 @@ function updatePreAlertOptions(){
 }
 function preAlertDisplayLabel(mode,type){
  if(mode==='off')return 'OFF';
- if(mode==='rush100')return 'RUSH・LT突入確定';
+ if(mode==='rush100'){
+  if(type==='ocean')return '確変突入確定';
+  if(type==='symph')return '時短99回直行確定';
+  if(type==='agnes')return 'ハピネス120回確定';
+  return 'RUSH・LT突入確定';
+ }
  if(mode==='judge100')return '最終ジャッジ到達確定';
  return `${type==='crimson'?'CZ':'図柄揃い'}期待度 ${mode}%`;
 }
@@ -1597,6 +1726,9 @@ function decidePreAlert(ev){
   if(s.sp.type==='ghoul'||s.sp.type==='cafe'||s.sp.type==='mask'||s.sp.type==='craft')qualifies=!!ev.rush;
   if(s.sp.type==='crimson')qualifies=!!ev.czPlan?.x?.rush;
   if(s.sp.type==='horn'||s.sp.type==='strike')qualifies=!!ev.x?.rush;
+  if(s.sp.type==='ocean')qualifies=!!ev.x?.kaku;
+  if(s.sp.type==='symph')qualifies=!!ev.x?.direct;
+  if(s.sp.type==='agnes')qualifies=!!ev.x?.happiness;
 
   return qualifies&&passesOccupancy();
  }
@@ -1688,6 +1820,7 @@ function start(machine){
   preAlertMode:ui.preAlertMode.value,
   silentHitEnabled:ui.silentHitEnabled.checked,
   preAlerts:0,preAlertSuccess:0,
+  lowProbSpins:0,yutimeUsed:false,yutimeEntries:0,
   sessionUnlocked:[],
   savedSessionId:null
  };
@@ -1716,7 +1849,10 @@ const COMPLETE_MY_THRESHOLDS={
  crimson:95000,
  craft:95000,
  horn:95000,
- strike:64000
+ strike:64000,
+ ocean:64000,
+ symph:64000,
+ agnes:31000
 };
 function checkCompleteMyAchievement(){
  if(!s)return;
@@ -1764,6 +1900,8 @@ function award(n,sec=null,label='',forceRight=false){
   if(s.sp.type==='bousou')cutRate=.10;
   else if(s.sp.type==='ghoul'||s.sp.type==='cafe')cutRate=.05;
   else if(s.sp.type==='crimson'&&s.right?.kind==='crimson')cutRate=.05;
+  else if(s.sp.type==='ocean')cutRate=.05;
+  else if(s.sp.type==='agnes')cutRate=.10;
 
   if(cutRate)s.rightLoss+=Math.round(n*cutRate);
  }
@@ -1793,6 +1931,9 @@ function normalDetail(){
  if(s.sp.type==='crimson')return 'CZ合算 約1/129／300玉チャージ 約1/348（約20%でCZ）';
  if(s.sp.type==='craft')return 'BONUS 約1/318.13';
  if(s.sp.type==='horn'||s.sp.type==='strike')return '大当たり 約1/319.7';
+ if(s.sp.type==='ocean')return `大当たり 約1/319.6／遊タイムまで ${Math.max(0,950-s.lowProbSpins)}回`;
+ if(s.sp.type==='symph')return '大当たり 約1/199.8／99%で最終決戦';
+ if(s.sp.type==='agnes')return `大当たり 約1/99.9／遊タイムまで ${Math.max(0,299-s.lowProbSpins)}回`;
  return s.sp.type==='marine'?'大当たり 約1/99.9':'大当たり 約1/319.7';
 }
 function judgeMode(title,msg,btn){
@@ -1825,6 +1966,7 @@ function doNormal(n,deferSingleHit=false){
   const c=cost(s.machine.rate);
   s.invested+=c;s.elapsed+=8+Math.min(18,c*.45)+Math.random()*3;
   s.normalSpins++;s.totalSpins++;s.sinceHit++;done++;
+  countLowProbabilitySpin();
   s.maxHamari=Math.max(s.maxHamari,s.sinceHit);record();
 
   const ev=normalEvent();
@@ -1849,6 +1991,10 @@ function doNormal(n,deferSingleHit=false){
     update();
    }
    return {hit:true,preAlerts:batchAlerts,preAlertSuccess:batchSuccess};
+  }
+
+  if(activateYutimeIfReady()){
+   return {hit:false,preAlerts:batchAlerts,preAlertSuccess:batchSuccess,yutime:true};
   }
  }
 
@@ -1920,6 +2066,119 @@ function rollStrikeInitial(){
   {p:40,payout:300,rush:false,label:'300玉＋時短'}
  ]);
 }
+function rollOceanHit(){
+ return {kaku:Math.random()<.54};
+}
+function rollSymphInitial(){
+ return Math.random()<.01
+  ?{payout:1300,direct:true,label:'10R・1300玉＋時短99回'}
+  :{payout:390,direct:false,label:'3R・390玉＋最終決戦'};
+}
+function rollSymphRight(){
+ return weighted([
+  {p:45,payout:520,turns:7,label:'4R・520玉＋時短7回'},
+  {p:3,payout:780,turns:7,label:'6R・780玉＋時短7回'},
+  {p:2,payout:910,turns:7,label:'7R・910玉＋時短7回'},
+  {p:36,payout:1300,turns:7,label:'10R・1300玉＋時短7回'},
+  {p:3,payout:1300,turns:11,label:'10R・1300玉＋時短11回'},
+  {p:11,payout:1300,turns:99,label:'10R・1300玉＋時短99回'}
+ ]);
+}
+function rollAgnesNormal(){
+ return weighted([
+  {p:30,payout:432,total:25,happiness:false,label:'4R・432玉＋電サポ25回'},
+  {p:6,payout:432,total:50,happiness:false,label:'4R・432玉＋電サポ50回'},
+  {p:60,payout:648,total:50,happiness:false,label:'6R・648玉＋電サポ50回'},
+  {p:4,payout:1080,total:120,happiness:true,label:'10R・1080玉＋ハピネス120回'}
+ ]);
+}
+function rollAgnesHappiness(){
+ return weighted([
+  {p:36,payout:432,total:120,happiness:true,label:'4R・432玉＋ハピネス120回'},
+  {p:60,payout:648,total:120,happiness:true,label:'6R・648玉＋ハピネス120回'},
+  {p:4,payout:1080,total:120,happiness:true,label:'10R・1080玉＋ハピネス120回'}
+ ]);
+}
+function resetLowProbabilityCycle(){
+ if(s.sp.type==='ocean'||s.sp.type==='agnes'){
+  s.lowProbSpins=0;
+  s.yutimeUsed=false;
+ }
+}
+function countLowProbabilitySpin(){
+ if(s.sp.type==='ocean'||s.sp.type==='agnes')s.lowProbSpins++;
+}
+function activateYutimeIfReady(){
+ if(s.yutimeUsed||s.mode!=='normal')return false;
+ const threshold=s.sp.type==='ocean'?950:s.sp.type==='agnes'?299:null;
+ if(!threshold||s.lowProbSpins<threshold)return false;
+
+ s.yutimeUsed=true;
+ s.yutimeEntries++;
+ s.pendingSpin=s.lowProbSpins;
+ s.chain=0;
+ s.currentEarned=0;
+ s.currentBreakdown={};
+ unlockMachineAchievement('special');
+
+ if(s.sp.type==='ocean'){
+  rightMode('oceanYutime',350,'蒼海遊タイム','低確率950回到達・時短350回',{total:350});
+  ui.message.textContent='低確率950回到達！ 蒼海遊タイム350回スタート。';
+  playFx('rush','蒼海遊タイム！','時短350回');
+ }else{
+  rightMode('agnesYutime',379,'幸福遊タイム','低確率299回到達・時短379回',{total:379,stLeft:0});
+  ui.message.textContent='低確率299回到達！ 幸福遊タイム379回スタート。';
+  playFx('rush','幸福遊タイム！','時短379回');
+ }
+ update();
+ return true;
+}
+function endYutimeWithoutHit(kind){
+ const title=kind==='oceanYutime'?'蒼海遊タイム':'幸福遊タイム';
+ s.sinceHit=s.lowProbSpins;
+ s.pending=null;
+ s.right=null;
+ s.chain=0;
+ s.currentEarned=0;
+ s.currentBreakdown={};
+ normalMode(`${title}終了。当たりなしで通常時へ。現在${fmt(s.sinceHit)}回転。`);
+ update();
+}
+function beginYutimeHit(kind){
+ const source=kind;
+ s.pendingSpin=s.lowProbSpins;
+ s.sinceHit=0;
+ s.chain=1;
+ s.currentEarned=0;
+ s.currentBreakdown={};
+ s.initialHits++;
+ s.rightHits++;
+ unlockMachineAchievement('first_hit');
+ resetLowProbabilityCycle();
+
+ if(source==='oceanYutime'){
+  const x=rollOceanHit();
+  award(1500);
+  if(x.kaku){
+   s.rushEntries++;
+   rightMode('oceanKaku',0,'蒼海確変','約1/31.9・次回大当たりまで',{total:0});
+   ui.message.textContent='遊タイム中に1500玉＋確変獲得！';
+  }else{
+   rightMode('oceanTime',200,'時短200回','遊タイム中の通常当たり・約1/319.6',{total:200});
+   ui.message.textContent='遊タイム中に1500玉＋時短200回！';
+  }
+  playFx('hit','蒼海大当たり！',x.kaku?'確変突入':'時短200回');
+  return;
+ }
+
+ const x=rollAgnesNormal();
+ award(x.payout);
+ if(x.happiness)s.rushEntries++;
+ rightMode(x.happiness?'agnesHappiness':'agnesSupport',x.total,x.happiness?'ハピネスチャンス':'甘海チャンスタイム',x.label,{total:x.total,stLeft:10});
+ ui.message.textContent=`遊タイム中に${x.label}！`;
+ playFx('hit','甘海大当たり！',x.label);
+}
+
 function normalEvent(){
  switch(s.sp.type){
   case'marine':
@@ -1967,6 +2226,21 @@ function normalEvent(){
    return chance(319.7)?{kind:'figure',x:rollHornInitial()}:null;
   case'strike':
    return chance(319.7)?{kind:'figure',x:rollStrikeInitial()}:null;
+  case'ocean':{
+   if(!chance(319.6))return null;
+   const x=rollOceanHit();
+   return {kind:'figure',x,rush:x.kaku};
+  }
+  case'symph':{
+   if(!chance(199.8))return null;
+   const x=rollSymphInitial();
+   return {kind:'figure',x,rush:x.direct};
+  }
+  case'agnes':{
+   if(!chance(99.9))return null;
+   const x=rollAgnesNormal();
+   return {kind:'figure',x,rush:x.happiness};
+  }
  }
 }
 function beginHit(ev){
@@ -1978,6 +2252,7 @@ function beginHit(ev){
  }
 
  s.pendingSpin=s.sinceHit;s.sinceHit=0;s.chain=1;s.currentEarned=0;s.currentBreakdown={};
+ resetLowProbabilityCycle();
  if(ev.kind==='charge'){
   s.charges++;
  }else if(ev.kind==='figure'){
@@ -1995,6 +2270,9 @@ function beginHit(ev){
   case'craft':startCraft(ev);break;
   case'horn':startHorn(ev);break;
   case'strike':startStrike(ev);break;
+  case'ocean':startOcean(ev);break;
+  case'symph':startSymph(ev);break;
+  case'agnes':startAgnes(ev);break;
  }
  if(ev.kind==='charge'){
   setStage('super','CHARGE','小当たり・チャージ当選',72);
@@ -2153,6 +2431,25 @@ function startStrike(ev){
   'ST判定'
  );
 }
+function startOcean(ev){
+ const x=ev.x||rollOceanHit();
+ award(1500);
+ s.pending={type:'ocean',x,step:0};
+ judgeMode('確変ジャッジ',`${s.pendingSpin}回転で1500玉！ 54%で次回まで確変。`,'結果を見る');
+}
+function startSymph(ev){
+ const x=ev.x||rollSymphInitial();
+ award(x.payout);
+ s.pending={type:'symph',x,step:0};
+ judgeMode('最終決戦ルート',`${s.pendingSpin}回転で${x.label}！`,x.direct?'時短99回へ':'最終決戦へ');
+}
+function startAgnes(ev){
+ const x=ev.x||rollAgnesNormal();
+ award(x.payout);
+ s.pending={type:'agnes',x,step:0};
+ judgeMode('甘海BONUS',`${s.pendingSpin}回転で${x.label}！`,'電サポ開始');
+}
+
 function doJudge(){
  const p=s.pending;if(!p)return;
 
@@ -2286,6 +2583,33 @@ function doJudge(){
   }else{
    rightMode('strikeTime',100,'時短100回','約1/601.3・100回');
   }
+  return;
+ }
+
+ if(p.type==='ocean'){
+  if(p.x.kaku){
+   s.rushEntries++;
+   rightMode('oceanKaku',0,'蒼海確変','約1/31.9・次回大当たりまで',{total:0});
+  }else{
+   rightMode('oceanTime',100,'時短100回','約1/319.6・100回',{total:100});
+  }
+  return;
+ }
+
+ if(p.type==='symph'){
+  if(p.x.direct){
+   s.rushEntries++;
+   unlockMachineAchievement('special','symph');
+   rightMode('symphChance',99,'絶唱チャンス','約1/7.6・時短99回＋残保留4',{total:99});
+  }else{
+   rightMode('symphFinal',1,'最終決戦','約1/7.6・時短1回＋残保留4',{total:1});
+  }
+  return;
+ }
+
+ if(p.type==='agnes'){
+  if(p.x.happiness)s.rushEntries++;
+  rightMode(p.x.happiness?'agnesHappiness':'agnesSupport',p.x.total,p.x.happiness?'ハピネスチャンス':'甘海チャンスタイム',p.x.label,{total:p.x.total,stLeft:10});
  }
 }
 function doRight(n){
@@ -2316,6 +2640,14 @@ function doRight(n){
 
   s.elapsed+=1.5+Math.random()*1.8;
   s.totalSpins++;r.segmentSpins++;
+
+  // 次回大当たりまで続く確変ループ。
+  if(r.kind==='oceanKaku'){
+   s.elapsed+=1.5+Math.random()*1.8;
+   s.totalSpins++;r.segmentSpins++;record();
+   if(chance(31.9)){rightHit();return}
+   continue;
+  }
 
   // 転落タイプは残り回転を減らさず、当たり・転落を同時抽選。
   if(r.kind==='horn'){
@@ -2350,17 +2682,31 @@ function doRight(n){
   else if(r.kind==='craft')den=2.06;
   else if(r.kind==='strikeST'||r.kind==='strikeInfinite')den=84;
   else if(r.kind==='strikeTime')den=601.3;
+  else if(r.kind==='oceanTime'||r.kind==='oceanYutime'){
+   den=319.6;
+   countLowProbabilitySpin();
+  }else if(r.kind==='symphFinal'||r.kind==='symphChance')den=7.6;
+  else if(r.kind==='agnesSupport'||r.kind==='agnesHappiness'||r.kind==='agnesYutime'){
+   den=r.stLeft>0?19.5:99.9;
+   if(r.stLeft>0)r.stLeft--;
+   else countLowProbabilitySpin();
+  }
 
   record();
   if(chance(den)){rightHit();return}
 
   if(r.remaining<=0){
-   if(['marine','bousouST','bousouTime','mask','maskSuper','craft'].includes(r.kind)){
+   if(['marine','bousouST','bousouTime','mask','maskSuper','craft','symphFinal','symphChance'].includes(r.kind)){
     if(runResidual(r.kind))return;
    }
-   const result=r.kind==='bousouTime'||r.kind==='strikeTime'
-    ?'時短引き戻しなし'
-    :s.chain===1?'駆け抜け':`${s.chain}連終了`;
+   if(r.kind==='oceanYutime'||r.kind==='agnesYutime'){
+    endYutimeWithoutHit(r.kind);
+    return;
+   }
+   const result=r.kind==='symphFinal'?'最終決戦敗北':
+    r.kind==='bousouTime'||r.kind==='strikeTime'||r.kind==='oceanTime'
+     ?'時短引き戻しなし'
+     :s.chain===1?'駆け抜け':`${s.chain}連終了`;
    closeHit(result);
    return;
   }
@@ -2379,7 +2725,8 @@ function runResidual(kind){
   kind==='bousouST'?99.4:
   kind==='bousouTime'?319.7:
   kind==='mask'||kind==='maskSuper'?14.3:
-  kind==='craft'?2.06:999999;
+  kind==='craft'?2.06:
+  kind==='symphFinal'||kind==='symphChance'?7.6:999999;
 
  for(let i=0;i<count;i++){
   s.totalSpins++;s.elapsed+=1.3;record();
@@ -2516,7 +2863,12 @@ function resolveMaskSuperHit(){
 }
 
 function rightHit(){
- const r=s.right;addRightHitToChain();
+ const r=s.right;
+ if(r.kind==='oceanYutime'||r.kind==='agnesYutime'){
+  beginYutimeHit(r.kind);
+  return;
+ }
+ addRightHitToChain();
  if(r.kind==='marine'){startMarine(true);return}
  if(r.kind==='bousouST'||r.kind==='bousouTime'){
   award(1500);if(r.kind==='bousouTime')s.rushEntries++;
@@ -2612,6 +2964,48 @@ function rightHit(){
   award(1500);r.segmentSpins=0;
   ui.message.textContent=`白角FEVER +1500玉！ ${s.chain}連`;playFx('hit',s.chain>=3?'超覚醒FEVER！':'白角FEVER！',`${s.chain}連`);update();return;
  }
+ if(r.kind==='oceanKaku'||r.kind==='oceanTime'){
+  const source=r.kind;
+  const x=rollOceanHit();
+  award(1500);
+  resetLowProbabilityCycle();
+
+  if(x.kaku){
+   if(source!=='oceanKaku')s.rushEntries++;
+   rightMode('oceanKaku',0,'蒼海確変','約1/31.9・次回大当たりまで',{total:0});
+  }else{
+   const turns=source==='oceanTime'?200:100;
+   rightMode('oceanTime',turns,`時短${turns}回`,`通常当たり・約1/319.6・${turns}回`,{total:turns});
+  }
+  ui.message.textContent=`蒼海BONUS 1500玉！ ${s.chain}連・${x.kaku?'確変継続':`時短${source==='oceanTime'?200:100}回`}`;
+  playFx('hit','蒼海大当たり！',`${s.chain}連・1500玉`);
+  return;
+ }
+
+ if(r.kind==='symphFinal'||r.kind==='symphChance'){
+  const fromFinal=r.kind==='symphFinal';
+  const x=rollSymphRight();
+  award(x.payout);
+  if(fromFinal)s.rushEntries++;
+  if(x.turns===99)unlockMachineAchievement('special','symph');
+  rightMode('symphChance',x.turns,'絶唱チャンス',`約1/7.6・時短${x.turns}回＋残保留4`,{total:x.turns});
+  ui.message.textContent=`絶唱BONUS ${x.label}！ ${s.chain}連`;
+  playFx(x.turns===99?'rush':'hit',x.turns===99?'絶唱99回！':'絶唱BONUS！',`${x.label}・${s.chain}連`);
+  return;
+ }
+
+ if(r.kind==='agnesSupport'||r.kind==='agnesHappiness'){
+  const fromHappiness=r.kind==='agnesHappiness';
+  const x=fromHappiness?rollAgnesHappiness():rollAgnesNormal();
+  award(x.payout);
+  resetLowProbabilityCycle();
+  if(x.happiness&&!fromHappiness)s.rushEntries++;
+  rightMode(x.happiness?'agnesHappiness':'agnesSupport',x.total,x.happiness?'ハピネスチャンス':'甘海チャンスタイム',x.label,{total:x.total,stLeft:10});
+  ui.message.textContent=`甘海BONUS ${x.label}！ ${s.chain}連`;
+  playFx(x.happiness?'rush':'hit',x.happiness?'ハピネス継続！':'甘海BONUS！',`${x.label}・${s.chain}連`);
+  return;
+ }
+
  if(r.kind==='strikeST'||r.kind==='strikeTime'||r.kind==='strikeInfinite'){
   const source=r.kind;
   const x=weighted([
@@ -2708,7 +3102,9 @@ function appendHistory(h){
  ui.history.prepend(createHitHistoryEntry(h,s.sp.type));
 }
 function closeHit(result){
- const carriedSpins=s.right&&s.right.kind!=='gold'?(s.right.segmentSpins||0):0;
+ const carriedSpins=(s.sp.type==='ocean'||s.sp.type==='agnes')
+  ?s.lowProbSpins
+  :s.right&&s.right.kind!=='gold'?(s.right.segmentSpins||0):0;
  appendHistory({
   spin:s.pendingSpin,
   result,
@@ -2727,6 +3123,7 @@ function closeHit(result){
 }
 function update(){
  if(!s)return;
+ if(s.mode==='normal')ui.detail.textContent=normalDetail();
  const rem=Math.max(0,DAY-s.elapsed),h=Math.floor(rem/3600),m=Math.floor(rem%3600/60);
  ui.net.textContent=signed(net());ui.net.className=net()>=0?'good':'bad';
  ui.current.textContent=fmt(s.sinceHit);ui.normalTotal.textContent=fmt(s.normalSpins);
@@ -2847,6 +3244,7 @@ function makeSessionRecord(reason){
   actualRate:Number(actual.toFixed(2)),
   roundTime:s.roundTime,
   preAlertMode:preAlertDisplayLabel(s.preAlertMode,s.sp.type),
+  yutimeEntries:s.yutimeEntries||0,
   log:s.log.map(h=>({
    spin:h.spin,
    result:h.result,
@@ -2926,7 +3324,7 @@ function renderPlayHistory(){
   quick.className='grid saved-session-quick';
   [
    ['初当たり',`${record.initialHits}回`],
-   ['RUSH・LT',`${record.rushEntries}回`],
+   ['RUSH等',`${record.rushEntries}回`],
    ['最高連',`${record.maxChain}連`],
    ['最大MY',`${fmt(record.maxMY)}玉`]
   ].forEach(([label,value])=>{
@@ -2953,7 +3351,8 @@ function renderPlayHistory(){
    ['右打ち獲得',`${fmt(record.rightPaid)}玉`],
    ['右打ちBONUS',`${record.rightHits}回`],
    ['最大ハマり',`${fmt(record.maxHamari)}回`],
-   ['先バレ設定',record.preAlertMode||'不明']
+   ['先バレ設定',record.preAlertMode||'不明'],
+   ...(record.yutimeEntries?[['遊タイム発動',`${record.yutimeEntries}回`]]:[])
   ].forEach(([label,value])=>{
    const [left,right]=statPair(label,value);
    stats.append(left,right);
@@ -3004,6 +3403,10 @@ function finish(reason){
  playFx('end','遊技終了',`最終差玉 ${signed(net())}玉`);
  ui.play.classList.add('hidden');ui.result.classList.remove('hidden');
  ui.headline.textContent=`${reason}。最終差玉 ${signed(net())}玉`;
+ const yutimeRows=(s.sp.type==='ocean'||s.sp.type==='agnes')?[
+  ['遊タイム発動',`${s.yutimeEntries}回`],
+  ['低確率累計',`${fmt(s.lowProbSpins)}回`]
+ ]:[];
  const crimsonRows=s.sp.type==='crimson'?[
   ['CZ突入',`${s.czEntries}回`],
   ['CZ消化回転',`${s.czSpins}回`],
@@ -3015,7 +3418,7 @@ function finish(reason){
  const rows=[
   ['機種',s.sp.name],['通常回転',`${fmt(s.normalSpins)}回`],
   ['最終現在回転',`${fmt(s.sinceHit)}回`],['図柄系初当たり',`${s.initialHits}回`],
-  ['チャージ',`${s.charges}回`],...crimsonRows,['RUSH・LT突入',`${s.rushEntries}回`],
+  ['チャージ',`${s.charges}回`],...crimsonRows,...yutimeRows,['RUSH・LT・確変突入',`${s.rushEntries}回`],
   ['先バレ設定（終了時）',preAlertDisplayLabel(s.preAlertMode,s.sp.type)],
   ['対象当たり占有率',s.preAlertMode==='off'?'対象外':(s.silentHitEnabled?'90%':'100%')],
   ['先バレ発生',`${s.preAlerts}回`],
