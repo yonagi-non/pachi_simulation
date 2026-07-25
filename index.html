@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>20機種 確率シミュレーター v10.11</title>
+<title>20機種 確率シミュレーター v10.13</title>
 <style>
 :root{
   color-scheme:dark;
@@ -84,6 +84,18 @@ svg{width:100%;height:auto;background:#0f1622;border:1px solid var(--line);borde
 .saved-session-actions{display:flex;justify-content:flex-end;margin-top:10px}
 .saved-session-actions button{min-height:34px;padding:6px 10px}
 .storage-note{display:block;margin-top:7px;line-height:1.45}
+.play-history-toolbar{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.play-history-toolbar label{min-width:0}
+.play-history-summary{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:9px}
+.play-history-summary>div,.machine-record-box{border:1px solid var(--line);border-radius:11px;padding:8px;text-align:center;background:var(--panel)}
+.play-history-summary b,.machine-record-box b{display:block;margin-top:2px;font-size:15px}
+.saved-session-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.saved-session-tag{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:2px 7px;font-size:11px;font-weight:800;background:var(--panel)}
+.saved-session-tag.complete{border-color:#ffd35b;color:#ffd35b;background:rgba(255,211,91,.08)}
+.saved-session-tag.win{color:var(--good)}
+.saved-session-tag.loss{color:var(--bad)}
+.machine-personal-best{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:9px}
+.machine-personal-best .machine-record-empty{grid-column:1/-1;text-align:left;color:var(--muted)}
 .lifetime-overall{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:11px}
 .lifetime-overall>div{border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:9px;text-align:center}
 .lifetime-overall b{display:block;margin-top:3px;font-size:17px}
@@ -585,10 +597,28 @@ body[data-theme="soccer"]{background:radial-gradient(circle at 50% -20%,#20415e 
 .achievement-toast-desc{color:#f8e9b1;font-size:13px;margin-top:2px}
 .achievement-section>summary{cursor:pointer;list-style:none}
 .achievement-section>summary::-webkit-details-marker{display:none}
-.achievement-controls{
-  display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px
+.achievement-overview{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px
 }
-.achievement-controls label{display:grid;gap:5px}
+.achievement-overview>div{
+  border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:9px;text-align:center
+}
+.achievement-overview b{display:block;margin-top:3px;font-size:17px}
+.achievement-unlock-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px
+}
+.achievement-unlock-card{
+  border:1px solid var(--line);border-radius:13px;background:rgba(0,0,0,.08);padding:10px
+}
+.achievement-unlock-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.achievement-unlock-head strong{font-size:14px}
+.achievement-unlock-card progress{
+  width:100%;height:11px;margin-top:8px;accent-color:var(--machine,#62a8ff)
+}
+.achievement-controls{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:12px
+}
+.achievement-controls label{display:grid;gap:5px;min-width:0}
 .achievement-controls select{
   width:100%;min-height:42px;padding:8px 10px;border-radius:12px;
   border:1px solid var(--line);background:var(--panel2);color:var(--text);
@@ -648,8 +678,16 @@ body[data-theme="soccer"]{background:radial-gradient(circle at 50% -20%,#20415e 
 .achievement-desc{display:block;margin-top:5px;color:var(--muted);line-height:1.35}
 .achievement-state{display:block;margin-top:7px;font-size:11px;font-weight:800;color:#718096}
 .achievement-item.unlocked .achievement-state{color:#e4ba45}
+.achievement-progress-text{display:flex;justify-content:space-between;gap:6px;margin-top:7px;font-size:10px;color:var(--muted)}
+.achievement-progress-track{height:7px;margin-top:4px;border-radius:999px;background:#0e1520;border:1px solid var(--line);overflow:hidden}
+.achievement-progress-fill{height:100%;border-radius:inherit;background:var(--machine,#62a8ff);transition:width .2s ease}
+.achievement-empty{padding:18px;border:1px dashed var(--line);border-radius:14px;color:var(--muted);text-align:center}
+@media(max-width:760px){
+  .achievement-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 @media(max-width:620px){
-  .achievement-controls{grid-template-columns:1fr}
+  .achievement-overview{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .achievement-unlock-grid,.achievement-controls{grid-template-columns:1fr}
 }
 .session-achievements{grid-template-columns:repeat(2,minmax(0,1fr))}
 .session-achievements>div{
@@ -804,8 +842,12 @@ button.busy{opacity:.58;cursor:wait}
 @media(max-width:430px){
   .achievement-grid{grid-template-columns:1fr}
   .saved-session-quick{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .play-history-toolbar{grid-template-columns:1fr}
+  .play-history-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .machine-personal-best{grid-template-columns:repeat(2,minmax(0,1fr))}
   .lifetime-overall,.lifetime-quick{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
 
 /* 公開版：開発専用機能は表示・操作しない */
 #bulkSimulationSection,#debugAutoPanel{display:none!important}
@@ -841,7 +883,7 @@ button.busy{opacity:.58;cursor:wait}
 
         <section class="info-section">
           <h3>基本仕様</h3>
-          <p>20機種から遊ぶ機種を選び、見た目では性能差の分からない10台から1台を選択します。12時間営業を想定し、終了時には差玉・大当たり履歴・スランプグラフを確認できます。</p>
+          <p>20機種から遊ぶ機種を選び、見た目では性能差の分からない10台から1台を選択します。12時間営業を想定し、終了時には差玉・大当たり履歴・時間軸スランプグラフを確認できます。</p>
         </section>
 
         <section class="info-section">
@@ -856,7 +898,7 @@ button.busy{opacity:.58;cursor:wait}
 
         <section class="info-section">
           <h3>実績と高速回転</h3>
-          <p>実績は総合25個＋各機種16個の合計345個です。名誉・不名誉・累計、★1〜★5で分類しています。公開版では実績10個で10回転、100個で通常時の100回転を永久解放します。</p>
+          <p>実績は総合37個＋各機種24個の合計517個です。名誉・不名誉・累計、★1〜★5で分類し、解除状況・難易度による絞り込みと条件別の進捗表示に対応しています。公開版では実績10個で10回転、100個で通常時の100回転を永久解放します。</p>
         </section>
 
         <section class="info-section">
@@ -878,8 +920,24 @@ button.busy{opacity:.58;cursor:wait}
         <p class="info-lead">新しいものから順に、主な変更内容を掲載しています。</p>
         <div class="update-list">
           <section class="update-entry latest">
-            <div class="update-entry-head"><span class="update-version">v10.11</span><span class="update-date">2026-07-25</span></div>
-            <ul><li>黄金7500・妖怪時計319の演出、履歴表示、最新ゲーム仕様をまとめて公開版へ反映</li><li>到達した瞬間に遊技を終了するコンプリート機能を追加</li><li>公開版では内部性能・自動遊技・大量シミュレーションを非表示化</li></ul>
+            <div class="update-entry-head"><span class="update-version">v10.13</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>過去プレー履歴強化、時間軸スランプグラフ、実績整理を統合した正式公開版</li><li>実績を総合37個＋各機種24個の合計517個へ増設</li><li>解除状況・難易度フィルター、カテゴリ別集計、高速回転の解放進捗、条件別進捗バーを追加</li><li>公開版では台の内部性能・自動遊技・大量シミュレーションを非公開化</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.12.3 DEBUG</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>スランプグラフの縦軸を±10,000玉から開始する可変表示へ変更</li><li>±10,000玉を超えた側だけ、5,000玉刻みで個別に拡張する方式へ変更</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.12.2 DEBUG</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>スランプグラフの縦軸を-50,000玉〜+50,000玉へ固定し、25,000玉刻みの補助線を追加</li><li>±50,000玉を超えた折れ線は上端・下端へ張り付くクリップ表示へ変更</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.12.1 DEBUG</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>スランプグラフの横軸を総回転数から12時間固定の経過時間へ変更</li><li>1時間ごとの縦線、3時間ごとのラベル、現在地点の強調線を追加</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.12 DEBUG</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>過去プレー履歴へ機種・結果の絞り込みと、差玉・最大MY・最高連による並び替えを追加</li><li>表示中履歴の勝率・コンプリート回数・最高差玉と、選択機種の累計自己ベストを追加</li></ul>
           </section>
           <section class="update-entry">
             <div class="update-entry-head"><span class="update-version">v10.10.18</span><span class="update-date">2026-07-25</span></div>
@@ -1030,7 +1088,7 @@ button.busy{opacity:.58;cursor:wait}
     </div>
   </div>
   <div class="titlebar">
-    <h1>20機種 確率シミュレーター <span class="muted">v10.11</span></h1>
+    <h1>20機種 確率シミュレーター <span class="muted">v10.13</span></h1>
     <div class="title-actions">
       <button id="updateOpen" class="info-button update-button" type="button" aria-label="更新履歴を開く" aria-haspopup="dialog">!
         <span id="updateNew" class="update-new hidden">NEW</span>
@@ -1052,6 +1110,7 @@ button.busy{opacity:.58;cursor:wait}
       <button id="replace" class="secondary">10台を入れ替える</button>
     </div>
     <div id="summary" class="specbox"></div>
+    <div id="machinePersonalBest" class="machine-personal-best" aria-live="polite"></div>
     <div class="grid prealert-settings">
       <label>
         <small>先バレカスタム</small>
@@ -1076,11 +1135,31 @@ button.busy{opacity:.58;cursor:wait}
   <details class="card achievement-section" style="margin-top:12px">
     <summary class="row" style="justify-content:space-between">
       <div>
-        <h2>実績コレクション <span id="achievementCount" class="badge">0/345</span></h2>
-        <small>名誉・不名誉・累計を★1〜★5で分類／進捗はこの端末に保存</small>
+        <h2>実績コレクション <span id="achievementCount" class="badge">0/517</span></h2>
+        <small>総合37個＋各機種24個／名誉・不名誉・累計を★1〜★5で分類</small>
       </div>
       <button id="resetAchievements" type="button" class="secondary" style="min-height:38px;padding:7px 11px">リセット</button>
     </summary>
+
+    <div class="achievement-overview">
+      <div><small>全体</small><b id="achievementOverallCount">0/517</b></div>
+      <div><small>🏅 名誉</small><b id="achievementHonorCount">0/0</b></div>
+      <div><small>💀 不名誉</small><b id="achievementDishonorCount">0/0</b></div>
+      <div><small>📊 累計</small><b id="achievementCumulativeCount">0/0</b></div>
+    </div>
+
+    <div class="achievement-unlock-grid">
+      <div class="achievement-unlock-card">
+        <div class="achievement-unlock-head"><strong>10回転ボタン</strong><span id="achievementTenUnlockText" class="badge">0/10</span></div>
+        <progress id="achievementTenUnlockProgress" max="10" value="0"></progress>
+        <small id="achievementTenUnlockNote">あと10個で永久解放</small>
+      </div>
+      <div class="achievement-unlock-card">
+        <div class="achievement-unlock-head"><strong>100回転ボタン</strong><span id="achievementHundredUnlockText" class="badge">0/100</span></div>
+        <progress id="achievementHundredUnlockProgress" max="100" value="0"></progress>
+        <small id="achievementHundredUnlockNote">あと100個で永久解放</small>
+      </div>
+    </div>
 
     <div class="achievement-controls">
       <label>
@@ -1094,6 +1173,25 @@ button.busy{opacity:.58;cursor:wait}
           <option value="honor">名誉</option>
           <option value="dishonor">不名誉</option>
           <option value="cumulative">累計</option>
+        </select>
+      </label>
+      <label>
+        <small>解除状況</small>
+        <select id="achievementStatusFilter" aria-label="実績の解除状況">
+          <option value="all">すべて</option>
+          <option value="locked">未解除のみ</option>
+          <option value="unlocked">解除済みのみ</option>
+        </select>
+      </label>
+      <label>
+        <small>難易度</small>
+        <select id="achievementDifficultyFilter" aria-label="実績の難易度">
+          <option value="all">すべて</option>
+          <option value="1">★1</option>
+          <option value="2">★2</option>
+          <option value="3">★3</option>
+          <option value="4">★4</option>
+          <option value="5">★5</option>
         </select>
       </label>
     </div>
@@ -1132,6 +1230,32 @@ button.busy{opacity:.58;cursor:wait}
       <button id="clearPlayHistory" type="button" class="secondary" style="min-height:38px;padding:7px 11px">全削除</button>
     </summary>
     <small class="storage-note">ブラウザのデータを消すと履歴も消えます。ほかの端末とは共有されません。</small>
+    <div class="grid play-history-toolbar">
+      <label>
+        <small>表示する機種</small>
+        <select id="playHistoryMachineFilter" aria-label="履歴を機種で絞り込む"></select>
+      </label>
+      <label>
+        <small>結果</small>
+        <select id="playHistoryResultFilter" aria-label="履歴を結果で絞り込む">
+          <option value="all">すべて</option>
+          <option value="win">プラス差玉</option>
+          <option value="loss">マイナス差玉</option>
+          <option value="complete">コンプリート</option>
+        </select>
+      </label>
+      <label>
+        <small>並び順</small>
+        <select id="playHistorySort" aria-label="履歴の並び順">
+          <option value="newest">新しい順</option>
+          <option value="oldest">古い順</option>
+          <option value="netHigh">差玉が高い順</option>
+          <option value="myHigh">最大MYが高い順</option>
+          <option value="chainHigh">最高連が多い順</option>
+        </select>
+      </label>
+    </div>
+    <div id="playHistorySummary" class="grid play-history-summary" aria-live="polite"></div>
     <div id="playHistoryList" class="saved-session-list">
       <small>まだ保存されたプレー履歴はありません</small>
     </div>
@@ -1267,12 +1391,41 @@ button.busy{opacity:.58;cursor:wait}
 
     <div style="margin-top:12px">
       <div class="row" style="justify-content:space-between">
-        <div><h2>スランプグラフ</h2><small>横軸：総消化　縦軸：差玉</small></div>
+        <div><h2>スランプグラフ</h2><small>横軸：経過時間（12時間固定）　縦軸：差玉（±10,000玉から片側ずつ5,000玉刻みで拡張）</small></div>
         <small id="peak">最高 ±0玉</small>
       </div>
-      <svg viewBox="0 0 720 250" aria-label="差玉グラフ">
-        <line x1="45" y1="125" x2="700" y2="125" stroke="#334155" stroke-dasharray="5 5"/>
-        <path id="graph" d="M45 125" fill="none" stroke="#62a8ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg viewBox="0 0 720 250" aria-label="経過時間ごとの差玉グラフ。縦軸はプラスマイナス1万玉から始まり、超えた側だけ5千玉刻みで拡張">
+        <line x1="45.0" y1="18" x2="45.0" y2="229" stroke="#475569" opacity="0.75"/>
+        <line x1="99.6" y1="18" x2="99.6" y2="229" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="154.2" y1="18" x2="154.2" y2="229" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="208.8" y1="18" x2="208.8" y2="229" stroke="#3f4d63" opacity="0.65"/>
+        <line x1="263.3" y1="18" x2="263.3" y2="229" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="317.9" y1="18" x2="317.9" y2="229" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="372.5" y1="18" x2="372.5" y2="229" stroke="#3f4d63" opacity="0.65"/>
+        <line x1="427.1" y1="18" x2="427.1" y2="229" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="481.7" y1="18" x2="481.7" y2="229" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="536.2" y1="18" x2="536.2" y2="229" stroke="#3f4d63" opacity="0.65"/>
+        <line x1="590.8" y1="18" x2="590.8" y2="229" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="645.4" y1="18" x2="645.4" y2="229" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="700.0" y1="18" x2="700.0" y2="229" stroke="#475569" opacity="0.75"/>
+        <text x="45.0" y="246" text-anchor="start" fill="#8f9bad" font-size="12">0h</text>
+        <text x="208.8" y="246" text-anchor="middle" fill="#8f9bad" font-size="12">3h</text>
+        <text x="372.5" y="246" text-anchor="middle" fill="#8f9bad" font-size="12">6h</text>
+        <text x="536.2" y="246" text-anchor="middle" fill="#8f9bad" font-size="12">9h</text>
+        <text x="700.0" y="246" text-anchor="end" fill="#8f9bad" font-size="12">12h</text>
+        <line id="graphTopLine" x1="45" y1="21" x2="700" y2="21" stroke="#475569" opacity=".7"/>
+        <line id="graphPlusGuideLine" x1="45" y1="73" x2="700" y2="73" stroke="#475569" stroke-dasharray="4 6" opacity=".52"/>
+        <line id="graphZeroLine" x1="45" y1="125" x2="700" y2="125" stroke="#64748b" stroke-dasharray="5 5" opacity=".9"/>
+        <line id="graphMinusGuideLine" x1="45" y1="177" x2="700" y2="177" stroke="#475569" stroke-dasharray="4 6" opacity=".52"/>
+        <line id="graphBottomLine" x1="45" y1="229" x2="700" y2="229" stroke="#475569" opacity=".7"/>
+        <text id="graphTopLabel" x="40" y="25" text-anchor="end" fill="#8f9bad" font-size="11">+10,000</text>
+        <text id="graphPlusGuideLabel" x="40" y="77" text-anchor="end" fill="#8f9bad" font-size="11">+5,000</text>
+        <text id="graphZeroLabel" x="40" y="129" text-anchor="end" fill="#8f9bad" font-size="11">0</text>
+        <text id="graphMinusGuideLabel" x="40" y="181" text-anchor="end" fill="#8f9bad" font-size="11">-5,000</text>
+        <text id="graphBottomLabel" x="40" y="227" text-anchor="end" fill="#8f9bad" font-size="11">-10,000</text>
+        <line id="graphCurrentLine" x1="45" y1="18" x2="45" y2="229" stroke="#9cc7ff" stroke-width="2" opacity=".9"/>
+        <text id="graphCurrentLabel" x="50" y="15" fill="#b9d9ff" font-size="12">現在 0:00</text>
+        <path id="graph" d="M45 125" fill="none" stroke="#62a8ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px rgba(98,168,255,.45))"/>
         <circle id="dot" cx="45" cy="125" r="5" fill="#62a8ff"/>
       </svg>
     </div>
@@ -1294,7 +1447,7 @@ button.busy{opacity:.58;cursor:wait}
       <div class="row" style="justify-content:space-between">
         <div>
           <h2>最終スランプグラフ</h2>
-          <small>横軸：総消化回転　縦軸：差玉</small>
+          <small>横軸：経過時間（12時間固定）　縦軸：差玉（±10,000玉から片側ずつ5,000玉刻みで拡張）</small>
         </div>
         <span id="resultGraphStatus" class="badge">最終 ±0玉</span>
       </div>
@@ -1305,17 +1458,43 @@ button.busy{opacity:.58;cursor:wait}
         <div><small>最大MY</small><b id="resultGraphMY">0玉</b></div>
       </div>
 
-      <svg viewBox="0 0 720 270" role="img" aria-label="終了時のスランプグラフ">
+      <svg viewBox="0 0 720 270" role="img" aria-label="終了時の経過時間別スランプグラフ。縦軸はプラスマイナス1万玉から始まり、超えた側だけ5千玉刻みで拡張">
+        <line x1="45.0" y1="18" x2="45.0" y2="247" stroke="#475569" opacity="0.75"/>
+        <line x1="99.6" y1="18" x2="99.6" y2="247" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="154.2" y1="18" x2="154.2" y2="247" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="208.8" y1="18" x2="208.8" y2="247" stroke="#3f4d63" opacity="0.65"/>
+        <line x1="263.3" y1="18" x2="263.3" y2="247" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="317.9" y1="18" x2="317.9" y2="247" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="372.5" y1="18" x2="372.5" y2="247" stroke="#3f4d63" opacity="0.65"/>
+        <line x1="427.1" y1="18" x2="427.1" y2="247" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="481.7" y1="18" x2="481.7" y2="247" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="536.2" y1="18" x2="536.2" y2="247" stroke="#3f4d63" opacity="0.65"/>
+        <line x1="590.8" y1="18" x2="590.8" y2="247" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="645.4" y1="18" x2="645.4" y2="247" stroke="#334155" opacity="0.34" stroke-dasharray="3 6"/>
+        <line x1="700.0" y1="18" x2="700.0" y2="247" stroke="#475569" opacity="0.75"/>
+        <text x="45.0" y="267" text-anchor="start" fill="#8f9bad" font-size="12">0h</text>
+        <text x="208.8" y="267" text-anchor="middle" fill="#8f9bad" font-size="12">3h</text>
+        <text x="372.5" y="267" text-anchor="middle" fill="#8f9bad" font-size="12">6h</text>
+        <text x="536.2" y="267" text-anchor="middle" fill="#8f9bad" font-size="12">9h</text>
+        <text x="700.0" y="267" text-anchor="end" fill="#8f9bad" font-size="12">12h</text>
+        <line id="resultGraphCurrentLine" x1="45" y1="18" x2="45" y2="247" stroke="var(--machine)" stroke-width="2" opacity=".85"/>
+        <text id="resultGraphCurrentLabel" x="50" y="15" fill="#cbd5e1" font-size="12">終了 0:00</text>
+        <line id="resultGraphTopLine" x1="45" y1="23" x2="700" y2="23" stroke="#475569" opacity=".7"/>
+        <line id="resultGraphPlusGuideLine" x1="45" y1="79" x2="700" y2="79" stroke="#475569" stroke-dasharray="4 6" opacity=".52"/>
         <line id="resultZeroLine" x1="45" y1="135" x2="700" y2="135"
-          stroke="#475569" stroke-dasharray="6 6"/>
+          stroke="#64748b" stroke-dasharray="6 6" opacity=".9"/>
+        <line id="resultGraphMinusGuideLine" x1="45" y1="191" x2="700" y2="191" stroke="#475569" stroke-dasharray="4 6" opacity=".52"/>
+        <line id="resultGraphBottomLine" x1="45" y1="247" x2="700" y2="247" stroke="#475569" opacity=".7"/>
         <path id="resultGraph" d="M45 135" fill="none" stroke="var(--machine)"
           stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         <circle id="resultDot" cx="45" cy="135" r="6" fill="var(--machine)"/>
-        <text id="resultGraphTopLabel" x="50" y="22" fill="#a8b2c4" font-size="14">+0玉</text>
-        <text id="resultGraphZeroLabel" x="50" y="130" fill="#a8b2c4" font-size="13">0</text>
-        <text id="resultGraphBottomLabel" x="50" y="258" fill="#a8b2c4" font-size="14">-0玉</text>
-        <text id="resultGraphSpinLabel" x="695" y="258" text-anchor="end"
-          fill="#a8b2c4" font-size="14">0回転</text>
+        <text id="resultGraphTopLabel" x="40" y="27" text-anchor="end" fill="#a8b2c4" font-size="11">+10,000</text>
+        <text id="resultGraphPlusGuideLabel" x="40" y="83" text-anchor="end" fill="#a8b2c4" font-size="11">+5,000</text>
+        <text id="resultGraphZeroLabel" x="40" y="139" text-anchor="end" fill="#a8b2c4" font-size="11">0</text>
+        <text id="resultGraphMinusGuideLabel" x="40" y="195" text-anchor="end" fill="#a8b2c4" font-size="11">-5,000</text>
+        <text id="resultGraphBottomLabel" x="40" y="245" text-anchor="end" fill="#a8b2c4" font-size="11">-10,000</text>
+        <text id="resultGraphSpinLabel" x="695" y="252" text-anchor="end"
+          fill="#a8b2c4" font-size="14">経過 0:00</text>
       </svg>
 
       <div class="result-graph-note">
@@ -1933,13 +2112,19 @@ const ui={
  playTime:$('playTime'),spinSummary:$('spinSummary'),hitSummary:$('hitSummary'),mode:$('mode'),
  detail:$('detail'),message:$('message'),main:$('main'),ten:$('ten'),hundred:$('hundred'),end:$('end'),
  debugAutoPanel:$('debugAutoPanel'),debugAutoControl:$('debugAutoControl'),
- peak:$('peak'),graph:$('graph'),dot:$('dot'),history:$('history'),
+ peak:$('peak'),graph:$('graph'),dot:$('dot'),graphCurrentLine:$('graphCurrentLine'),graphCurrentLabel:$('graphCurrentLabel'),
+ graphTopLine:$('graphTopLine'),graphPlusGuideLine:$('graphPlusGuideLine'),graphZeroLine:$('graphZeroLine'),graphMinusGuideLine:$('graphMinusGuideLine'),graphBottomLine:$('graphBottomLine'),
+ graphTopLabel:$('graphTopLabel'),graphPlusGuideLabel:$('graphPlusGuideLabel'),graphZeroLabel:$('graphZeroLabel'),graphMinusGuideLabel:$('graphMinusGuideLabel'),graphBottomLabel:$('graphBottomLabel'),history:$('history'),
  headline:$('headline'),stats:$('stats'),reveal:$('reveal'),again:$('again'),
  resultHistory:$('resultHistory'),resultHitCount:$('resultHitCount'),resultSavedNote:$('resultSavedNote'),
  playHistoryList:$('playHistoryList'),playHistoryCount:$('playHistoryCount'),clearPlayHistory:$('clearPlayHistory'),
+ playHistoryMachineFilter:$('playHistoryMachineFilter'),playHistoryResultFilter:$('playHistoryResultFilter'),
+ playHistorySort:$('playHistorySort'),playHistorySummary:$('playHistorySummary'),machinePersonalBest:$('machinePersonalBest'),
  lifetimeOverall:$('lifetimeOverall'),lifetimeStatsList:$('lifetimeStatsList'),
  lifetimeMachineCount:$('lifetimeMachineCount'),resetLifetimeStats:$('resetLifetimeStats'),
- resultGraph:$('resultGraph'),resultDot:$('resultDot'),resultZeroLine:$('resultZeroLine'),
+ resultGraph:$('resultGraph'),resultDot:$('resultDot'),resultZeroLine:$('resultZeroLine'),resultGraphCurrentLine:$('resultGraphCurrentLine'),resultGraphCurrentLabel:$('resultGraphCurrentLabel'),
+ resultGraphTopLine:$('resultGraphTopLine'),resultGraphPlusGuideLine:$('resultGraphPlusGuideLine'),resultGraphMinusGuideLine:$('resultGraphMinusGuideLine'),resultGraphBottomLine:$('resultGraphBottomLine'),
+ resultGraphPlusGuideLabel:$('resultGraphPlusGuideLabel'),resultGraphMinusGuideLabel:$('resultGraphMinusGuideLabel'),
  resultGraphStatus:$('resultGraphStatus'),resultGraphHigh:$('resultGraphHigh'),
  resultGraphLow:$('resultGraphLow'),resultGraphMY:$('resultGraphMY'),
  resultGraphTopLabel:$('resultGraphTopLabel'),resultGraphZeroLabel:$('resultGraphZeroLabel'),
@@ -1957,8 +2142,14 @@ const ui={
  achievementToastLabel:$('achievementToastLabel'),
  achievementToastName:$('achievementToastName'),achievementToastDesc:$('achievementToastDesc'),
  achievementCount:$('achievementCount'),achievementGrid:$('achievementGrid'),
+ achievementOverallCount:$('achievementOverallCount'),achievementHonorCount:$('achievementHonorCount'),
+ achievementDishonorCount:$('achievementDishonorCount'),achievementCumulativeCount:$('achievementCumulativeCount'),
+ achievementTenUnlockText:$('achievementTenUnlockText'),achievementTenUnlockProgress:$('achievementTenUnlockProgress'),
+ achievementTenUnlockNote:$('achievementTenUnlockNote'),achievementHundredUnlockText:$('achievementHundredUnlockText'),
+ achievementHundredUnlockProgress:$('achievementHundredUnlockProgress'),achievementHundredUnlockNote:$('achievementHundredUnlockNote'),
  achievementMachineFilter:$('achievementMachineFilter'),
- achievementCategoryFilter:$('achievementCategoryFilter'),
+ achievementCategoryFilter:$('achievementCategoryFilter'),achievementStatusFilter:$('achievementStatusFilter'),
+ achievementDifficultyFilter:$('achievementDifficultyFilter'),
  achievementSelectedTitle:$('achievementSelectedTitle'),
  achievementFilteredCount:$('achievementFilteredCount'),
  resetAchievements:$('resetAchievements'),sessionAchievementCard:$('sessionAchievementCard'),
@@ -2086,8 +2277,10 @@ function machineAchievementItems(meta){
  return [
   {key:'first_hit',category:'honor',stars:1,icon:'🎯',name:`${meta.name}初当たり`,desc:'図柄系初当たりを引く'},
   {key:'right_hit',category:'honor',stars:1,icon:'⚡',name:'連チャン開始',desc:'電サポ・RUSH・LT中に初めて当てる'},
+  {key:'chain3',category:'honor',stars:1,icon:'✨',name:'3連達成',desc:`${meta.name}で3連チャンを達成する`},
   {key:'chain5',category:'honor',stars:2,icon:'🔥',name:'5連達成',desc:`${meta.name}で5連チャンを達成する`},
   {key:'chain10',category:'honor',stars:3,icon:'👑',name:'10連達成',desc:`${meta.name}で10連チャンを達成する`},
+  {key:'chain15',category:'honor',stars:4,icon:'🌠',name:'15連達成',desc:`${meta.name}で15連チャンを達成する`},
   {
    key:'chain20',
    category:'honor',
@@ -2100,7 +2293,7 @@ function machineAchievementItems(meta){
   },
   meta.type==='greed'
    ?{key:'one_shot',category:'honor',stars:5,icon:'🌌',name:'強欲万発',desc:'1回の3000玉＋αで10,000玉を超える'}
-   :{key:'one_shot',category:'honor',stars:3,icon:'💎',name:'一撃万発',desc:'1回の大当たり履歴で10,000玉以上獲得する'},
+   :{key:'one_shot',category:'honor',stars:4,icon:'💎',name:'一撃万発',desc:'1回の大当たり履歴で10,000玉以上獲得する'},
   {key:'special',category:'honor',...meta.special},
   ...(Number.isFinite(meta.complete)&&meta.complete>0
    ?[{key:'complete_my',category:'honor',stars:5,icon:'🏆',name:'コンプリート級',desc:`最大MY${meta.complete.toLocaleString()}玉に到達する`}]
@@ -2108,10 +2301,18 @@ function machineAchievementItems(meta){
   {key:'quick100_3',category:'honor',stars:3,icon:'⏱️',name:'早当たり3連続',desc:'100回転以内の図柄系初当たりを3回連続で引く'},
   {key:'quick50_3',category:'honor',stars:4,icon:'💨',name:'超早当たり3連続',desc:'50回転以内の図柄系初当たりを3回連続で引く'},
   {key:'quick100_5',category:'honor',stars:5,icon:'⚡',name:'神速5連続',desc:'100回転以内の図柄系初当たりを5回連続で引く'},
-  {key:'five_x',category:'dishonor',stars:3,icon:'🕳️',name:'分母5倍ハマり',desc:'通常時の表示分母のおよそ5倍までハマる'},
+
+  {key:'hamari1000',category:'dishonor',stars:2,icon:'🌫️',name:'1,000回転ハマり',desc:'この機種で図柄系初当たりまで1,000回転ハマる'},
+  {key:'hamari1500',category:'dishonor',stars:4,icon:'🫥',name:'1,500回転ハマり',desc:'この機種で図柄系初当たりまで1,500回転ハマる'},
+  {key:'five_x',category:'dishonor',stars:4,icon:'🕳️',name:'分母5倍ハマり',desc:'通常時の表示分母のおよそ5倍までハマる'},
+
+  {key:'total_games_1000',category:'cumulative',stars:1,icon:'🎮',name:'通常1,000回転',desc:'この機種の通常総回転が1,000回に到達する'},
   {key:'total_games_10000',category:'cumulative',stars:2,icon:'🎮',name:'通常10,000回転',desc:'この機種の通常総回転が10,000回に到達する'},
+  {key:'total_games_25000',category:'cumulative',stars:3,icon:'🛞',name:'通常25,000回転',desc:'この機種の通常総回転が25,000回に到達する'},
   {key:'total_games_50000',category:'cumulative',stars:4,icon:'🛞',name:'通常50,000回転',desc:'この機種の通常総回転が50,000回に到達する'},
+  {key:'total_hits_10',category:'cumulative',stars:1,icon:'🔟',name:'総大当たり10回',desc:'この機種の総大当たりが10回に到達する'},
   {key:'total_hits_100',category:'cumulative',stars:2,icon:'💯',name:'総大当たり100回',desc:'この機種の総大当たりが100回に到達する'},
+  {key:'total_hits_250',category:'cumulative',stars:3,icon:'🎇',name:'総大当たり250回',desc:'この機種の総大当たりが250回に到達する'},
   {key:'total_hits_500',category:'cumulative',stars:4,icon:'🎆',name:'総大当たり500回',desc:'この機種の総大当たりが500回に到達する'}
  ];
 }
@@ -2119,10 +2320,16 @@ function machineAchievementItems(meta){
 const GLOBAL_ACHIEVEMENT_GROUP={
  type:'global',icon:'🏅',name:'総合実績',
  items:[
+  {key:'day_plus10000',category:'honor',stars:1,icon:'📈',name:'勝利＋10,000玉',desc:'1プレー中に差玉＋10,000玉へ到達する'},
   {key:'day_plus25000',category:'honor',stars:2,icon:'📈',name:'快勝＋25,000玉',desc:'1プレー中に差玉＋25,000玉へ到達する'},
   {key:'day_plus50000',category:'honor',stars:4,icon:'🚀',name:'大勝＋50,000玉',desc:'1プレー中に差玉＋50,000玉へ到達する'},
+  {key:'day_plus75000',category:'honor',stars:5,icon:'🌌',name:'爆勝＋75,000玉',desc:'1プレー中に差玉＋75,000玉へ到達する'},
+  {key:'day_plus95000',category:'honor',stars:5,icon:'👑',name:'極勝＋95,000玉',desc:'1プレー中に差玉＋95,000玉へ到達する'},
   {key:'all_played',category:'honor',stars:3,icon:'🗺️',name:'全機種制覇',desc:'20機種すべてを1回以上プレーする'},
   {key:'all_hit',category:'honor',stars:4,icon:'🎯',name:'全機種初当たり',desc:'20機種すべてで図柄系初当たりを記録する'},
+  {key:'all_chain5',category:'honor',stars:4,icon:'🔥',name:'全機種5連達成',desc:'20機種すべてで最高5連以上を記録する'},
+  {key:'all_chain10',category:'honor',stars:5,icon:'🌠',name:'全機種10連達成',desc:'20機種すべてで最高10連以上を記録する'},
+  {key:'all_complete',category:'honor',stars:5,icon:'🏆',name:'全機種コンプリート級',desc:'20機種すべてでコンプリート級実績を解除する'},
 
   {key:'hamari1500',category:'dishonor',stars:4,icon:'🫥',name:'1,500回転ハマり',desc:'いずれかの機種で1,500回転までハマる'},
   {key:'hamari2000',category:'dishonor',stars:5,icon:'🪦',name:'2,000回転ハマり',desc:'いずれかの機種で2,000回転までハマる'},
@@ -2136,18 +2343,24 @@ const GLOBAL_ACHIEVEMENT_GROUP={
   {key:'plays10',category:'cumulative',stars:1,icon:'🗓️',name:'総プレー10回',desc:'累計プレー回数が10回に到達する'},
   {key:'plays50',category:'cumulative',stars:2,icon:'🗓️',name:'総プレー50回',desc:'累計プレー回数が50回に到達する'},
   {key:'plays100',category:'cumulative',stars:3,icon:'📚',name:'総プレー100回',desc:'累計プレー回数が100回に到達する'},
+  {key:'plays250',category:'cumulative',stars:4,icon:'📚',name:'総プレー250回',desc:'累計プレー回数が250回に到達する'},
+  {key:'plays500',category:'cumulative',stars:5,icon:'🏛️',name:'総プレー500回',desc:'累計プレー回数が500回に到達する'},
 
+  {key:'games1000',category:'cumulative',stars:1,icon:'🎮',name:'通常総回転1,000回',desc:'全機種の通常総回転が1,000回に到達する'},
   {key:'games10000',category:'cumulative',stars:1,icon:'🎮',name:'通常総回転10,000回',desc:'全機種の通常総回転が10,000回に到達する'},
   {key:'games50000',category:'cumulative',stars:2,icon:'🎮',name:'通常総回転50,000回',desc:'全機種の通常総回転が50,000回に到達する'},
   {key:'games100000',category:'cumulative',stars:3,icon:'🛞',name:'通常総回転100,000回',desc:'全機種の通常総回転が100,000回に到達する'},
   {key:'games250000',category:'cumulative',stars:4,icon:'🛞',name:'通常総回転250,000回',desc:'全機種の通常総回転が250,000回に到達する'},
   {key:'games500000',category:'cumulative',stars:5,icon:'🌌',name:'通常総回転500,000回',desc:'全機種の通常総回転が500,000回に到達する'},
+  {key:'games1000000',category:'cumulative',stars:5,icon:'♾️',name:'通常総回転1,000,000回',desc:'全機種の通常総回転が1,000,000回に到達する'},
 
+  {key:'hits10',category:'cumulative',stars:1,icon:'🔟',name:'総大当たり10回',desc:'全機種の総大当たりが10回に到達する'},
   {key:'hits100',category:'cumulative',stars:1,icon:'💯',name:'総大当たり100回',desc:'全機種の総大当たりが100回に到達する'},
   {key:'hits500',category:'cumulative',stars:2,icon:'🎆',name:'総大当たり500回',desc:'全機種の総大当たりが500回に到達する'},
   {key:'hits1000',category:'cumulative',stars:3,icon:'🎇',name:'総大当たり1,000回',desc:'全機種の総大当たりが1,000回に到達する'},
   {key:'hits2500',category:'cumulative',stars:4,icon:'🌠',name:'総大当たり2,500回',desc:'全機種の総大当たりが2,500回に到達する'},
-  {key:'hits5000',category:'cumulative',stars:5,icon:'👑',name:'総大当たり5,000回',desc:'全機種の総大当たりが5,000回に到達する'}
+  {key:'hits5000',category:'cumulative',stars:5,icon:'👑',name:'総大当たり5,000回',desc:'全機種の総大当たりが5,000回に到達する'},
+  {key:'hits10000',category:'cumulative',stars:5,icon:'🏆',name:'総大当たり10,000回',desc:'全機種の総大当たりが10,000回に到達する'}
  ]
 };
 
@@ -2291,6 +2504,7 @@ function syncSpeedUnlocks(silent=true){
 
  if(newlyUnlocked.length)saveSpeedUnlockData();
  updateSpeedButtons();
+ if(ui.achievementCount)updateAchievementOverview(count);
 
  if(!silent){
   newlyUnlocked.forEach(queueSpeedFeatureUnlock);
@@ -2334,19 +2548,161 @@ function ensureAchievementFilters(){
  }
  if(!ui.achievementMachineFilter.value)ui.achievementMachineFilter.value='global';
 }
+function achievementLifetimeSnapshot(){
+ const machines=MACHINE_ORDER.map(type=>{
+  const spec=SPECS[type];
+  return lifetimeStatsData.machines[type]||emptyMachineLifetime({
+   machineType:type,
+   machineName:spec?.name||type
+  });
+ });
+ const byType=Object.fromEntries(machines.map(machine=>[machine.machineType,machine]));
+ const totals=machines.reduce((sum,machine)=>{
+  sum.sessions+=numberOrZero(machine.sessions);
+  sum.normalSpins+=numberOrZero(machine.normalSpins);
+  sum.totalBonuses+=lifetimeTotalBonuses(machine);
+  sum.maxHamari=Math.max(sum.maxHamari,numberOrZero(machine.maxFigureHamari||machine.maxHamari));
+  if(machine.bestNet!==null)sum.bestNet=Math.max(sum.bestNet,numberOrZero(machine.bestNet));
+  if(machine.worstNet!==null)sum.worstNet=Math.min(sum.worstNet,numberOrZero(machine.worstNet));
+  return sum;
+ },{sessions:0,normalSpins:0,totalBonuses:0,maxHamari:0,bestNet:0,worstNet:0});
+ return {
+  machines,byType,totals,
+  played:machines.filter(machine=>numberOrZero(machine.sessions)>0).length,
+  hit:machines.filter(machine=>numberOrZero(machine.initialHits)>0).length,
+  chain5:machines.filter(machine=>numberOrZero(machine.maxChain)>=5).length,
+  chain10:machines.filter(machine=>numberOrZero(machine.maxChain)>=10).length,
+  complete:MACHINE_ORDER.filter(type=>achievementData.unlocked[`${type}_complete_my`]).length
+ };
+}
+function achievementProgress(item,snapshot){
+ const clamp=(value,target,unit='')=>({
+  value:Math.max(0,numberOrZero(value)),
+  target:Math.max(1,numberOrZero(target)),
+  unit
+ });
+ const sameSession=!!s&&!s.finished&&s.sp?.type===item.type;
+
+ if(item.type==='global'){
+  const {totals}=snapshot;
+  if(item.key.startsWith('plays'))return clamp(totals.sessions,Number(item.key.slice(5)),'回');
+  if(item.key.startsWith('games'))return clamp(totals.normalSpins,Number(item.key.slice(5)),'回転');
+  if(item.key.startsWith('hits'))return clamp(totals.totalBonuses,Number(item.key.slice(4)),'回');
+  if(item.key.startsWith('day_plus')){
+   const target=Number(item.key.slice(8));
+   const current=Math.max(totals.bestNet,s?net():0,0);
+   return clamp(current,target,'玉');
+  }
+  if(item.key.startsWith('loss')){
+   const target=Number(item.key.slice(4));
+   const current=Math.max(Math.abs(Math.min(totals.worstNet,s?net():0,0)),0);
+   return clamp(current,target,'玉');
+  }
+  if(item.key==='hamari1500')return clamp(totals.maxHamari,1500,'回転');
+  if(item.key==='hamari2000')return clamp(totals.maxHamari,2000,'回転');
+  if(item.key==='all_played')return clamp(snapshot.played,MACHINE_ORDER.length,'機種');
+  if(item.key==='all_hit')return clamp(snapshot.hit,MACHINE_ORDER.length,'機種');
+  if(item.key==='all_chain5')return clamp(snapshot.chain5,MACHINE_ORDER.length,'機種');
+  if(item.key==='all_chain10')return clamp(snapshot.chain10,MACHINE_ORDER.length,'機種');
+  if(item.key==='all_complete')return clamp(snapshot.complete,MACHINE_ORDER.length,'機種');
+  return null;
+ }
+
+ const machine=snapshot.byType[item.type]||emptyMachineLifetime({machineType:item.type,machineName:item.machineName});
+ const totalBonuses=lifetimeTotalBonuses(machine);
+ const sessionMaxChain=sameSession?Math.max(numberOrZero(s.chain),numberOrZero(s.maxChain)):0;
+ const maxChain=Math.max(numberOrZero(machine.maxChain),sessionMaxChain);
+ const sessionHamari=sameSession?Math.max(numberOrZero(s.maxFigureHamari),numberOrZero(s.figureSinceHit)):0;
+ const maxHamari=Math.max(numberOrZero(machine.maxFigureHamari||machine.maxHamari),sessionHamari);
+ const sessionMY=sameSession?numberOrZero(s.peak)-numberOrZero(s.low):0;
+ const maxMY=Math.max(numberOrZero(machine.maxMY),sessionMY);
+
+ if(item.key==='first_hit')return clamp(numberOrZero(machine.initialHits)+(sameSession?numberOrZero(s.initialHits):0),1,'回');
+ if(item.key==='right_hit')return clamp(numberOrZero(machine.rightHits)+(sameSession?numberOrZero(s.rightHits):0),1,'回');
+ if(item.key==='chain3')return clamp(maxChain,3,'連');
+ if(item.key==='chain5')return clamp(maxChain,5,'連');
+ if(item.key==='chain10')return clamp(maxChain,10,'連');
+ if(item.key==='chain15')return clamp(maxChain,15,'連');
+ if(item.key==='chain20')return clamp(maxChain,item.type==='craft'?30:20,'連');
+ if(item.key==='complete_my'){
+  const target=numberOrZero(MACHINE_REGISTRY[item.type]?.completeMy);
+  return target>0?clamp(maxMY,target,'玉'):null;
+ }
+ if(item.key==='quick100_3')return clamp(sameSession?numberOrZero(s.quickStreak100):0,3,'連続');
+ if(item.key==='quick50_3')return clamp(sameSession?numberOrZero(s.quickStreak50):0,3,'連続');
+ if(item.key==='quick100_5')return clamp(sameSession?numberOrZero(s.quickStreak100):0,5,'連続');
+ if(item.key==='hamari1000')return clamp(maxHamari,1000,'回転');
+ if(item.key==='hamari1500')return clamp(maxHamari,1500,'回転');
+ if(item.key==='five_x'){
+  const target=numberOrZero(MACHINE_HAMARI_DENOMINATORS[item.type])*5;
+  return target>0?clamp(maxHamari,target,'回転'):null;
+ }
+ if(item.key.startsWith('total_games_'))return clamp(numberOrZero(machine.normalSpins)+(sameSession?numberOrZero(s.normalSpins):0),Number(item.key.slice(12)),'回転');
+ if(item.key.startsWith('total_hits_')){
+  const activeBonuses=sameSession?numberOrZero(s.initialHits)+numberOrZero(s.charges)+numberOrZero(s.rightHits):0;
+  return clamp(totalBonuses+activeBonuses,Number(item.key.slice(11)),'回');
+ }
+ return null;
+}
+function achievementProgressHTML(item,snapshot){
+ if(achievementData.unlocked[item.id])return '';
+ const progress=achievementProgress(item,snapshot);
+ if(!progress)return '';
+ const percent=Math.max(0,Math.min(100,progress.value/progress.target*100));
+ const current=Math.min(progress.value,progress.target);
+ return `<div class="achievement-progress-text"><span>進捗</span><span>${fmt(current)}/${fmt(progress.target)}${progress.unit}</span></div>
+    <div class="achievement-progress-track"><div class="achievement-progress-fill" style="width:${percent.toFixed(1)}%"></div></div>`;
+}
+function updateAchievementOverview(unlockedCount){
+ const categoryCount=category=>{
+  const items=ACHIEVEMENTS.filter(item=>item.category===category);
+  return [items.filter(item=>achievementData.unlocked[item.id]).length,items.length];
+ };
+ const [honorUnlocked,honorTotal]=categoryCount('honor');
+ const [dishonorUnlocked,dishonorTotal]=categoryCount('dishonor');
+ const [cumulativeUnlocked,cumulativeTotal]=categoryCount('cumulative');
+
+ ui.achievementOverallCount.textContent=`${unlockedCount}/${ACHIEVEMENTS.length}`;
+ ui.achievementHonorCount.textContent=`${honorUnlocked}/${honorTotal}`;
+ ui.achievementDishonorCount.textContent=`${dishonorUnlocked}/${dishonorTotal}`;
+ ui.achievementCumulativeCount.textContent=`${cumulativeUnlocked}/${cumulativeTotal}`;
+
+ const updateUnlock=(key,text,progress,note)=>{
+  const target=SPEED_UNLOCK_THRESHOLDS[key];
+  const value=Math.min(unlockedCount,target);
+  const permanentlyUnlocked=!!speedUnlockData[key];
+  text.textContent=permanentlyUnlocked?'永久解放済み':`${value}/${target}`;
+  progress.value=value;
+  note.textContent=permanentlyUnlocked
+   ?`${key==='ten'?'10回転':'100回転'}は永久解放済み`
+   :DEBUG_SPEED_UNLOCKS
+    ?`DEBUGでは使用可・あと${target-value}個で公開版も永久解放`
+    :`あと${target-value}個で永久解放`;
+ };
+ updateUnlock('ten',ui.achievementTenUnlockText,ui.achievementTenUnlockProgress,ui.achievementTenUnlockNote);
+ updateUnlock('hundred',ui.achievementHundredUnlockText,ui.achievementHundredUnlockProgress,ui.achievementHundredUnlockNote);
+}
 function renderAchievements(){
  ensureAchievementFilters();
 
  const unlockedCount=ACHIEVEMENTS.filter(item=>achievementData.unlocked[item.id]).length;
  ui.achievementCount.textContent=`${unlockedCount}/${ACHIEVEMENTS.length}`;
+ updateAchievementOverview(unlockedCount);
 
  const selectedType=ui.achievementMachineFilter.value||'global';
  const selectedCategory=ui.achievementCategoryFilter.value||'all';
+ const selectedStatus=ui.achievementStatusFilter.value||'all';
+ const selectedDifficulty=ui.achievementDifficultyFilter.value||'all';
  const group=ACHIEVEMENT_GROUPS.find(item=>item.type===selectedType)||ACHIEVEMENT_GROUPS[0];
  const allGroupItems=ACHIEVEMENTS.filter(item=>item.type===group.type);
- const visibleItems=selectedCategory==='all'
-  ?allGroupItems
-  :allGroupItems.filter(item=>item.category===selectedCategory);
+ const visibleItems=allGroupItems.filter(item=>{
+  if(selectedCategory!=='all'&&item.category!==selectedCategory)return false;
+  const unlocked=!!achievementData.unlocked[item.id];
+  if(selectedStatus==='locked'&&unlocked)return false;
+  if(selectedStatus==='unlocked'&&!unlocked)return false;
+  if(selectedDifficulty!=='all'&&item.stars!==Number(selectedDifficulty))return false;
+  return true;
+ });
  const visibleUnlocked=visibleItems.filter(item=>achievementData.unlocked[item.id]).length;
 
  ui.achievementSelectedTitle.textContent=`${group.icon} ${group.name}`;
@@ -2355,9 +2711,10 @@ function renderAchievements(){
  const categories=selectedCategory==='all'
   ?['honor','dishonor','cumulative']
   :[selectedCategory];
+ const snapshot=achievementLifetimeSnapshot();
 
- ui.achievementGrid.innerHTML=categories.map(category=>{
-  const items=allGroupItems.filter(item=>item.category===category);
+ const content=categories.map(category=>{
+  const items=visibleItems.filter(item=>item.category===category);
   if(!items.length)return '';
 
   const categoryUnlocked=items.filter(item=>achievementData.unlocked[item.id]).length;
@@ -2377,6 +2734,7 @@ function renderAchievements(){
      </div>
      <small class="achievement-desc">${item.desc}</small>
      <small class="achievement-state">${state}</small>
+     ${achievementProgressHTML(item,snapshot)}
     </div>
    </div>`;
   }).join('');
@@ -2392,6 +2750,8 @@ function renderAchievements(){
    <div class="achievement-grid">${cards}</div>
   </section>`;
  }).join('');
+
+ ui.achievementGrid.innerHTML=content||'<div class="achievement-empty">この条件に一致する実績はありません。</div>';
 }
 let achievementQueue=[];
 let achievementShowing=false;
@@ -2447,8 +2807,10 @@ function unlockGlobalAchievement(key,silent=false){
 function checkMachineChainAchievements(){
  if(!s)return;
  if(s.chain>=2)unlockMachineAchievement('right_hit');
+ if(s.chain>=3)unlockMachineAchievement('chain3');
  if(s.chain>=5)unlockMachineAchievement('chain5');
  if(s.chain>=10)unlockMachineAchievement('chain10');
+ if(s.chain>=15)unlockMachineAchievement('chain15');
  if(s.sp.type==='craft'){
   if(s.chain>=20)unlockMachineAchievement('special');
   if(s.chain>=30)unlockMachineAchievement('chain20');
@@ -2477,6 +2839,8 @@ function checkHamariAchievements(){
  const hamari=Math.max(s.maxFigureHamari||0,s.figureSinceHit||0);
  const denominator=MACHINE_HAMARI_DENOMINATORS[s.sp.type];
 
+ if(hamari>=1000)unlockMachineAchievement('hamari1000');
+ if(hamari>=1500)unlockMachineAchievement('hamari1500');
  if(denominator&&hamari>=denominator*5)unlockMachineAchievement('five_x');
  if(hamari>=1500)unlockGlobalAchievement('hamari1500');
  if(hamari>=2000)unlockGlobalAchievement('hamari2000');
@@ -2485,8 +2849,11 @@ function checkSessionNetAchievements(){
  if(!s)return;
  const value=net();
 
+ if(value>=10000)unlockGlobalAchievement('day_plus10000');
  if(value>=25000)unlockGlobalAchievement('day_plus25000');
  if(value>=50000)unlockGlobalAchievement('day_plus50000');
+ if(value>=75000)unlockGlobalAchievement('day_plus75000');
+ if(value>=95000)unlockGlobalAchievement('day_plus95000');
 
  [25000,30000,35000,40000,45000,50000].forEach(threshold=>{
   if(value<=-threshold)unlockGlobalAchievement(`loss${threshold}`);
@@ -2805,9 +3172,9 @@ function validateMachineRegistry(){
  }
 
  if(errors.length){
-  console.error('[v10.11 MACHINE_REGISTRY] 検証エラー',errors);
+  console.error('[v10.13 MACHINE_REGISTRY] 検証エラー',errors);
  }else{
-  console.info(`[v10.11 MACHINE_REGISTRY] ${MACHINE_ORDER.length}機種の共通登録を確認`);
+  console.info(`[v10.13 MACHINE_REGISTRY] ${MACHINE_ORDER.length}機種の共通登録を確認`);
  }
  return errors;
 }
@@ -3568,6 +3935,7 @@ function build(){
  ui.preAlertMode.disabled=false;
  ui.playPreAlertMode.disabled=false;
  ui.summary.textContent=`区分：${machineCategory(sp.type).short}｜${sp.name}｜${sp.summary}｜10台の内部性能は非公開`;
+ renderMachinePersonalBest(sp.type);
  ui.seats.innerHTML='';
  hall.forEach(m=>{
   const b=document.createElement('button');b.className='seat';b.type='button';
@@ -3664,7 +4032,7 @@ function checkCompleteCondition(){
 function record(){
  const n=net();s.peak=Math.max(s.peak,n);s.low=Math.min(s.low,n);
  // 最終到達点を結果グラフへ残した直後、その瞬間にコンプリート判定する。
- if(!bulkSimulation.active)s.graph.push({x:s.totalSpins,y:n});
+ if(!bulkSimulation.active)s.graph.push({x:Math.max(0,Math.min(DAY,s.elapsed)),y:n});
  if(checkCompleteCondition())throw COMPLETE_STOP_SIGNAL;
  if(bulkSimulation.active)return;
  checkCompleteMyAchievement();
@@ -6097,14 +6465,33 @@ function update(){
  draw();
  if(!(s.mode==='judge'&&ui.stage.classList.contains('hot')))updateStage();
 }
+function formatGraphElapsed(seconds){
+ const safe=Math.max(0,Math.min(DAY,Number(seconds)||0));
+ const h=Math.floor(safe/3600);
+ const m=Math.floor((safe%3600)/60);
+ return `${h}:${String(m).padStart(2,'0')}`;
+}
+const SLUMP_GRAPH_BASE_LIMIT=10000;
+const SLUMP_GRAPH_Y_STEP=5000;
+function slumpGraphAxisRange(){
+ const high=Math.max(0,Number(s?.peak)||0);
+ const low=Math.min(0,Number(s?.low)||0);
+ // 最初は±10,000玉。超えた側だけ5,000玉刻みで広げる。
+ const maxY=Math.max(SLUMP_GRAPH_BASE_LIMIT,Math.ceil(high/SLUMP_GRAPH_Y_STEP)*SLUMP_GRAPH_Y_STEP);
+ const minY=-Math.max(SLUMP_GRAPH_BASE_LIMIT,Math.ceil(Math.abs(low)/SLUMP_GRAPH_Y_STEP)*SLUMP_GRAPH_Y_STEP);
+ return {maxY,minY};
+}
 function graphGeometry(centerY=125,amplitude=104){
  const a=s.graph;
- const mx=Math.max(100,a[a.length-1].x);
- let my=Math.max(1000,...a.map(v=>Math.abs(v.y)));
- my=Math.ceil(my/1000)*1000;
 
- const X=x=>45+x/mx*655;
- const Y=y=>centerY-y/my*amplitude;
+ // 横軸は常に12時間固定。未消化時間は右側の空白として残る。
+ const X=x=>45+Math.max(0,Math.min(DAY,x))/DAY*655;
+ const {maxY,minY}=slumpGraphAxisRange();
+ const topY=centerY-amplitude;
+ const bottomY=centerY+amplitude;
+ const span=Math.max(1,maxY-minY);
+ const clampY=y=>Math.max(minY,Math.min(maxY,Number(y)||0));
+ const Y=y=>topY+(maxY-clampY(y))/span*(bottomY-topY);
  const step=Math.max(1,Math.ceil(a.length/220));
  const sampled=a.filter((_,i)=>i%step===0||i===a.length-1);
  const d=sampled.map((v,i)=>`${i?'L':'M'}${X(v.x).toFixed(1)} ${Y(v.y).toFixed(1)}`).join(' ');
@@ -6113,18 +6500,74 @@ function graphGeometry(centerY=125,amplitude=104){
  return {
   d,
   last,
-  maxAbs:my,
-  maxX:mx,
+  maxY,
+  minY,
+  maxX:DAY,
+  topY,
+  bottomY,
+  yFor:Y,
   endX:X(last.x),
   endY:Y(last.y),
-  zeroY:Y(0)
+  zeroY:Y(0),
+  currentX:X(s.elapsed)
  };
+}
+function formatGraphAxisValue(value){
+ if(value===0)return '0';
+ return `${value>0?'+':'-'}${fmt(Math.abs(value))}`;
+}
+function positionHorizontalLine(line,y){
+ if(!line)return;
+ line.setAttribute('y1',y);
+ line.setAttribute('y2',y);
+}
+function positionAxisLabel(label,value,y,edge){
+ if(!label)return;
+ label.textContent=formatGraphAxisValue(value);
+ const adjusted=edge==='top'?y+4:edge==='bottom'?y-2:y+4;
+ label.setAttribute('y',adjusted);
+}
+function updateGraphAxisVisuals(g,prefix='graph'){
+ const isResult=prefix==='resultGraph';
+ const topLine=isResult?ui.resultGraphTopLine:ui.graphTopLine;
+ const plusLine=isResult?ui.resultGraphPlusGuideLine:ui.graphPlusGuideLine;
+ const zeroLine=isResult?ui.resultZeroLine:ui.graphZeroLine;
+ const minusLine=isResult?ui.resultGraphMinusGuideLine:ui.graphMinusGuideLine;
+ const bottomLine=isResult?ui.resultGraphBottomLine:ui.graphBottomLine;
+ const topLabel=isResult?ui.resultGraphTopLabel:ui.graphTopLabel;
+ const plusLabel=isResult?ui.resultGraphPlusGuideLabel:ui.graphPlusGuideLabel;
+ const zeroLabel=isResult?ui.resultGraphZeroLabel:ui.graphZeroLabel;
+ const minusLabel=isResult?ui.resultGraphMinusGuideLabel:ui.graphMinusGuideLabel;
+ const bottomLabel=isResult?ui.resultGraphBottomLabel:ui.graphBottomLabel;
+
+ positionHorizontalLine(topLine,g.topY);
+ positionHorizontalLine(plusLine,g.yFor(5000));
+ positionHorizontalLine(zeroLine,g.zeroY);
+ positionHorizontalLine(minusLine,g.yFor(-5000));
+ positionHorizontalLine(bottomLine,g.bottomY);
+ positionAxisLabel(topLabel,g.maxY,g.topY,'top');
+ positionAxisLabel(plusLabel,5000,g.yFor(5000));
+ positionAxisLabel(zeroLabel,0,g.zeroY);
+ positionAxisLabel(minusLabel,-5000,g.yFor(-5000));
+ positionAxisLabel(bottomLabel,g.minY,g.bottomY,'bottom');
+}
+function positionTimeMarker(line,label,x,prefix){
+ if(!line||!label)return;
+ const safeX=Math.max(45,Math.min(700,x));
+ line.setAttribute('x1',safeX);
+ line.setAttribute('x2',safeX);
+ const nearRight=safeX>610;
+ label.setAttribute('x',nearRight?safeX-5:safeX+5);
+ label.setAttribute('text-anchor',nearRight?'end':'start');
+ label.textContent=`${prefix} ${formatGraphElapsed(s.elapsed)}`;
 }
 function draw(){
  const g=graphGeometry();
  ui.graph.setAttribute('d',g.d);
  ui.dot.setAttribute('cx',g.endX);
  ui.dot.setAttribute('cy',g.endY);
+ updateGraphAxisVisuals(g,'graph');
+ positionTimeMarker(ui.graphCurrentLine,ui.graphCurrentLabel,g.currentX,'現在');
 }
 function drawResultGraph(){
  if(!s||!ui.resultGraph)return;
@@ -6138,19 +6581,15 @@ function drawResultGraph(){
  ui.resultGraph.setAttribute('d',g.d);
  ui.resultDot.setAttribute('cx',g.endX);
  ui.resultDot.setAttribute('cy',g.endY);
- ui.resultZeroLine.setAttribute('y1',g.zeroY);
- ui.resultZeroLine.setAttribute('y2',g.zeroY);
+ updateGraphAxisVisuals(g,'resultGraph');
 
  ui.resultGraphStatus.textContent=`最終 ${signed(finalNet)}玉`;
  ui.resultGraphStatus.className=`badge ${finalNet>=0?'good':'bad'}`;
  ui.resultGraphHigh.textContent=`${signed(high)}玉`;
  ui.resultGraphLow.textContent=`${signed(low)}玉`;
  ui.resultGraphMY.textContent=`${fmt(maxMY)}玉`;
- ui.resultGraphTopLabel.textContent=`+${fmt(g.maxAbs)}玉`;
- ui.resultGraphZeroLabel.textContent='0';
- ui.resultGraphZeroLabel.setAttribute('y',Math.max(18,Math.min(252,g.zeroY-5)));
- ui.resultGraphBottomLabel.textContent=`-${fmt(g.maxAbs)}玉`;
- ui.resultGraphSpinLabel.textContent=`${fmt(g.last.x)}回転`;
+ ui.resultGraphSpinLabel.textContent=`経過 ${formatGraphElapsed(s.elapsed)}`;
+ positionTimeMarker(ui.resultGraphCurrentLine,ui.resultGraphCurrentLabel,g.currentX,'終了');
  ui.resultGraphEndText.textContent=`終了時 ${signed(finalNet)}玉`;
  ui.resultGraphCostNote.textContent=s.sp.type==='marine'
   ?'折れ線は通常投入と電サポ中消費を差し引いた推移です。'
@@ -6183,7 +6622,6 @@ function makeSessionRecord(reason){
   machineType:s.sp.type,
   machineName:s.sp.name,
   seat:s.machine.no,
-  internalRate:Number(s.machine.rate.toFixed(2)),
   rateCategory:s.machine.category,
   finalNet:net(),
   normalSpins:s.normalSpins,
@@ -6400,33 +6838,53 @@ function checkLifetimeAchievements(silent=false){
   const type=machine.machineType;
   const bonuses=lifetimeTotalBonuses(machine);
   const denominator=MACHINE_HAMARI_DENOMINATORS[type];
-
-  if(machine.normalSpins>=10000)unlockMachineAchievement('total_games_10000',type,silent);
-  if(machine.normalSpins>=50000)unlockMachineAchievement('total_games_50000',type,silent);
-  if(bonuses>=100)unlockMachineAchievement('total_hits_100',type,silent);
-  if(bonuses>=500)unlockMachineAchievement('total_hits_500',type,silent);
   const figureHamari=numberOrZero(machine.maxFigureHamari||machine.maxHamari);
+
+  [1000,10000,25000,50000].forEach(threshold=>{
+   if(machine.normalSpins>=threshold)unlockMachineAchievement(`total_games_${threshold}`,type,silent);
+  });
+  [10,100,250,500].forEach(threshold=>{
+   if(bonuses>=threshold)unlockMachineAchievement(`total_hits_${threshold}`,type,silent);
+  });
+  if(machine.maxChain>=3)unlockMachineAchievement('chain3',type,silent);
+  if(machine.maxChain>=5)unlockMachineAchievement('chain5',type,silent);
+  if(machine.maxChain>=10)unlockMachineAchievement('chain10',type,silent);
+  if(machine.maxChain>=15)unlockMachineAchievement('chain15',type,silent);
+  if(type==='craft'){
+   if(machine.maxChain>=30)unlockMachineAchievement('chain20',type,silent);
+  }else if(machine.maxChain>=20){
+   unlockMachineAchievement('chain20',type,silent);
+  }
+  if(machine.initialHits>0)unlockMachineAchievement('first_hit',type,silent);
+  if(machine.rightHits>0)unlockMachineAchievement('right_hit',type,silent);
+  if(figureHamari>=1000)unlockMachineAchievement('hamari1000',type,silent);
+  if(figureHamari>=1500)unlockMachineAchievement('hamari1500',type,silent);
   if(denominator&&figureHamari>=denominator*5)unlockMachineAchievement('five_x',type,silent);
+  const completeTarget=numberOrZero(MACHINE_REGISTRY[type]?.completeMy);
+  if(completeTarget>0&&machine.maxMY>=completeTarget)unlockMachineAchievement('complete_my',type,silent);
  });
 
  if(machines.every(machine=>machine.sessions>0))unlockGlobalAchievement('all_played',silent);
  if(machines.every(machine=>machine.initialHits>0))unlockGlobalAchievement('all_hit',silent);
+ if(machines.every(machine=>machine.maxChain>=5))unlockGlobalAchievement('all_chain5',silent);
+ if(machines.every(machine=>machine.maxChain>=10))unlockGlobalAchievement('all_chain10',silent);
+ if(MACHINE_ORDER.every(type=>achievementData.unlocked[`${type}_complete_my`]))unlockGlobalAchievement('all_complete',silent);
 
- if(totals.sessions>=10)unlockGlobalAchievement('plays10',silent);
- if(totals.sessions>=50)unlockGlobalAchievement('plays50',silent);
- if(totals.sessions>=100)unlockGlobalAchievement('plays100',silent);
-
- [10000,50000,100000,250000,500000].forEach(threshold=>{
+ [10,50,100,250,500].forEach(threshold=>{
+  if(totals.sessions>=threshold)unlockGlobalAchievement(`plays${threshold}`,silent);
+ });
+ [1000,10000,50000,100000,250000,500000,1000000].forEach(threshold=>{
   if(totals.normalSpins>=threshold)unlockGlobalAchievement(`games${threshold}`,silent);
  });
- [100,500,1000,2500,5000].forEach(threshold=>{
+ [10,100,500,1000,2500,5000,10000].forEach(threshold=>{
   if(totals.totalBonuses>=threshold)unlockGlobalAchievement(`hits${threshold}`,silent);
  });
 
  if(totals.maxHamari>=1500)unlockGlobalAchievement('hamari1500',silent);
  if(totals.maxHamari>=2000)unlockGlobalAchievement('hamari2000',silent);
- if(totals.bestNet>=25000)unlockGlobalAchievement('day_plus25000',silent);
- if(totals.bestNet>=50000)unlockGlobalAchievement('day_plus50000',silent);
+ [10000,25000,50000,75000,95000].forEach(threshold=>{
+  if(totals.bestNet>=threshold)unlockGlobalAchievement(`day_plus${threshold}`,silent);
+ });
 
  [25000,30000,35000,40000,45000,50000].forEach(threshold=>{
   if(totals.worstNet<=-threshold)unlockGlobalAchievement(`loss${threshold}`,silent);
@@ -6616,11 +7074,79 @@ function statPair(label,value){
  return [left,right];
 }
 
+function populatePlayHistoryMachineFilter(){
+ if(!ui.playHistoryMachineFilter)return;
+ const previous=ui.playHistoryMachineFilter.value||'all';
+ ui.playHistoryMachineFilter.innerHTML=[
+  '<option value="all">すべての機種</option>',
+  ...MACHINE_ORDER.map(type=>`<option value="${type}">${SPECS[type].name}</option>`)
+ ].join('');
+ ui.playHistoryMachineFilter.value=[...ui.playHistoryMachineFilter.options].some(option=>option.value===previous)?previous:'all';
+}
+
+function filteredPlayHistory(){
+ const machine=ui.playHistoryMachineFilter?.value||'all';
+ const result=ui.playHistoryResultFilter?.value||'all';
+ const sort=ui.playHistorySort?.value||'newest';
+ let records=playHistoryData.filter(record=>{
+  if(machine!=='all'&&record.machineType!==machine)return false;
+  const finalNet=numberOrZero(record.finalNet);
+  if(result==='win'&&finalNet<=0)return false;
+  if(result==='loss'&&finalNet>=0)return false;
+  if(result==='complete'&&record.reason!=='コンプリート機能作動')return false;
+  return true;
+ });
+ const timeOf=record=>Date.parse(record.endedAt||'')||0;
+ records=[...records];
+ if(sort==='oldest')records.sort((a,b)=>timeOf(a)-timeOf(b));
+ else if(sort==='netHigh')records.sort((a,b)=>numberOrZero(b.finalNet)-numberOrZero(a.finalNet)||timeOf(b)-timeOf(a));
+ else if(sort==='myHigh')records.sort((a,b)=>numberOrZero(b.maxMY)-numberOrZero(a.maxMY)||timeOf(b)-timeOf(a));
+ else if(sort==='chainHigh')records.sort((a,b)=>numberOrZero(b.maxChain)-numberOrZero(a.maxChain)||timeOf(b)-timeOf(a));
+ else records.sort((a,b)=>timeOf(b)-timeOf(a));
+ return records;
+}
+
+function renderPlayHistorySummary(records){
+ if(!ui.playHistorySummary)return;
+ const count=records.length;
+ const wins=records.filter(record=>numberOrZero(record.finalNet)>0).length;
+ const completes=records.filter(record=>record.reason==='コンプリート機能作動').length;
+ const best=count?Math.max(...records.map(record=>numberOrZero(record.finalNet))):0;
+ const winRate=count?wins/count*100:0;
+ ui.playHistorySummary.innerHTML=[
+  ['表示中',`${fmt(count)}件`],
+  ['勝率',`${winRate.toFixed(1)}%`],
+  ['コンプリート',`${fmt(completes)}回`],
+  ['最高差玉',count?`${signed(best)}玉`:'記録なし']
+ ].map(([label,value],index)=>`<div><small>${label}</small><b class="${index===3&&count?(best>=0?'good':'bad'):''}">${value}</b></div>`).join('');
+}
+
+function renderMachinePersonalBest(type){
+ if(!ui.machinePersonalBest)return;
+ const machine=lifetimeStatsData.machines[type];
+ if(!machine||!machine.sessions){
+  ui.machinePersonalBest.innerHTML='<div class="machine-record-box machine-record-empty"><small>この機種の累計記録はまだありません</small></div>';
+  return;
+ }
+ const values=[
+  ['プレー',`${fmt(machine.sessions)}回`],
+  ['最高差玉',machine.bestNet===null?'記録なし':`${signed(machine.bestNet)}玉`],
+  ['最高連',`${fmt(machine.maxChain)}連`],
+  ['最大MY',`${fmt(machine.maxMY)}玉`],
+  ['最終プレー',machine.lastPlayedAt?formatSavedDate(machine.lastPlayedAt):'記録なし']
+ ];
+ ui.machinePersonalBest.innerHTML=values.map(([label,value],index)=>`<div class="machine-record-box"><small>${label}</small><b class="${index===1&&machine.bestNet!==null?(machine.bestNet>=0?'good':'bad'):''}">${value}</b></div>`).join('');
+}
+
 function renderPlayHistory(){
  if(!ui.playHistoryList||!ui.playHistoryCount)return;
 
- ui.playHistoryCount.textContent=`${playHistoryData.length}件`;
+ populatePlayHistoryMachineFilter();
+ const records=filteredPlayHistory();
+ ui.playHistoryCount.textContent=`${records.length}/${playHistoryData.length}件`;
  ui.playHistoryList.textContent='';
+ renderPlayHistorySummary(records);
+ renderMachinePersonalBest(ui.spec?.value||MACHINE_ORDER[0]);
 
  if(!playHistoryData.length){
   const empty=document.createElement('small');
@@ -6628,8 +7154,14 @@ function renderPlayHistory(){
   ui.playHistoryList.appendChild(empty);
   return;
  }
+ if(!records.length){
+  const empty=document.createElement('small');
+  empty.textContent='条件に一致するプレー履歴はありません';
+  ui.playHistoryList.appendChild(empty);
+  return;
+ }
 
- playHistoryData.forEach(record=>{
+ records.forEach(record=>{
   const details=document.createElement('details');
   details.className='saved-session';
 
@@ -6642,6 +7174,19 @@ function renderPlayHistory(){
   const small=document.createElement('small');
   small.textContent=`${formatSavedDate(record.endedAt)}｜${fmt(record.normalSpins)}回転`;
   title.append(strong,small);
+  const tags=document.createElement('div');
+  tags.className='saved-session-tags';
+  const resultTag=document.createElement('span');
+  resultTag.className=`saved-session-tag ${numberOrZero(record.finalNet)>0?'win':numberOrZero(record.finalNet)<0?'loss':''}`;
+  resultTag.textContent=numberOrZero(record.finalNet)>0?'プラス':numberOrZero(record.finalNet)<0?'マイナス':'±0';
+  tags.appendChild(resultTag);
+  if(record.reason==='コンプリート機能作動'){
+   const completeTag=document.createElement('span');
+   completeTag.className='saved-session-tag complete';
+   completeTag.textContent='COMPLETE';
+   tags.appendChild(completeTag);
+  }
+  title.appendChild(tags);
 
   const netText=document.createElement('div');
   netText.className=`saved-session-net ${record.finalNet>=0?'good':'bad'}`;
@@ -7095,6 +7640,7 @@ function processBulkChunk(){
  setTimeout(processBulkChunk,0);
 }
 function startBulkSimulation(){
+ if(PUBLIC_BUILD)return;
  if(bulkSimulation.active)return;
  if(s&&!s.finished){
   ui.bulkProgressWrap.classList.remove('hidden');
@@ -7127,7 +7673,7 @@ function startBulkSimulation(){
 }
 
 const CHANGELOG_STORAGE_KEY='pachiSimulatorChangelogSeenVersionV1';
-const CURRENT_CHANGELOG_VERSION='10.10.14';
+const CURRENT_CHANGELOG_VERSION='10.12.1';
 
 function changelogSeenVersion(){
  try{return localStorage.getItem(CHANGELOG_STORAGE_KEY)||''}catch(_){return ''}
@@ -7279,6 +7825,9 @@ ui.silentHitEnabled.addEventListener('change',()=>{
 ui.playSilentHitEnabled.addEventListener('change',()=>{
  applySilentHitSetting(ui.playSilentHitEnabled.checked);
 });
+[ui.playHistoryMachineFilter,ui.playHistoryResultFilter,ui.playHistorySort].forEach(control=>{
+ if(control)control.addEventListener('change',renderPlayHistory);
+});
 ui.clearPlayHistory.addEventListener('click',event=>{
  event.preventDefault();
  event.stopPropagation();
@@ -7303,10 +7852,12 @@ ui.resetLifetimeStats.addEventListener('click',event=>{
  });
  saveLifetimeStats();
  renderLifetimeStats();
+ renderMachinePersonalBest(ui.spec.value);
 });
 
-ui.achievementMachineFilter.addEventListener('change',renderAchievements);
-ui.achievementCategoryFilter.addEventListener('change',renderAchievements);
+[ui.achievementMachineFilter,ui.achievementCategoryFilter,ui.achievementStatusFilter,ui.achievementDifficultyFilter].forEach(control=>{
+ if(control)control.addEventListener('change',renderAchievements);
+});
 
 ui.resetAchievements.addEventListener('click',event=>{
  event.preventDefault();
