@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>22機種 確率シミュレーター v10.19</title>
+<title>23機種 確率シミュレーター v10.20</title>
 <style>
 :root{
   color-scheme:dark;
@@ -208,6 +208,7 @@ body[data-theme="guard"]{--machine:#74e0c2;--machine2:#277765;--machine-soft:rgb
 body[data-theme="fulldrive"]{--machine:#c99cff;--machine2:#6945a3;--machine-soft:rgba(201,156,255,.18)}
 body[data-theme="soccer"]{--machine:#5db8ff;--machine2:#215f9d;--machine-soft:rgba(93,184,255,.18)}
 body[data-theme="worldstar"]{--machine:#ffd45d;--machine2:#6445b8;--machine-soft:rgba(255,212,93,.18)}
+body[data-theme="sao_yozora"]{--machine:#70c8ff;--machine2:#384b9e;--machine-soft:rgba(112,200,255,.18)}
 body[data-theme="umaiwa"]{--machine:#f6b84a;--machine2:#9a5420;--machine-soft:rgba(246,184,74,.18)}
 body{--machine:var(--accent);--machine2:#315f9b;--machine-soft:rgba(98,168,255,.18);transition:background .35s ease}
 body[data-theme="marine"]{background:radial-gradient(circle at 50% -20%,#123d50 0,#0b1521 38%,#0b1018 100%)}
@@ -231,6 +232,7 @@ body[data-theme="guard"]{background:radial-gradient(circle at 50% -20%,#304d48 0
 body[data-theme="fulldrive"]{background:radial-gradient(circle at 50% -20%,#46345d 0,#21182c 38%,#0d0b12 100%)}
 body[data-theme="soccer"]{background:radial-gradient(circle at 50% -20%,#20415e 0,#102238 38%,#07111d 100%)}
 body[data-theme="worldstar"]{background:radial-gradient(circle at 50% -20%,#4b3a76 0,#211a38 38%,#0d0c18 100%)}
+body[data-theme="sao_yozora"]{background:radial-gradient(circle at 50% -20%,#203e70 0,#151a35 38%,#0a0d18 100%)}
 body[data-theme="umaiwa"]{background:radial-gradient(circle at 50% -20%,#5b3717 0,#23170e 38%,#0f0c09 100%)}
 .seat.selected{border-color:var(--machine);background:var(--machine-soft)}
 .badge{border-color:color-mix(in srgb,var(--machine) 58%,#243247);background:var(--machine-soft);color:var(--text)}
@@ -1129,7 +1131,6 @@ button.busy{opacity:.58;cursor:wait}
  .debug-auto-mode-grid{grid-template-columns:1fr}
 }
 
-
 /* 公開版：開発専用機能と内部性能表示は画面に出さない */
 #bulkSimulationSection,
 #debugAutoPanel{
@@ -1184,7 +1185,7 @@ button.busy{opacity:.58;cursor:wait}
 
         <section class="info-section">
           <h3>基本仕様</h3>
-          <p>22機種から遊ぶ機種を選び、見た目では性能差の分からない10台から1台を選択します。1日12時間の遊技に加え、同じ機種・同じ台・同じ内部性能を最大7日間据え置くコンテニューに対応しています。総発射数は1発0.6秒を基準に管理し、12時間で72,000発を超えないよう計算します。</p>
+          <p>23機種から遊ぶ機種を選び、見た目では性能差の分からない10台から1台を選択します。1日12時間の遊技に加え、同じ機種・同じ台・同じ内部性能を最大7日間据え置くコンテニューに対応しています。総発射数は1発0.6秒を基準に管理し、12時間で72,000発を超えないよう計算します。</p>
         </section>
 
         <section class="info-section">
@@ -1199,7 +1200,7 @@ button.busy{opacity:.58;cursor:wait}
 
         <section class="info-section">
           <h3>実績と高速回転</h3>
-          <p>実績は総合38個＋各機種24個の合計566個です。実績20個で10回転、200個で通常時の100回転を永久解放します。シークレット実績達成後は、速度や停止条件を設定できる1回転AUTOも使用できます。</p>
+          <p>実績は総合38個＋各機種24個の合計590個です。実績20個で10回転、200個で通常時の100回転を永久解放します。シークレット実績達成後は、速度や停止条件を設定できる1回転AUTOも使用できます。</p>
         </section>
 
         <section class="info-section">
@@ -1281,8 +1282,24 @@ button.busy{opacity:.58;cursor:wait}
         <p class="info-lead">新しいものから順に、主な変更内容を掲載しています。</p>
         <div class="update-list">
           <section class="update-entry latest">
-            <div class="update-entry-head"><span class="update-version">v10.19</span><span class="update-date">2026-08-08</span></div>
-            <ul><li>22機種目「うまい輪2」と新ジャンル「権利物」を正式追加</li><li>全22機種へ総発射速度モデルを正式採用し、1発0.6秒・12時間最大72,000発の時間計算へ刷新</li><li>ワールドスターのブースト突入音・5,050ptブラックアウト音、妖怪時計319の「勝利」表示など演出改善を統合</li><li>プレー履歴保存・12時間終了画面・1回転ボタン・低回転率機の投入計算など、DEBUG版で確認した修正を反映</li><li>コンプリート停止は全22機種MY＋95,000ptへ統一し、機種別の低い目標値は「MYチャレンジ」実績として分離</li></ul>
+            <div class="update-entry-head"><span class="update-version">v10.20</span><span class="update-date">2026-08-08</span></div>
+            <ul><li>23機種目「e ソードアート・オンライン アリシゼーション 夜空」を正式追加</li><li>下位SWORD RUSH・上位War of Underworld、「ぼくの英雄」「咲け、花たち」の1,500ptループ、SWORD DRIVEを実装</li><li>右打ち中の出玉減少を反映し、大量検証で長期収支がほぼ100%付近となる基準へ調整</li><li>ページ読み込み時に発生したホールイベントを、機種変更後も同じ内容で維持するよう修正</li><li>公開版では内部性能・DEBUG AUTO・大量シミュレーションを非表示とし、10回転・100回転は通常の実績解除条件へ戻しています</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.20.3 DEBUG</span><span class="update-date">2026-08-08</span></div>
+            <ul><li>SAO アリシゼーション 夜空の検証用内部回転率を19.5回/250ptへ変更</li><li>20.0回/250ptで10,000日検証時に推定出率約102.6〜102.8%となったため、100%付近の基準点を確認するための暫定テスト版</li><li>右打ち5%削り・初当たり・ST・BONUS振り分けなどの抽選仕様はv10.20.2から変更なし</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.20.2 DEBUG</span><span class="update-date">2026-08-08</span></div>
+            <ul><li>SAO アリシゼーション 夜空のボーダーを、4円・250pt基準の20.0回/250ptへ修正</li><li>資料のボーダー算出条件に合わせ、SAOの右打ち獲得出玉へ5%相当の削りを反映</li><li>1円・200個基準の16.0回転を250pt基準と取り違えないよう、機種説明も20.0回/250ptへ統一</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.20.1 DEBUG</span><span class="update-date">2026-08-08</span></div>
+            <ul><li>ホールイベントを機種変更だけで再抽選してしまう不具合を修正</li><li>ページ読み込み時に決まったイベントは、別機種へ切り替えても同じイベント内容を維持</li><li>イベント再抽選は「10台を入れ替える」操作時のみ行い、機種変更時はイベント告知モーダルも再表示しない</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.20 DEBUG</span><span class="update-date">2026-08-08</span></div>
+            <ul><li>23機種目「e ソードアート・オンライン アリシゼーション 夜空」を追加</li><li>通常約1/199.9、初当たり50%でST突入。下位ST53回・上位ST70回はいずれも実質約1/51.6</li><li>「ぼくの英雄」「咲け、花たち」は最低3,000pt＋50%の1,500ptループとして実装</li><li>上位ST中40%のSWORD DRIVEは、1,500〜9,000ptの振り分けと「7,500pt＋SWORD DRIVE再抽選」1%を実装</li><li>FAIR STARTの入賞演出は通常回転率と二重抽選にせず、既存の内部回転率モデルで処理</li></ul>
           </section>
           <section class="update-entry">
             <div class="update-entry-head"><span class="update-version">v10.19.3 DEBUG</span><span class="update-date">2026-08-07</span></div>
@@ -1573,7 +1590,7 @@ button.busy{opacity:.58;cursor:wait}
     </div>
   </div>
   <div class="titlebar">
-    <h1>22機種 確率シミュレーター <span class="muted">v10.19</span></h1>
+    <h1>23機種 確率シミュレーター <span class="muted">v10.20</span></h1>
     <div class="title-actions">
       <button id="updateOpen" class="info-button update-button" type="button" aria-label="更新履歴を開く" aria-haspopup="dialog">!
         <span id="updateNew" class="update-new hidden">NEW</span>
@@ -1620,14 +1637,14 @@ button.busy{opacity:.58;cursor:wait}
   <details class="card achievement-section" style="margin-top:12px">
     <summary class="row" style="justify-content:space-between">
       <div>
-        <h2>実績コレクション <span id="achievementCount" class="badge">0/566</span></h2>
-        <small>総合38個＋各機種24個／合計566個・名誉・不名誉・累計を★1〜★5で分類</small>
+        <h2>実績コレクション <span id="achievementCount" class="badge">0/590</span></h2>
+        <small>総合38個＋各機種24個／合計590個・名誉・不名誉・累計を★1〜★5で分類</small>
       </div>
       <button id="resetAchievements" type="button" class="secondary" style="min-height:38px;padding:7px 11px">リセット</button>
     </summary>
 
     <div class="achievement-overview">
-      <div><small>全体</small><b id="achievementOverallCount">0/566</b></div>
+      <div><small>全体</small><b id="achievementOverallCount">0/590</b></div>
       <div><small>🏅 名誉</small><b id="achievementHonorCount">0/0</b></div>
       <div><small>💀 不名誉</small><b id="achievementDishonorCount">0/0</b></div>
       <div><small>📊 累計</small><b id="achievementCumulativeCount">0/0</b></div>
@@ -1691,7 +1708,7 @@ button.busy{opacity:.58;cursor:wait}
   <details class="card" style="margin-top:12px">
     <summary class="row" style="justify-content:space-between">
       <div>
-        <h2>機種別累計データ <span id="lifetimeMachineCount" class="badge">0/22機種</span></h2>
+        <h2>機種別累計データ <span id="lifetimeMachineCount" class="badge">0/23機種</span></h2>
         <small>プレー履歴50件とは別に、各機種の総計を継続保存</small>
       </div>
       <button id="resetLifetimeStats" type="button" class="secondary" style="min-height:38px;padding:7px 11px">累計リセット</button>
@@ -2630,7 +2647,22 @@ const MACHINE_REGISTRY={
   "preAlertTarget":"図柄揃い",
   "preAlertSpecial":{"value":"rush100","label":"ブースト確定 100%","guarantee":"ブーストモード突入確定"},
   "summary":"完全オリジナル機。通常約1/159.9。初当たりは710ptで、25%がブーストモードへ。ブーストは約1/3.5を7回、当選ごとに7回再セットして継続期待度約90.5%。右当たりは90%が300pt、10%が5050pt（1500pt＋710pt×5）。右打ち中の減算なし。"
- } ,
+ },
+ "sao_yozora":{
+  "name":"e ソードアート・オンライン アリシゼーション 夜空",
+  "category":"light",
+  "menuOrder":60,
+  "base":19.5,
+  "figureDenominator":199.9,
+  "noAlertEventProbability":0.9949974987493747,
+  "completeMy":95000,
+  "achievementIcon":"🗡️",
+  "achievementSpecial":{"icon":"⚔️","name":"SWORD DRIVE再発動","desc":"SWORD DRIVEで7,500pt＋再抽選を獲得する","stars":4},
+  "theme":{"icon":"🗡️","idle":"夜空の剣を待機","spin":"FAIR STARTを探索中…","hit":"アリシゼーションBONUS！","rush":"SWORD RUSH突入！"},
+  "preAlertTarget":"図柄揃い",
+  "preAlertSpecial":{"value":"rush100","label":"ST確定 100%","guarantee":"SWORD RUSH以上突入確定"},
+  "summary":"通常約1/199.9。初当たりは1.5%が「ぼくの英雄」3,000pt＋50%上乗せループ後に上位ST70回、48.5%が300pt＋下位ST53回、50%が300pt・通常。右は実質約1/51.6。下位ST当たりの22%で上位STへ、上位ST当たりの40%でSWORD DRIVE。検証用基準19.5回/250pt（公式資料の4円ボーダー20.0から暫定調整）。右打ちは獲得出玉の5%相当を削りへ反映。FAIR STARTは通常回転率と二重抽選せず演出扱い。"
+ },
  "umaiwa":{
   "name":"うまい輪2",
   "category":"rights",
@@ -3351,11 +3383,11 @@ const GLOBAL_ACHIEVEMENT_GROUP={
   {key:'day_plus50000',category:'honor',stars:4,icon:'🚀',name:'大勝＋50,000pt',desc:'1プレー中に差pt＋50,000ptへ到達する'},
   {key:'day_plus75000',category:'honor',stars:5,icon:'🌌',name:'爆勝＋75,000pt',desc:'1プレー中に差pt＋75,000ptへ到達する'},
   {key:'day_plus95000',category:'honor',stars:5,icon:'👑',name:'極勝＋95,000pt',desc:'1プレー中に差pt＋95,000ptへ到達する'},
-  {key:'all_played',category:'honor',stars:3,icon:'🗺️',name:'全機種制覇',desc:'22機種すべてを1回以上プレーする'},
-  {key:'all_hit',category:'honor',stars:4,icon:'🎯',name:'全機種初当たり',desc:'22機種すべてで図柄系初当たりを記録する'},
-  {key:'all_chain5',category:'honor',stars:4,icon:'🔥',name:'全機種5連達成',desc:'22機種すべてで最高5連以上を記録する'},
-  {key:'all_chain10',category:'honor',stars:5,icon:'🌠',name:'全機種10連達成',desc:'22機種すべてで最高10連以上を記録する'},
-  {key:'all_complete',category:'honor',stars:5,icon:'🏆',name:'全機種MYチャレンジ',desc:'22機種すべてで機種別MYチャレンジを解除する'},
+  {key:'all_played',category:'honor',stars:3,icon:'🗺️',name:'全機種制覇',desc:'23機種すべてを1回以上プレーする'},
+  {key:'all_hit',category:'honor',stars:4,icon:'🎯',name:'全機種初当たり',desc:'23機種すべてで図柄系初当たりを記録する'},
+  {key:'all_chain5',category:'honor',stars:4,icon:'🔥',name:'全機種5連達成',desc:'23機種すべてで最高5連以上を記録する'},
+  {key:'all_chain10',category:'honor',stars:5,icon:'🌠',name:'全機種10連達成',desc:'23機種すべてで最高10連以上を記録する'},
+  {key:'all_complete',category:'honor',stars:5,icon:'🏆',name:'全機種MYチャレンジ',desc:'23機種すべてで機種別MYチャレンジを解除する'},
 
   {key:'hamari1500',category:'dishonor',stars:4,icon:'🫥',name:'1,500回転ハマり',desc:'いずれかの機種で1,500回転までハマる'},
   {key:'hamari2000',category:'dishonor',stars:5,icon:'🪦',name:'2,000回転ハマり',desc:'いずれかの機種で2,000回転までハマる'},
@@ -3998,6 +4030,7 @@ const NORMAL_EFFECTS={
  fulldrive:{reach:['魔力反応','杖が輝き始める…'],super:['全力詠唱！','魔導決戦へ'],hot:['全開ドライブ！','激アツ演出']},
  soccer:{reach:['パス予告','ゴール前へ進む…'],super:['エゴ覚醒！','ストライカー決戦へ'],hot:['超絶シュート！','激アツ演出']},
  worldstar:{reach:['スター予告','星の軌道が重なる…'],super:['ワールドゲート開放！','銀河決戦へ'],hot:['超新星ブースト！','激アツ演出']},
+ sao_yozora:{reach:['夜空予告','剣が淡く輝く…'],super:['SWORD SKILL発動！','決戦リーチへ'],hot:['STARBURST STREAM！','激アツ演出']},
  umaiwa:{reach:['輪っか予告','権利獲得の気配…'],super:['うまい輪チャンス','輪が重なれば大当たり'],hot:['おかわり接近','激アツ演出']}
 };
 const HIT_ROUTES={
@@ -4082,6 +4115,7 @@ const HIT_ROUTES={
  fulldrive:[{weight:20,type:'direct',start:'魔力灯点灯',finish:'全開直撃！',sub:'魔法成功で大当たり'},{weight:55,type:'super',start:'魔力収束',develop:'全力全開決戦！',finish:'魔導勝利！',sub:'決戦勝利で大当たり'},{weight:25,type:'revival',start:'魔力枯渇',develop:'最後の詠唱！',miss:'術式崩壊……',finish:'再起動・全開！',sub:'復活大当たり'}],
  soccer:[{weight:20,type:'direct',start:'ゴールランプ点灯',finish:'ダイレクトシュート！',sub:'一撃で大当たり'},{weight:55,type:'super',start:'エゴ覚醒',develop:'ストライカー決戦！',finish:'ゴール成功！',sub:'決戦勝利で大当たり'},{weight:25,type:'revival',start:'ラストプレー',develop:'最終シュート！',miss:'ポスト直撃……',finish:'こぼれ球ゴール！',sub:'復活大当たり'}],
  worldstar:[{weight:20,type:'direct',start:'スターランプ点灯',finish:'ワールド直撃！',sub:'星が揃って大当たり'},{weight:55,type:'super',start:'スターゲート起動',develop:'銀河最終決戦！',finish:'ワールドBONUS！',sub:'決戦勝利で大当たり'},{weight:25,type:'revival',start:'星間航路消失',develop:'ラストゲート！',miss:'ゲート閉鎖……',finish:'超新星再点火！',sub:'復活大当たり'}],
+ sao_yozora:[{weight:20,type:'direct',start:'夜空の剣・点灯',finish:'LINK START！',sub:'直撃で大当たり'},{weight:55,type:'super',start:'SWORD SKILL',develop:'アンダーワールド決戦！',finish:'BONUS獲得！',sub:'決戦勝利で大当たり'},{weight:25,type:'revival',start:'HP残りわずか',develop:'LAST ATTACK！',miss:'攻撃が届かない……',finish:'夜空の剣・再起！',sub:'復活大当たり'}],
  umaiwa:[{weight:20,type:'direct',start:'輪ランプ点灯',finish:'権利獲得！',sub:'一発告知で大当たり'},{weight:55,type:'super',start:'輪っか接近',develop:'うまい輪チャンス！',finish:'うまい輪BONUS！',sub:'輪が重なって大当たり'},{weight:25,type:'revival',start:'輪が外れる',develop:'最後のおかわり！',miss:'権利獲得ならず……',finish:'逆転・権利獲得！',sub:'復活大当たり'}]
 };
 const MISS_ROUTES={
@@ -4166,6 +4200,7 @@ const MISS_ROUTES={
  fulldrive:[{weight:66,type:'normal',start:'魔力反応',finish:'魔力消散……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'全力詠唱',develop:'魔導決戦',finish:'術式不発',sub:'決戦リーチハズレ'},{weight:7,type:'hot',start:'全開ドライブ',develop:'最終魔導',finish:'魔力枯渇',sub:'激アツ演出ハズレ'}],
  soccer:[{weight:66,type:'normal',start:'パス予告',finish:'パスカット……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'エゴ覚醒',develop:'ストライカー決戦',finish:'シュート失敗',sub:'決戦リーチハズレ'},{weight:7,type:'hot',start:'超絶シュート',develop:'最終プレー',finish:'ゴールならず',sub:'激アツ演出ハズレ'}],
  worldstar:[{weight:66,type:'normal',start:'スター予告',finish:'星が流れていく……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'スターゲート起動',develop:'銀河決戦',finish:'ゲート閉鎖',sub:'決戦リーチハズレ'},{weight:7,type:'hot',start:'超新星ブースト',develop:'ラストゲート',finish:'航路消失',sub:'激アツ演出ハズレ'}],
+ sao_yozora:[{weight:66,type:'normal',start:'夜空予告',finish:'剣の光が消えた……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'SWORD SKILL',develop:'アンダーワールド決戦',finish:'攻撃失敗',sub:'決戦リーチハズレ'},{weight:7,type:'hot',start:'STARBURST STREAM',develop:'LAST ATTACK',finish:'あと一撃届かず……',sub:'激アツ演出ハズレ'}],
  umaiwa:[{weight:66,type:'normal',start:'輪っか予告',finish:'輪が通り過ぎた……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'輪っか接近',develop:'うまい輪チャンス',finish:'権利獲得ならず',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'おかわり接近',develop:'最後の一輪',finish:'輪が外れた……',sub:'激アツ演出ハズレ'}]
 };
 
@@ -4215,9 +4250,9 @@ function validateMachineRegistry(){
  }
 
  if(errors.length){
-  console.error('[v10.19 MACHINE_REGISTRY] 検証エラー',errors);
+  console.error('[v10.20 MACHINE_REGISTRY] 検証エラー',errors);
  }else{
-  console.info(`[v10.19 MACHINE_REGISTRY] ${MACHINE_ORDER.length}機種の共通登録を確認`);
+  console.info(`[v10.20 MACHINE_REGISTRY] ${MACHINE_ORDER.length}機種の共通登録を確認`);
  }
  return errors;
 }
@@ -4995,7 +5030,7 @@ function setHallEventModal(show){
  document.body.classList.toggle('modal-open',show);
 }
 
-function updateHallEventPresentation(){
+function updateHallEventPresentation(announce=false){
  const event=currentHallEvent;
  if(!event||event.id==='normal'){
   ui.hallEventBanner.classList.add('hidden');
@@ -5010,7 +5045,7 @@ function updateHallEventPresentation(){
  ui.hallEventIcon.textContent=shown.icon;
  ui.hallEventName.textContent=shown.name;
  ui.hallEventDescription.textContent=shown.description;
- setTimeout(()=>setHallEventModal(true),120);
+ if(announce)setTimeout(()=>setHallEventModal(true),120);
 }
 function rateLabel(machine){
  return machine.category;
@@ -5178,6 +5213,7 @@ function decidePreAlert(ev){
   if(s.sp.type==='oni')qualifies=!!ev.x?.direct;
   if(s.sp.type==='yokai'||s.sp.type==='soccer')qualifies=!!ev.x?.direct;
   if(s.sp.type==='worldstar')qualifies=!!ev.x?.rush;
+  if(s.sp.type==='sao_yozora')qualifies=!!ev.rush;
   if(s.sp.type==='kakugan'||s.sp.type==='guard'||s.sp.type==='fulldrive')qualifies=!!ev.rush;
 
   return qualifies&&passesOccupancy();
@@ -5713,8 +5749,11 @@ function armDebugAutoLongPress(element,batchSize=10){
  element.addEventListener('contextmenu',event=>event.preventDefault());
 }
 
-function build(){
+function build(options={}){
  if(bulkSimulation.active)return;
+ const rerollEvent=!!options.rerollEvent||!currentHallEvent;
+ const announceEvent=!!options.announceEvent||rerollEvent;
+
  closeContinuationSeries('新しい10台へ移動');
  stopOneSpinAuto('画面リセット');
  stopDebugAuto('画面リセット',true);
@@ -5723,7 +5762,11 @@ function build(){
  const sp=SPECS[ui.spec.value];
  applyTheme(sp.type);
  updatePreAlertOptions();
- currentHallEvent=rollHallEvent();
+
+ // ホールイベントは「その日のホール全体」の状態として保持する。
+ // 機種を変更しただけでは再抽選せず、明示的な10台入れ替え時だけ更新する。
+ if(rerollEvent)currentHallEvent=rollHallEvent();
+
  hall=buildRates(sp.base,currentHallEvent).map((entry,index)=>({
   no:index+1,
   rate:Math.max(minimumInternalRate(sp.base),entry.rate),
@@ -5738,7 +5781,11 @@ function build(){
  ui.playPreAlertMode.disabled=false;
  const publicSummary=sp.type==='umaiwa'
   ?sp.summary.replace('ボーダー1.31回/250pt。','')
-  :sp.summary;
+  :sp.type==='sao_yozora'
+    ?sp.summary
+      .replace('検証用基準19.5回/250pt（公式資料の4円ボーダー20.0から暫定調整）。','')
+      .replace('右打ちは獲得出玉の5%相当を削りへ反映。','')
+    :sp.summary;
  ui.summary.textContent=`区分：${machineCategory(sp.type).short}｜${sp.name}｜${publicSummary}｜10台の内部性能は非公開`;
  renderMachinePersonalBest(sp.type);
  ui.seats.innerHTML='';
@@ -5747,7 +5794,7 @@ function build(){
   b.innerHTML=`<small>台</small><strong>${m.no}</strong><small class="seat-category">タップして選択</small>`;
   b.addEventListener('click',()=>start(m));ui.seats.appendChild(b);
  });
- updateHallEventPresentation();
+ updateHallEventPresentation(announceEvent);
 }
 function start(machine,options={}){
  if(bulkSimulation.active)return;
@@ -6014,7 +6061,7 @@ function award(n,sec=null,label='',forceRight=false){
 
   let cutRate=0;
   if(s.sp.type==='bousou')cutRate=.10;
-  else if(s.sp.type==='ghoul'||s.sp.type==='cafe'||s.sp.type==='greed')cutRate=.05;
+  else if(s.sp.type==='ghoul'||s.sp.type==='cafe'||s.sp.type==='greed'||s.sp.type==='sao_yozora')cutRate=.05;
   else if(s.sp.type==='crimson'&&s.right?.kind==='crimson')cutRate=.05;
   else if(s.sp.type==='ocean')cutRate=.05;
   else if(s.sp.type==='agnes')cutRate=.10;
@@ -6062,6 +6109,7 @@ function normalDetail(){
  if(s.sp.type==='fulldrive')return '大当たり 約1/348.5／完走型ST 約1/51.6';
  if(s.sp.type==='soccer')return '大当たり 約1/121.5／RUSH中 大当たり約1/3.0・終了約1/9.0';
  if(s.sp.type==='worldstar')return '大当たり 約1/159.9／ブースト 約1/3.5・7回';
+ if(s.sp.type==='sao_yozora')return '大当たり 約1/199.9／SWORD RUSH・WoU 約1/51.6';
  if(s.sp.type==='umaiwa')return '大当たり 約1/38.4／おかわりゾーン 約1/2.2・保留4個';
  return s.sp.type==='marine'?'大当たり 約1/99.9':'大当たり 約1/319.7';
 }
@@ -6356,6 +6404,67 @@ function rollSoccerInitial(){
   ?{payout:400,direct:true,label:'青サッカーBONUS・400pt＋RUSH直行'}
   :{payout:400,direct:false,label:'青サッカーBONUS・400pt＋頂上チャレンジ'};
 }
+
+function rollSaoInitial(){
+ return weighted([
+  {p:1.5,kind:'hero',rush:true,label:'Epilogue BONUS（ぼくの英雄）'},
+  {p:48.5,kind:'lower',rush:true,label:'LAST FLOOR / 禁忌目録 BONUS'},
+  {p:50.0,kind:'normal',rush:false,label:'通常大当り'}
+ ]);
+}
+function rollSaoLowerHit(){
+ return weighted([
+  {p:11,kind:'bloom',label:'咲け、花たち'},
+  {p:11,kind:'bladeSuccess',label:'決意の刃・成功'},
+  {p:33,kind:'bladeFail',label:'決意の刃・失敗'},
+  {p:45,kind:'bonus',label:'BONUS'}
+ ]);
+}
+function rollSaoBonusLoopUnits(){
+ let units=2;
+ while(Math.random()<.50&&units<66)units++;
+ return units;
+}
+function awardSaoInitialLoop(){
+ const units=rollSaoBonusLoopUnits();
+ award(1500,null,'1500pt');
+ for(let i=1;i<units;i++){
+  addRightHitToChain();
+  award(1500,null,'1500pt',true);
+ }
+ return {units,total:units*1500,adds:units-2};
+}
+function awardSaoRightLoop(){
+ const units=rollSaoBonusLoopUnits();
+ award(1500,null,'1500pt');
+ for(let i=1;i<units;i++){
+  addRightHitToChain();
+  award(1500,null,'1500pt');
+ }
+ return {units,total:units*1500,adds:units-2};
+}
+function rollSaoSwordDrive(){
+ let total=0;
+ let redrives=0;
+ let terminalLabel='';
+ for(let guard=0;guard<64;guard++){
+  const x=weighted([
+   {p:8.2,kind:'fixed',payout:1500,label:'1,500pt'},
+   {p:28.1,kind:'fixed',payout:3000,label:'3,000pt'},
+   {p:36.1,kind:'fixed',payout:4500,label:'4,500pt'},
+   {p:20.7,kind:'fixed',payout:6000,label:'6,000pt'},
+   {p:4.4,kind:'fixed',payout:7500,label:'7,500pt'},
+   {p:1.5,kind:'fixed',payout:9000,label:'7,500pt＋1,500 BONUS'},
+   {p:1.0,kind:'redrive',payout:7500,label:'7,500pt＋SWORD DRIVE'}
+  ]);
+  total+=x.payout;
+  terminalLabel=x.label;
+  if(x.kind!=='redrive')break;
+  redrives++;
+ }
+ return {total,redrives,label:terminalLabel};
+}
+
 function rollWorldStarInitial(){
  const rush=Math.random()<.25;
  // 突入結果はルーレットが止まるまで表示しない。
@@ -6648,6 +6757,11 @@ function normalEvent(){
    const x=rollWorldStarInitial();
    return {kind:'figure',x,rush:x.rush};
   }
+  case'sao_yozora':{
+   if(!chance(199.9))return null;
+   const x=rollSaoInitial();
+   return {kind:'figure',x,rush:x.rush};
+  }
   case'umaiwa':
    return chance(38.4)?{kind:'figure'}:null;
  }
@@ -6692,6 +6806,7 @@ function beginHit(ev){
   case'fulldrive':startFullDrive(ev);break;
   case'soccer':startSoccer(ev);break;
   case'worldstar':startWorldStar(ev);break;
+  case'sao_yozora':startSaoYozora(ev);break;
   case'umaiwa':startUmaiwa(ev);break;
  }
  const kakuganBlind=s.sp.type==='kakugan'&&s.pending?.type==='kakugan'&&s.pending.step===0;
@@ -7112,6 +7227,20 @@ function startSoccer(ev){
  judgeMode('頂上ルート判定',`${s.pendingSpin}回転で${x.label}！`,x.direct?'RUSHへ':'チャレンジへ');
 }
 
+
+function startSaoYozora(ev){
+ const x=ev.x||rollSaoInitial();
+ if(x.kind==='hero'){
+  const loop=awardSaoInitialLoop();
+  s.pending={type:'sao_yozora',x,loop,step:0};
+  judgeMode('Epilogue BONUS（ぼくの英雄）',`${s.pendingSpin}回転で${fmt(loop.total)}pt！ 1,500pt×${loop.units}回`,'War of Underworldへ');
+  return;
+ }
+ award(300);
+ s.pending={type:'sao_yozora',x,step:0};
+ judgeMode(x.kind==='lower'?'LAST FLOOR / 禁忌目録 BONUS':'通常大当り',`${s.pendingSpin}回転で300pt！`,x.kind==='lower'?'SWORD RUSHへ':'通常へ戻る');
+}
+
 function startUmaiwa(){
  awardUmaiwaBundle(4500,false);
  s.rushEntries++;
@@ -7395,6 +7524,16 @@ function doJudge(){
  if(p.type==='worldstar'){
   if(p.step===0){beginWorldStarRoulette(p);return {preserveStage:true};}
   if(p.step===.5||p.step===1)return {preserveStage:true};
+ }
+ if(p.type==='sao_yozora'){
+  if(p.x.kind==='hero'){
+   s.rushEntries++;
+   rightMode('saoUpper',70,'War of Underworld','約1/51.6・ST70回／大当たりの40%でSWORD DRIVE',{total:70});
+  }else if(p.x.kind==='lower'){
+   s.rushEntries++;
+   rightMode('saoLower',53,'SWORD RUSH','約1/51.6・ST53回／大当たりの22%で上位ST',{total:53});
+  }else closeHit('ST非突入・300pt獲得');
+  return;
  }
 }
 
@@ -7811,6 +7950,7 @@ function doRight(n){
   else if(r.kind==='fullTime')den=348.5;
   else if(r.kind==='soccerChallenge')den=1.7857;
   else if(r.kind==='worldstarBoost')den=3.5;
+  else if(r.kind==='saoLower'||r.kind==='saoUpper')den=51.6;
   else if(r.kind==='umaiwaZone')den=2.2;
   else if(r.kind==='yokaiDuel')den=1;
   else if(r.kind==='agnesSupport'||r.kind==='agnesHappiness'||r.kind==='agnesYutime'){
@@ -8317,6 +8457,47 @@ function rightHit(){
   rightMode('soccerRush',10000,'エゴバトル','大当たり約1/3.0・終了約1/9.0');
   ui.message.textContent=`得点BONUS ${fmt(x.total)}pt！ ${s.chain}連${x.adds?`／上乗せ${x.adds}回`:''}`;
   playFx(x.total>=2500?'rush':'hit','得点BONUS！',`${fmt(x.total)}pt・${s.chain}連`);
+  return;
+ }
+
+
+ if(r.kind==='saoLower'){
+  const x=rollSaoLowerHit();
+  if(x.kind==='bloom'){
+   const loop=awardSaoRightLoop();
+   rightMode('saoUpper',70,'War of Underworld','約1/51.6・ST70回／大当たりの40%でSWORD DRIVE',{total:70});
+   ui.message.textContent=`咲け、花たち ${fmt(loop.total)}pt！ ${s.chain}連・上位ST突入`;
+   playFx('rush','咲け、花たち',`${fmt(loop.total)}pt・War of Underworldへ`);
+   return;
+  }
+  award(1500);
+  if(x.kind==='bladeSuccess'){
+   rightMode('saoUpper',70,'War of Underworld','約1/51.6・ST70回／大当たりの40%でSWORD DRIVE',{total:70});
+   ui.message.textContent=`決意の刃 成功！ 1,500pt・${s.chain}連・上位ST突入`;
+   playFx('rush','決意の刃 成功！','War of Underworldへ');
+  }else{
+   rightMode('saoLower',53,'SWORD RUSH','約1/51.6・ST53回／大当たりの22%で上位ST',{total:53});
+   ui.message.textContent=`${x.label} 1,500pt！ ${s.chain}連・SWORD RUSH継続`;
+   playFx('hit',x.kind==='bladeFail'?'決意の刃 失敗':'BONUS',`1,500pt・${s.chain}連`);
+  }
+  return;
+ }
+
+ if(r.kind==='saoUpper'){
+  if(Math.random()<.40){
+   const drive=rollSaoSwordDrive();
+   award(drive.total,null,`${drive.total}pt`);
+   if(drive.redrives>0)unlockMachineAchievement('special','sao_yozora');
+   rightMode('saoUpper',70,'War of Underworld','約1/51.6・ST70回／大当たりの40%でSWORD DRIVE',{total:70});
+   const suffix=drive.redrives?`／SWORD DRIVE再発動${drive.redrives}回`:'';
+   ui.message.textContent=`SWORD DRIVE ${fmt(drive.total)}pt！ ${s.chain}連${suffix}`;
+   playFx('rush','SWORD DRIVE！',`${fmt(drive.total)}pt${suffix}`);
+  }else{
+   award(1500);
+   rightMode('saoUpper',70,'War of Underworld','約1/51.6・ST70回／大当たりの40%でSWORD DRIVE',{total:70});
+   ui.message.textContent=`BONUS 1,500pt！ ${s.chain}連・War of Underworld継続`;
+   playFx('hit','BONUS','1,500pt');
+  }
   return;
  }
 
@@ -10211,7 +10392,7 @@ function startBulkSimulation(){
 }
 
 const CHANGELOG_STORAGE_KEY='pachiSimulatorChangelogSeenVersionV1';
-const CURRENT_CHANGELOG_VERSION='10.19';
+const CURRENT_CHANGELOG_VERSION='10.20';
 
 function changelogSeenVersion(){
  try{return localStorage.getItem(CHANGELOG_STORAGE_KEY)||''}catch(_){return ''}
@@ -10392,21 +10573,21 @@ ui.end.addEventListener('click',()=>{
  stopDebugAuto('遊技終了',true);
  finish('遊技終了');
 });
-ui.replace.addEventListener('click',build);
+ui.replace.addEventListener('click',()=>build({rerollEvent:true,announceEvent:true}));
 ui.continueSameSeat.addEventListener('click',continueSameSeatPlay);
 ui.reselectSameMachine.addEventListener('click',()=>{
- build();
+ build({rerollEvent:false,announceEvent:false});
  requestAnimationFrame(()=>document.getElementById('seatArea')?.scrollIntoView({behavior:'smooth',block:'start'}));
 });
 ui.returnMachineSelection.addEventListener('click',()=>{
- build();
+ build({rerollEvent:false,announceEvent:false});
  requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'smooth'}));
 });
 ui.machineCategory.addEventListener('change',()=>{
  populateMachineOptions(ui.machineCategory.value);
- build();
+ build({rerollEvent:false,announceEvent:false});
 });
-ui.spec.addEventListener('change',build);
+ui.spec.addEventListener('change',()=>build({rerollEvent:false,announceEvent:false}));
 ui.preAlertMode.addEventListener('change',()=>{
  applyPreAlertMode(ui.preAlertMode.value);
 });
@@ -10494,7 +10675,7 @@ syncSpeedUnlocks(true);
 updateOneSpinAutoUI();
 renderLifetimeStats();
 renderPlayHistory();
-build();
+build({rerollEvent:true,announceEvent:true});
 })();
 </script>
 </body>
