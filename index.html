@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>28機種 確率シミュレーター v10.24.23</title>
+<title>28機種 確率シミュレーター v10.24.24</title>
 <style>
 :root{
   color-scheme:dark;
@@ -1162,12 +1162,27 @@ button.busy{opacity:.58;cursor:wait}
 }
 
 
-/* v10.24.23 公開版：開発専用機能・内部性能表示は非表示 */
+/* v10.24.24 公開版：開発専用機能・内部性能表示は非表示 */
 #bulkSimulationSection,
 #debugAutoPanel,
 .seat-rate,
 .seat-category{
   display:none!important;
+}
+
+
+.seven-day-through-option{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:10px;padding:11px 12px;border:1px solid var(--line);border-radius:14px;
+  background:color-mix(in srgb,var(--machine) 7%,var(--panel2));text-align:left;cursor:pointer
+}
+.seven-day-through-copy{min-width:0}
+.seven-day-through-copy strong{display:block;font-size:14px}
+.seven-day-through-copy small{display:block;margin-top:3px;line-height:1.45}
+.seven-day-through-option input{width:23px;height:23px;flex:0 0 auto}
+.seven-day-through-option.active{
+  border-color:color-mix(in srgb,var(--machine) 58%,var(--line));
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--machine) 20%,transparent)
 }
 
 </style>
@@ -1228,7 +1243,7 @@ button.busy{opacity:.58;cursor:wait}
 
         <section class="info-section">
           <h3>データ保存</h3>
-          <p>終了したプレー履歴は端末内へ最大50件保存します。機種別累計データと実績は履歴とは別に継続保存されます。ブラウザのデータを消すと保存内容も消え、ほかの端末とは共有されません。</p>
+          <p>終了したプレー履歴は端末内へ最大50件保存します。機種別累計データと実績は履歴とは別に継続保存されます。7日間貫きモードでは同じ台を最大7日間据え置きで自動継続し、コンプリート機能作動日はその時点で営業終了、翌日は同じ台を据え置いたまま新しい1日として再開します。ブラウザのデータを消すと保存内容も消え、ほかの端末とは共有されません。</p>
         </section>
 
         <section class="info-section">
@@ -1315,7 +1330,16 @@ button.busy{opacity:.58;cursor:wait}
         <p class="info-lead">新しいものから順に、主な変更内容を掲載しています。</p>
         <div class="update-list">
           <section class="update-entry latest">
-            <div class="update-entry-head"><span class="update-version">v10.24.23</span><span class="update-date">2026-08-18</span></div>
+            <div class="update-entry-head"><span class="update-version">v10.24.24</span><span class="update-date">2026-08-18</span></div>
+            <ul>
+              <li>「7日間貫きモード」を追加。ON時は営業時間終了後、同じ台・同じ内部性能を据え置いたまま翌日へ自動移行し、最大7日目まで連続プレーできる</li>
+              <li>コンプリート機能作動はその日の営業終了として記録し、翌日はMY・差ptを日単位でリセットしたうえで同じ台の据え置きとして続行可能に変更</li>
+              <li>7日間貫きモード中にコンプリートしても、7日未満なら翌日へ自動移行。7日目終了時は従来どおり最終7日間リザルトを表示</li>
+              <li>DEBUG 10/100回転AUTOが営業終了時まで動作していた場合は、貫きモードで翌日も同じAUTOを自動再開。1回転AUTOも終了時点で動作中なら翌日へ引き継ぐ</li>
+            </ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.24.24</span><span class="update-date">2026-08-18</span></div>
             <ul>
               <li>全28機種の一巡監査内容を正式版へ統合</li>
               <li>複数機種で払出個数と実獲得差ptの扱い、時短・ST・LT・上乗せ処理、振り分けを再点検して修正</li>
@@ -1352,7 +1376,7 @@ button.busy{opacity:.58;cursor:wait}
     </div>
   </div>
   <div class="titlebar">
-    <h1>28機種 確率シミュレーター <span class="muted">v10.24.23</span></h1>
+    <h1>28機種 確率シミュレーター <span class="muted">v10.24.24</span></h1>
     <div class="title-actions">
       <button id="updateOpen" class="info-button update-button" type="button" aria-label="更新履歴を開く" aria-haspopup="dialog">!
         <span id="updateNew" class="update-new hidden">NEW</span>
@@ -1713,6 +1737,14 @@ button.busy{opacity:.58;cursor:wait}
           <button id="oneSpinAutoSettings" class="auto-gear" type="button" aria-label="1回転AUTO設定" disabled>⚙</button>
         </div>
       </div>
+
+      <label id="sevenDayThroughOption" class="seven-day-through-option">
+        <span class="seven-day-through-copy">
+          <strong>📅 7日間貫きモード</strong>
+          <small id="sevenDayThroughNote">OFF｜1日ごとに結果画面で据え置きを選択</small>
+        </span>
+        <input id="sevenDayThroughEnabled" type="checkbox">
+      </label>
 
       <div id="debugAutoPanel" class="debug-auto-panel">
         <div class="debug-auto-mode-grid">
@@ -2631,6 +2663,7 @@ const ui={
  detail:$('detail'),message:$('message'),main:$('main'),ten:$('ten'),hundred:$('hundred'),end:$('end'),
  debugAutoPanel:$('debugAutoPanel'),debugAutoControl:$('debugAutoControl'),debugAutoHundredControl:$('debugAutoHundredControl'),debugUnlockOneSpinAuto:$('debugUnlockOneSpinAuto'),
  oneSpinAutoPanel:$('oneSpinAutoPanel'),oneSpinAutoToggle:$('oneSpinAutoToggle'),oneSpinAutoSettings:$('oneSpinAutoSettings'),oneSpinAutoNote:$('oneSpinAutoNote'),
+ sevenDayThroughOption:$('sevenDayThroughOption'),sevenDayThroughEnabled:$('sevenDayThroughEnabled'),sevenDayThroughNote:$('sevenDayThroughNote'),
  autoSettingsModal:$('autoSettingsModal'),autoSettingsClose:$('autoSettingsClose'),autoSpeed:$('autoSpeed'),
  autoStopPreAlert:$('autoStopPreAlert'),autoStopReach:$('autoStopReach'),autoTargetNormal:$('autoTargetNormal'),autoTargetTime:$('autoTargetTime'),autoTargetRush:$('autoTargetRush'),
  autoLongPress:$('autoLongPress'),autoPerMode:$('autoPerMode'),secretAutoModal:$('secretAutoModal'),secretAutoConfirm:$('secretAutoConfirm'),
@@ -2703,7 +2736,83 @@ let hall=[],s=null,currentHallEvent=null;
 const CONTINUATION_MAX_DAYS=7;
 const CONTINUATION_HISTORY_STORAGE_KEY='pachiSimulatorContinuationHistoryV1';
 const MAX_CONTINUATION_HISTORY=20;
+const SEVEN_DAY_THROUGH_STORAGE_KEY='pachiSimulatorSevenDayThroughV1';
 let continuationSeries=null;
+let sevenDayThroughTimer=null;
+
+function loadSevenDayThroughEnabled(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(SEVEN_DAY_THROUGH_STORAGE_KEY)||'null');
+  return !!raw?.enabled;
+ }catch(_){return false}
+}
+let sevenDayThroughEnabled=loadSevenDayThroughEnabled();
+
+function saveSevenDayThroughEnabled(){
+ try{
+  localStorage.setItem(SEVEN_DAY_THROUGH_STORAGE_KEY,JSON.stringify({version:1,enabled:sevenDayThroughEnabled}));
+  return true;
+ }catch(_){return false}
+}
+function syncSevenDayThroughUI(){
+ if(!ui.sevenDayThroughEnabled)return;
+ ui.sevenDayThroughEnabled.checked=sevenDayThroughEnabled;
+ ui.sevenDayThroughOption?.classList.toggle('active',sevenDayThroughEnabled);
+ if(ui.sevenDayThroughNote){
+  const day=continuationSeries?.days?.length||0;
+  ui.sevenDayThroughNote.textContent=sevenDayThroughEnabled
+   ?`ON｜営業終了・コンプリート後に同じ台で翌日へ自動移行${day?`（現在${day+1}日目）`:''}`
+   :'OFF｜1日ごとに結果画面で据え置きを選択';
+ }
+}
+function setSevenDayThroughEnabled(enabled){
+ sevenDayThroughEnabled=!!enabled;
+ saveSevenDayThroughEnabled();
+ if(continuationSeries){
+  continuationSeries.throughMode=sevenDayThroughEnabled;
+  upsertContinuationSeries();
+ }
+ if(!sevenDayThroughEnabled){
+  clearTimeout(sevenDayThroughTimer);
+  sevenDayThroughTimer=null;
+ }
+ syncSevenDayThroughUI();
+}
+function captureSevenDayThroughResumeState(){
+ return {
+  oneSpinAuto:!!oneSpinAuto?.active,
+  debugAuto:!!debugAuto?.active,
+  debugBatchSize:debugAuto?.batchSize===100?100:10
+ };
+}
+function cancelSevenDayThroughContinuation(){
+ clearTimeout(sevenDayThroughTimer);
+ sevenDayThroughTimer=null;
+}
+function canSevenDayThroughContinue(reason){
+ if(!sevenDayThroughEnabled)return false;
+ if(reason!=='営業時間終了'&&reason!=='コンプリート機能作動')return false;
+ const days=continuationSeries?.days?.length||0;
+ return !!continuationSeries&&days>0&&days<CONTINUATION_MAX_DAYS;
+}
+function scheduleSevenDayThroughContinuation(reason,resumeState){
+ cancelSevenDayThroughContinuation();
+ if(!canSevenDayThroughContinue(reason))return false;
+ const days=continuationSeries.days.length;
+ if(ui.continueSameSeat){
+  ui.continueSameSeat.disabled=false;
+  ui.continueSameSeat.firstChild.textContent=`7日間貫きモード｜据え置き${days+1}日目へ自動移行`;
+  ui.continueSameSeatNote.textContent=reason==='コンプリート機能作動'
+   ?'本日の営業は終了。翌日はMYを日単位でリセットし、同じ台で再開します'
+   :'同じ台・同じ内部性能を維持して翌日へ進みます';
+ }
+ sevenDayThroughTimer=setTimeout(()=>{
+  sevenDayThroughTimer=null;
+  if(!canSevenDayThroughContinue(reason))return;
+  continueSameSeatPlay({throughAuto:true,resumeAuto:resumeState});
+ },450);
+ return true;
+}
 
 function loadContinuationHistory(){
  try{
@@ -2732,7 +2841,7 @@ function createContinuationSeries(machine){
  return {
   id:continuationId(),startedAt:new Date().toISOString(),updatedAt:new Date().toISOString(),
   machineType:sp.type,machineName:sp.name,seat:machine.no,internalRate:machine.rate,rateCategory:machine.category,
-  hall:hall.map(item=>({...item})),event:cloneHallEvent(currentHallEvent),days:[],completed:false,completionReason:''
+  hall:hall.map(item=>({...item})),event:cloneHallEvent(currentHallEvent),days:[],throughMode:sevenDayThroughEnabled,completed:false,completionReason:''
  };
 }
 function upsertContinuationSeries(){
@@ -2868,31 +2977,38 @@ function renderContinuationResult(){
 function updateResultActionButtons(){
  if(!ui.continueSameSeat)return;
 
- // 大当たり履歴の件数にかかわらず、結果画面上部へ必ず表示する。
  ui.resultActions?.classList.remove('hidden');
  if(ui.resultActions)ui.resultActions.style.display='block';
 
  const days=continuationSeries?.days?.length||0;
  const completeStopped=s?.endReason==='コンプリート機能作動';
- const canContinue=!!continuationSeries&&days>0&&days<CONTINUATION_MAX_DAYS&&!completeStopped;
+ const canContinue=!!continuationSeries&&days>0&&days<CONTINUATION_MAX_DAYS;
+ const performanceNote=typeof DEBUG_SPEED_UNLOCKS!=='undefined'&&DEBUG_SPEED_UNLOCKS
+   ?`内部性能 ${formatInternalRate(continuationSeries.internalRate)}回を維持`
+   :'同じ台の内部性能を維持';
 
  ui.continueSameSeat.classList.remove('hidden');
  ui.continueSameSeat.style.display='block';
  ui.continueSameSeat.disabled=!canContinue;
 
  if(canContinue){
-  ui.continueSameSeat.firstChild.textContent='この台で打ち続ける（同じ台を据え置き）';
-  ui.continueSameSeatNote.textContent=`次は据え置き${days+1}日目｜同じ台の内部性能を維持`;
- }else if(completeStopped){
-  ui.continueSameSeat.firstChild.textContent='コンプリート機能作動・続行不可';
-  ui.continueSameSeatNote.textContent='プラス側のコンプリート到達により、この台は停止しました';
+  ui.continueSameSeat.firstChild.textContent=completeStopped
+   ?'コンプリート翌日へ（同じ台を据え置き）'
+   :'この台で打ち続ける（同じ台を据え置き）';
+  ui.continueSameSeatNote.textContent=completeStopped
+   ?`本日は営業終了｜次は据え置き${days+1}日目｜${performanceNote}`
+   :`次は据え置き${days+1}日目｜${performanceNote}`;
  }else{
   ui.continueSameSeat.firstChild.textContent=days>=CONTINUATION_MAX_DAYS?'7日間の据え置き記録を完走！':'コンテニュー不可';
-  ui.continueSameSeatNote.textContent=days>=CONTINUATION_MAX_DAYS?'1週間分の連続記録が完成しました':'据え置き記録がありません';
+  ui.continueSameSeatNote.textContent=days>=CONTINUATION_MAX_DAYS
+   ?'1週間分の連続記録が完成しました'
+   :'据え置き記録がありません';
  }
 }
-function continueSameSeatPlay(){
+function continueSameSeatPlay(options={}){
+ cancelSevenDayThroughContinuation();
  if(!continuationSeries||continuationSeries.days.length>=CONTINUATION_MAX_DAYS)return;
+ const resumeAuto=options?.resumeAuto||null;
  currentHallEvent=cloneHallEvent(continuationSeries.event);
  hall=continuationSeries.hall.map(item=>({...item}));
  const machine=hall.find(item=>item.no===continuationSeries.seat);
@@ -2902,6 +3018,18 @@ function continueSameSeatPlay(){
  ui.spec.value=continuationSeries.machineType;
  ui.result.classList.add('hidden');
  start(machine,{continuing:true});
+ syncSevenDayThroughUI();
+
+ if(resumeAuto){
+  setTimeout(()=>{
+   if(!s||s.finished)return;
+   if(resumeAuto.debugAuto){
+    startDebugAuto(resumeAuto.debugBatchSize===100?100:10);
+   }else if(resumeAuto.oneSpinAuto&&oneSpinAutoUnlocked()){
+    startOneSpinAuto();
+   }
+  },90);
+ }
  requestAnimationFrame(()=>ui.play.scrollIntoView({behavior:'smooth',block:'start'}));
 }
 
@@ -4178,9 +4306,9 @@ function validateMachineRegistry(){
  }
 
  if(errors.length){
-  console.error('[v10.24.23 MACHINE_REGISTRY] 検証エラー',errors);
+  console.error('[v10.24.24 MACHINE_REGISTRY] 検証エラー',errors);
  }else{
-  console.info(`[v10.24.23 MACHINE_REGISTRY] ${MACHINE_ORDER.length}機種の共通登録を確認`);
+  console.info(`[v10.24.24 MACHINE_REGISTRY] ${MACHINE_ORDER.length}機種の共通登録を確認`);
  }
  return errors;
 }
@@ -5764,6 +5892,7 @@ function start(machine,options={}){
  ui.seatBadge.textContent=`台${machine.no}・${formatInternalRate(machine.rate)}回`;
  ui.continuationDayBadge.classList.remove('hidden');
  ui.continuationDayBadge.textContent=`据え置き${continuationDay}日目`;
+ syncSevenDayThroughUI();
  ui.history.innerHTML='<small>まだ大当たりなし</small>';
 
  // 前の台が演出中・AUTO停止中だった場合に残るDOM側のロックを、
@@ -10776,6 +10905,7 @@ function finish(reason){
 function finishCore(reason){
  if(!s||s.finished)return;
  const completeEnd=reason==='コンプリート機能作動';
+ const sevenDayResumeState=captureSevenDayThroughResumeState();
  s.endReason=reason;
  if(bulkSimulation.active){
   s.finished=true;
@@ -10888,7 +11018,9 @@ function finishCore(reason){
  drawResultGraph();
  renderContinuationResult();
  updateResultActionButtons();
- requestAnimationFrame(()=>ui.result.scrollIntoView({behavior:'smooth',block:'start'}));
+ if(!scheduleSevenDayThroughContinuation(reason,sevenDayResumeState)){
+  requestAnimationFrame(()=>ui.result.scrollIntoView({behavior:'smooth',block:'start'}));
+ }
 }
 
 
@@ -12019,7 +12151,7 @@ function startAuditSimulation(){
 }
 
 const CHANGELOG_STORAGE_KEY='pachiSimulatorChangelogSeenVersionV1';
-const CURRENT_CHANGELOG_VERSION='10.24.23';
+const CURRENT_CHANGELOG_VERSION='10.24.24';
 
 function changelogSeenVersion(){
  try{return localStorage.getItem(CHANGELOG_STORAGE_KEY)||''}catch(_){return ''}
@@ -12194,17 +12326,21 @@ ui.debugUnlockOneSpinAuto.addEventListener('click',()=>{
 });
 ui.end.addEventListener('click',()=>{
  if(bulkSimulation.active)return;
+ cancelSevenDayThroughContinuation();
  stopOneSpinAuto('遊技終了');
  stopDebugAuto('遊技終了',true);
  finish('遊技終了');
 });
-ui.replace.addEventListener('click',()=>build({rerollEvent:true,announceEvent:true}));
+ui.sevenDayThroughEnabled?.addEventListener('change',()=>setSevenDayThroughEnabled(ui.sevenDayThroughEnabled.checked));
+ui.replace.addEventListener('click',()=>{cancelSevenDayThroughContinuation();build({rerollEvent:true,announceEvent:true})});
 ui.continueSameSeat.addEventListener('click',continueSameSeatPlay);
 ui.reselectSameMachine.addEventListener('click',()=>{
+ cancelSevenDayThroughContinuation();
  build({rerollEvent:false,announceEvent:false});
  requestAnimationFrame(()=>document.getElementById('seatArea')?.scrollIntoView({behavior:'smooth',block:'start'}));
 });
 ui.returnMachineSelection.addEventListener('click',()=>{
+ cancelSevenDayThroughContinuation();
  build({rerollEvent:false,announceEvent:false});
  requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'smooth'}));
 });
@@ -12297,6 +12433,7 @@ ui.vibrationEnabled.addEventListener('change',()=>{
  if(!ui.vibrationEnabled.checked)stopVibration();
 });
 configureVibrationAvailability();
+syncSevenDayThroughUI();
 initializeMachineSelectors();
 initializeBulkSimulationControls();
 ensureAchievementFilters();
