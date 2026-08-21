@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>28機種 確率シミュレーター v10.24.24</title>
+<title>32機種 確率シミュレーター v10.29</title>
 <style>
 :root{
   color-scheme:dark;
@@ -212,6 +212,7 @@ body[data-theme="sao_yozora"]{--machine:#70c8ff;--machine2:#384b9e;--machine-sof
 body[data-theme="eva17_hajimari"]{--machine:#d95cff;--machine2:#3343a8;--machine-soft:rgba(217,92,255,.18)}
 body[data-theme="drum_denonbu"]{--machine:#ff4fa3;--machine2:#7d3cff;--machine-soft:rgba(255,79,163,.18)}
 body[data-theme="otome7"]{--machine:#ff667a;--machine2:#a06b18;--machine-soft:rgba(255,102,122,.18)}
+body[data-theme="keiji_gold"]{--machine:#e5a83d;--machine2:#7b241c;--machine-soft:rgba(229,168,61,.18)}
 body[data-theme="bofuri"]{--machine:#70d9ff;--machine2:#5d43b7;--machine-soft:rgba(112,217,255,.18)}
 body[data-theme="isekai_maou"]{--machine:#b66cff;--machine2:#6d224f;--machine-soft:rgba(182,108,255,.18)}
 body[data-theme="umaiwa"]{--machine:#f6b84a;--machine2:#9a5420;--machine-soft:rgba(246,184,74,.18)}
@@ -241,6 +242,7 @@ body[data-theme="sao_yozora"]{background:radial-gradient(circle at 50% -20%,#203
 body[data-theme="eva17_hajimari"]{background:radial-gradient(circle at 50% -20%,#40225f 0,#161a38 38%,#090c18 100%)}
 body[data-theme="drum_denonbu"]{background:radial-gradient(circle at 50% -20%,#5d174a 0,#2b153a 38%,#100b18 100%)}
 body[data-theme="otome7"]{background:radial-gradient(circle at 50% -20%,#5a262a 0,#2a1b16 38%,#100d0c 100%)}
+body[data-theme="keiji_gold"]{background:radial-gradient(circle at 50% -20%,#6b3d16 0,#2b1711 38%,#100c09 100%)}
 body[data-theme="bofuri"]{background:radial-gradient(circle at 50% -20%,#243f62 0,#171a38 38%,#090d18 100%)}
 body[data-theme="isekai_maou"]{background:radial-gradient(circle at 50% -20%,#4a225d 0,#241329 38%,#0f0a12 100%)}
 body[data-theme="umaiwa"]{background:radial-gradient(circle at 50% -20%,#5b3717 0,#23170e 38%,#0f0c09 100%)}
@@ -1162,15 +1164,6 @@ button.busy{opacity:.58;cursor:wait}
 }
 
 
-/* v10.24.24 公開版：開発専用機能・内部性能表示は非表示 */
-#bulkSimulationSection,
-#debugAutoPanel,
-.seat-rate,
-.seat-category{
-  display:none!important;
-}
-
-
 .seven-day-through-option{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   margin-top:10px;padding:11px 12px;border:1px solid var(--line);border-radius:14px;
@@ -1185,6 +1178,40 @@ button.busy{opacity:.58;cursor:wait}
   box-shadow:0 0 0 1px color-mix(in srgb,var(--machine) 20%,transparent)
 }
 
+
+.bulk-copy-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:12px 0 10px;
+}
+.bulk-copy-button{
+  flex:1;
+  min-height:46px;
+  padding:10px 14px;
+  border:1px solid color-mix(in srgb,var(--machine) 60%,var(--line));
+  border-radius:12px;
+  background:color-mix(in srgb,var(--machine) 13%,var(--panel2));
+  color:inherit;
+  font-weight:800;
+  font-size:14px;
+}
+.bulk-copy-button:active{transform:translateY(1px)}
+.bulk-copy-status{
+  min-width:110px;
+  text-align:right;
+  font-size:12px;
+  line-height:1.35;
+}
+
+
+/* v10.29 公開版：開発専用機能・内部性能表示は非表示 */
+#bulkSimulationSection,
+#debugAutoPanel,
+.seat-rate,
+.seat-category{
+  display:none!important;
+}
 </style>
 </head>
 <body>
@@ -1229,11 +1256,11 @@ button.busy{opacity:.58;cursor:wait}
         <button id="infoClose" class="info-close" type="button" aria-label="説明を閉じる">×</button>
       </header>
       <div class="info-content">
-        <p class="info-lead">現金・換金要素のない、1タップ＝1回転の確率シミュレーターです。機種名と演出名はすべてオリジナルです。</p>
+        <p class="info-lead">現金・換金要素のない、1タップ＝1回転の確率シミュレーターです。実在機種の公表スペックを参考に、抽選と遊技フローを簡略再現しています。</p>
 
         <section class="info-section">
           <h3>基本仕様</h3>
-          <p>28機種から遊ぶ機種を選び、性能の異なる10台から1台を選択します。12時間営業を想定し、終了時には差pt・大当たり履歴・スランプグラフを確認できます。</p>
+          <p>32機種から遊ぶ機種を選び、性能の異なる10台から1台を選択します。12時間営業を想定し、終了時には差pt・大当たり履歴・スランプグラフなどを確認できます。台ごとの内部性能は公開しません。</p>
         </section>
 
         <section class="info-section">
@@ -1248,12 +1275,12 @@ button.busy{opacity:.58;cursor:wait}
 
         <section class="info-section">
           <h3>実績と高速回転</h3>
-          <p>実績は総合38個＋各機種24個の合計710個です。名誉・不名誉・累計、★1〜★5で分類し、解除状況・難易度による絞り込みと条件別の進捗表示に対応しています。公開版では実績20個で10回転、200個で通常時の100回転を永久解放します。</p>
+          <p>実績は総合38個＋各機種24個の合計806個です。名誉・不名誉・累計、★1〜★5で分類し、解除状況・難易度による絞り込みと条件別の進捗表示に対応しています。公開版では実績20個で10回転、200個で通常時の100回転を永久解放します。</p>
         </section>
 
         <section class="info-section">
           <h3>公開版について</h3>
-          <p>台の内部回転率・ボーダー区分・DEBUG AUTO・大量シミュレーションは非公開です。10回転は実績20個、100回転は実績200個で永久解放されます。1回転AUTOはシークレット実績の達成後に利用できます。</p>
+          <p>台の内部回転率・ボーダー区分・開発用AUTO・大量シミュレーションは非公開です。10回転は実績20個、100回転は実績200個で永久解放されます。1回転AUTOはシークレット実績の達成後に利用できます。</p>
         </section>
       </div>
     </section>
@@ -1330,35 +1357,156 @@ button.busy{opacity:.58;cursor:wait}
         <p class="info-lead">新しいものから順に、主な変更内容を掲載しています。</p>
         <div class="update-list">
           <section class="update-entry latest">
-            <div class="update-entry-head"><span class="update-version">v10.24.24</span><span class="update-date">2026-08-18</span></div>
+            <div class="update-entry-head"><span class="update-version">v10.29</span><span class="update-date">2026-08-18</span></div>
             <ul>
-              <li>「7日間貫きモード」を追加。ON時は営業時間終了後、同じ台・同じ内部性能を据え置いたまま翌日へ自動移行し、最大7日目まで連続プレーできる</li>
-              <li>コンプリート機能作動はその日の営業終了として記録し、翌日はMY・差ptを日単位でリセットしたうえで同じ台の据え置きとして続行可能に変更</li>
-              <li>7日間貫きモード中にコンプリートしても、7日未満なら翌日へ自動移行。7日目終了時は従来どおり最終7日間リザルトを表示</li>
-              <li>DEBUG 10/100回転AUTOが営業終了時まで動作していた場合は、貫きモードで翌日も同じAUTOを自動再開。1回転AUTOも終了時点で動作中なら翌日へ引き継ぐ</li>
+              <li>正式公開版を32機種へ更新し、花の慶次シリーズ4機種の監査結果を統合</li>
+              <li>e花の慶次〜黄金の一撃、CR真・花の慶次2〜漆黒の衝撃2400、CR花の慶次〜斬 H6-V、初代CR花の慶次S-V（雲のかなたに）の抽選・振り分け・出玉会計を確定</li>
+              <li>漆黒・斬・初代はコンプリート機能非搭載として青天井へ修正。黄金の一撃はコンプリート機能を従来どおり維持</li>
+              <li>斬・初代は右打ち機ではないため、電サポ中のみ旧式左打ちの玉減りを独立計上。潜伏中には加算しない</li>
+              <li>公開版では内部回転率・ボーダー区分・開発用AUTO・大量シミュレーションを非表示。10回転／100回転は実績解除制、1回転AUTOはシークレット実績解除制</li>
+              <li>7日間貫きモード、プレー履歴、実績、結果グラフなど既存の公開機能を維持</li>
             </ul>
           </section>
           <section class="update-entry">
             <div class="update-entry-head"><span class="update-version">v10.24.24</span><span class="update-date">2026-08-18</span></div>
             <ul>
-              <li>全28機種の一巡監査内容を正式版へ統合</li>
-              <li>複数機種で払出個数と実獲得差ptの扱い、時短・ST・LT・上乗せ処理、振り分けを再点検して修正</li>
-              <li>P戦国乙女7 終焉の関ヶ原を含む各機種の基準を大量シミュレーションで再検証</li>
-              <li>外部サイトのボーダーは参考値とし、ゲーム内部の基準は実機スペックとシミュレーション結果から独自算出する運用へ統一</li>
-              <li>公開版では台の内部性能・DEBUG AUTO・大量シミュレーションを非表示。10回転／100回転は実績解除制</li>
+              <li>28機種の一巡監査結果を公開版へ統合</li>
+              <li>同じ台・同じ内部性能を最大7日間据え置く「7日間貫きモード」を追加</li>
+              <li>公開版では台の内部性能・開発用AUTO・大量シミュレーションを非表示にし、高速回転は実績解除制を維持</li>
             </ul>
           </section>
           <section class="update-entry">
-            <div class="update-entry-head"><span class="update-version">v10.23</span><span class="update-date">2026-08-17</span></div>
+            <div class="update-entry-head"><span class="update-version">v10.10.18</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>機種別completeMy到達時、演出・大当たり・RUSH中でもその瞬間にコンプリート機能が作動して即時終了</li><li>completeMy未設定・null・0の機種はコンプリート判定を行わない青天井仕様へ対応</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.17</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>eフィーバー妖怪ウォッチを通常約1/319.7、RUSH大当り約1/41.9・転落約1/88.0へ更新</li><li>初当たり振り分け、時短100回、最終決戦25%、妖王決戦を含む右打ち振り分けを最新指定へ統一</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.16</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>eフィーバー妖怪ウォッチの出ptを300pt／1500pt／3000ptの1500ptベースへ変更</li><li>怪闘SONICの通常変動を即時反応へ短縮し、低頻度のハズレリーチを追加</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.14</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>怪闘SONICの通常1回転を即時反応へ短縮し、当たり時と低確率のハズレ時だけリーチ演出を追加</li><li>妖王決戦の突入・上乗せ・再戦判定と、最終決戦の復帰ジャッジへ専用演出を追加</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.13</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>黄金7500の初回LT獲得時とLT中の7500ptを、履歴内訳で「7500pt×1」と表示するよう修正</li><li>連数・右打ち当たり回数・総獲得出pt・消化時間は従来どおり維持</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.10</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>黄金LT中の前兆色を約2秒表示し、色アイコンと期待度表示を追加</li><li>青・緑・赤・虹の前兆を見分けやすく改善</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.8</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>黄金LT中へ青・緑・赤・レインボーの7500pt期待度別前兆を追加</li><li>当たり後に静寂・赤炎・黄金フェイスの3種類の上乗せジャッジを追加</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.7</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>e牙狼12黄金騎士極限の2段階ジャッジへ約3秒の専用演出を追加</li><li>入口は通常・レインボー、LT最終判定は青・緑・赤・金の期待度別演出に対応</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.6</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>e東京喰種 超デカ超一撃ver.のチャージにも出ptブラインド演出を追加</li><li>中央タップまで300ptか7500pt＋STかを伏せ、開放後に結果を表示</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.5</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>e東京喰種 超デカ超一撃ver.の図柄揃い出ptを一時ブラインド化</li><li>中央ステージのタップで3000pt通常または7500pt＋STを開放する演出を追加</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.4</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>e東京喰種 超デカ超一撃ver.のチャージ当選率を約1/538.8へ変更</li><li>チャージからのST突入率を0.5%へ分離し、昇格時は7500pt＋STへ修正</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.3</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>大量シミュレーションの回転率入力を250ptあたりへ統一</li><li>換算表示と入力方式切替を削除し、ボーダー比較を簡潔化</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.2</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>eリコリス・リコイルの初当たり・LT確率・出pt・モード移行を見直し</li><li>e魔法少女リリカルなのはの通常時振り分け、時短100回、ST70回・約1/51.6、1500ptストックへ修正</li><li>eリコリス・リコイルのB継続15%とUD後A復帰は暫定値として定数管理</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10.1</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>e東京喰種 超デカ超一撃ver.の図柄・チャージ確率、初当たり出pt、ST確率、3000pt上乗せループを修正</li><li>ボーダー表示を30.1回／250ptへ修正</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.10</span><span class="update-date">2026-07-25</span></div>
+            <ul><li>完全オリジナルの特殊ゲーム性5機種を追加し、全20機種へ拡張</li><li>転落＋復帰戦、超一撃ループ、二層LT、完走型ストックST、転落バトルを追加</li><li>追加5機種を大量シミュレーターへ対応</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.9.1</span><span class="update-date">2026-07-24</span></div>
             <ul>
-              <li>28機種体制へ拡張し、P戦国乙女7・防振り・異世界魔王を追加</li>
+              <li>大量シミュレーションへ回転率入力とボーダー比較表示を追加</li>
+              <li>入力値とボーダーとの差をリアルタイム表示</li>
             </ul>
           </section>
           <section class="update-entry">
-            <div class="update-entry-head"><span class="update-version">v10.20</span><span class="update-date">2026-08-08</span></div>
+            <div class="update-entry-head"><span class="update-version">v10.9</span><span class="update-date">2026-07-24</span></div>
             <ul>
-              <li>SAO アリシゼーション 夜空を正式追加し、据え置き・イベント・AUTO関連の改善を統合</li>
+              <li>DEBUG版へ大量シミュレーション試作機能を追加</li>
+              <li>通常の遊技モードと同じ抽選処理を、演出・保存なしで高速反復</li>
+              <li>平均差pt・勝率・推定出率・実測初当たり・RUSH成績・到達率を集計</li>
+              <li>大量シミュレーション結果はプレー履歴・累計・実績へ保存しない</li>
             </ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.8.1</span><span class="update-date">2026-07-24</span></div>
+            <ul>
+              <li>バイブ非対応端末では設定を自動で無効化し、非対応表示へ変更</li>
+              <li>iPhone Safariなどで連続タップ時に拡大されにくいタッチ設定を追加</li>
+              <li>ピンチ操作による拡大は維持</li>
+            </ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.8</span><span class="update-date">2026-07-24</span></div>
+            <ul>
+              <li>機種の共通登録情報を内部レジストリへ集約</li>
+              <li>タイトル表示をバージョン番号だけに整理</li>
+              <li>「！」ボタンから確認できる更新履歴を追加</li>
+              <li>抽選内容・保存データ・既存実績IDは変更なし</li>
+            </ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.7</span><span class="update-date">2026-07-24</span></div>
+            <ul><li>e Re:ゼロから始める異世界生活 season2を追加し、全15機種・実績265個へ拡張</li><li>3000pt＋αの25％上乗せループを実装</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.6.2</span><span class="update-date">2026-07-24</span></div>
+            <ul><li>P新世紀エヴァンゲリオン ～未来への咆哮～のST後残保留4回を、ハズレ時リーチなし・リーチ時大当たりに調整</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.6.1</span><span class="update-date">2026-07-24</span></div>
+            <ul><li>遊技画面の大当たり回数表示を修正</li><li>回転表示を現在回転（総回転）の順へ変更</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.6</span><span class="update-date">2026-07-24</span></div>
+            <ul><li>遊技画面の情報を4項目へ集約し、表示をコンパクト化</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.5</span><span class="update-date">2026-07-24</span></div>
+            <ul><li>画面下の長い説明文を削除し、「？」説明モーダルへ移動</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.4</span><span class="update-date">2026-07-24</span></div>
+            <ul><li>機種タイプと機種名を分けた2段階プルダウンを追加</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.3</span><span class="update-date">2026-07-24</span></div>
+            <ul><li>甘デジ・ライト・ミドル・MAX／高出力の区分表示を追加</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.2</span><span class="update-date">2026-07-23</span></div>
+            <ul><li>設定1固定のPAぱちんこ新鬼武者ズバババ90A1を追加し、全14機種へ拡張</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.1</span><span class="update-date">2026-07-23</span></div>
+            <ul><li>実績10個で10回転、100個で100回転を永久解放する機能を追加</li></ul>
+          </section>
+          <section class="update-entry">
+            <div class="update-entry-head"><span class="update-version">v10.0</span><span class="update-date">2026-07</span></div>
+            <ul><li>総合＋機種別の実績システムを本格実装</li></ul>
           </section>
         </div>
       </div>
@@ -1376,7 +1524,7 @@ button.busy{opacity:.58;cursor:wait}
     </div>
   </div>
   <div class="titlebar">
-    <h1>28機種 確率シミュレーター <span class="muted">v10.24.24</span></h1>
+    <h1>29機種 確率シミュレーター <span class="muted">v10.25.1 DEBUG</span></h1>
     <div class="title-actions">
       <button id="updateOpen" class="info-button update-button" type="button" aria-label="更新履歴を開く" aria-haspopup="dialog">!
         <span id="updateNew" class="update-new hidden">NEW</span>
@@ -1423,14 +1571,14 @@ button.busy{opacity:.58;cursor:wait}
   <details class="card achievement-section" style="margin-top:12px">
     <summary class="row" style="justify-content:space-between">
       <div>
-        <h2>実績コレクション <span id="achievementCount" class="badge">0/710</span></h2>
-        <small>総合38個＋各機種24個／合計710個・名誉・不名誉・累計を★1〜★5で分類</small>
+        <h2>実績コレクション <span id="achievementCount" class="badge">0/806</span></h2>
+        <small>総合38個＋各機種24個／合計806個・名誉・不名誉・累計を★1〜★5で分類</small>
       </div>
       <button id="resetAchievements" type="button" class="secondary" style="min-height:38px;padding:7px 11px">リセット</button>
     </summary>
 
     <div class="achievement-overview">
-      <div><small>全体</small><b id="achievementOverallCount">0/710</b></div>
+      <div><small>全体</small><b id="achievementOverallCount">0/806</b></div>
       <div><small>🏅 名誉</small><b id="achievementHonorCount">0/0</b></div>
       <div><small>💀 不名誉</small><b id="achievementDishonorCount">0/0</b></div>
       <div><small>📊 累計</small><b id="achievementCumulativeCount">0/0</b></div>
@@ -1494,7 +1642,7 @@ button.busy{opacity:.58;cursor:wait}
   <details class="card" style="margin-top:12px">
     <summary class="row" style="justify-content:space-between">
       <div>
-        <h2>機種別累計データ <span id="lifetimeMachineCount" class="badge">0/28機種</span></h2>
+        <h2>機種別累計データ <span id="lifetimeMachineCount" class="badge">0/32機種</span></h2>
         <small>プレー履歴50件とは別に、各機種の総計を継続保存</small>
       </div>
       <button id="resetLifetimeStats" type="button" class="secondary" style="min-height:38px;padding:7px 11px">累計リセット</button>
@@ -1602,6 +1750,10 @@ button.busy{opacity:.58;cursor:wait}
     </div>
 
     <div id="bulkResults" class="hidden">
+      <div class="bulk-copy-row">
+        <button id="bulkCopyResult" class="bulk-copy-button" type="button">📋 結果をコピー</button>
+        <small id="bulkCopyStatus" class="bulk-copy-status muted">結果をそのまま貼り付けできます</small>
+      </div>
       <div class="bulk-result-summary">
         <div><small>平均差pt</small><b id="bulkAvgNet">±0pt</b></div>
         <div><small>勝率</small><b id="bulkWinRate">0.0%</b></div>
@@ -2589,6 +2741,66 @@ const MACHINE_REGISTRY={
   "preAlertSpecial":{"value":"rush100","label":"RUSH確定 100%","guarantee":"魔王PLAYモード＋V-STOCK2個確定"},
   "summary":"通常約1/319.6。初当たりは払出1500個（実獲得約1400pt）で、56%が魔王PLAYモードへ突入しV-STOCK2個スタート（最大4個）。RUSHは実質1/1で、V1個の継続率59.5%を右振り分けで再現。右の差pt加算は資料の実獲得目安を使用し、直撃は約1400pt＋V-STOCK2、払出1460個は約1360pt、払出660個は約600pt。トータル継続約88.3%。DEBUG基準17.27回/250pt、電サポ中の出pt増減なし。"
  },
+ "keiji_cloud":{
+  "name":"CR花の慶次S-V（雲のかなたに）",
+  "category":"max",
+  "menuOrder":137,
+  "base":18.9,
+  "figureDenominator":399.25,
+  "noAlertEventProbability":0.997495303068253,
+  "completeMy":null,
+  "achievementIcon":"🌸",
+  "achievementSpecial":{"icon":"🔥","name":"大ふへん者48","desc":"ランクアップボーナス48回開放を獲得する","stars":3},
+  "theme":{"icon":"🌸","idle":"雲のかなたに","spin":"傾奇者の一閃を待っている…","hit":"傾奇御免！","rush":"戦モード突入！"},
+  "preAlertTarget":"図柄揃い・RUB",
+  "preAlertSpecial":{"value":"rush100","label":"出玉あり確変 100%","guarantee":"15R確変またはRUB＋戦モード確定"},
+  "summary":"初代CR花の慶次S-V。通常1/399.25、高確率1/39.93、確変80%。大当たり振り分けは15R確変45%、RUB25%（16回19%／32回3%／48回3%）、2R確変10%、2R通常20%。小当たりは本抽選とは別に約1/319.4。電サポなしで2R確変を引くと潜伏、2R通常は通常状態。戦・殿の電サポ中に2R確変を引いた場合は高確率＋電サポが次回大当たりまで継続、2R通常は殿モード時短100回。実獲得目安は15R約1620pt、RUB16約550pt／32約1100pt／48約1660pt、2Rは0pt。右打ち機ではないため旧式左打ち電サポの玉減りを検証仮定として独立計上し、潜伏中には加算しない。コンプリート機能非搭載機として青天井。"
+ },
+ "keiji_zan":{
+  "name":"CR花の慶次〜斬 H6-V",
+  "category":"max",
+  "menuOrder":138,
+  "base":18.8,
+  "figureDenominator":399.25,
+  "noAlertEventProbability":0.997495303068253,
+  "completeMy":null,
+  "achievementIcon":"🌸",
+  "achievementSpecial":{"icon":"🔥","name":"大ふへん者","desc":"ランクアップボーナスαを獲得する","stars":3},
+  "theme":{"icon":"🌸","idle":"戦国の傾奇者","spin":"キセルの一閃を待っている…","hit":"傾奇御免！","rush":"真戦モード突入！"},
+  "preAlertTarget":"図柄揃い・RUB",
+  "preAlertSpecial":{"value":"rush100","label":"出玉あり確変 100%","guarantee":"16R確変またはRUB＋真戦モード確定"},
+  "summary":"通常1/399.25、高確率1/39.93、確変80%。大当たり振り分けは16R確変47%、RUB23%（16回15%／32回3%／48回3%／α2%）、2R確変A5%、2R確変B5%、2R通常20%。小当たりは本抽選と別に1/319.4で通常・高確率とも同率。電サポなしの2R確変は潜伏、2R通常は通常状態。電サポ中の2R確変Aは次回まで、Bは100回まで、2R通常は時短100回。Bが100回を抜けた場合は潜伏確変へ戻る。実獲得目安は16R約1550pt、RUB16約550pt／32約1100pt／48約1470pt／α約1580pt、2Rは0pt。右打ち機ではないため旧式左打ち電サポの玉減りを検証仮定として独立計上し、潜伏中には加算しない。コンプリート機能非搭載機として青天井。"
+ },
+ "keiji_shikkoku":{
+  "name":"CR真・花の慶次2〜漆黒の衝撃2400",
+  "category":"middle",
+  "menuOrder":140,
+  "base":18.3,
+  "figureDenominator":319.68,
+  "noAlertEventProbability":0.9968724974974975,
+  "completeMy":null,
+  "achievementIcon":"⚔️",
+  "achievementSpecial":{"icon":"🖤","name":"漆黒2400","desc":"真・RUSH中に16R・実獲得約2240ptを獲得する","stars":3},
+  "theme":{"icon":"⚔️","idle":"漆黒の戦場","spin":"傾奇者の一撃を待っている…","hit":"慶次BONUS！","rush":"真・RUSH突入！"},
+  "preAlertTarget":"図柄揃い",
+  "preAlertSpecial":{"value":"rush100","label":"確変確定 100%","guarantee":"6R確変＋真・RUSH突入確定"},
+  "summary":"通常1/319.68、高確率1/145.31、確変転落1/270.8。ヘソは6R実獲得約840ptで55%確変／45%通常。通常当たり後は時短100回、確変は最低100回の電サポ保証があり、転落しなければ101回転以降も大当たりまたは転落まで継続。電チュー大当たりは100% 16R確変・実獲得約2240pt。6Rは払出900個→実獲得約840pt、16Rは払出2400個→実獲得約2240ptとして会計し、追加右打ち削りは0。資料の約65%継続は高確率大当たりと転落の先着競合に対応し、100回保証中の転落後引き戻しも別途抽選。コンプリート機能非搭載機として青天井。"
+ },
+ "keiji_gold":{
+  "name":"e花の慶次〜黄金の一撃",
+  "category":"max",
+  "menuOrder":140,
+  "base":16.8,
+  "figureDenominator":399.76,
+  "noAlertEventProbability":0.9971313110257283,
+  "completeMy":95000,
+  "achievementIcon":"🌸",
+  "achievementSpecial":{"icon":"⚔️","name":"黄金の一撃6000","desc":"超天下無双RUSHで払出約6000個＋αを獲得する","stars":4},
+  "theme":{"icon":"🌸","idle":"黄金の舞台","spin":"傾奇者の気配を追っている…","hit":"花の慶次BONUS！","rush":"天下無双RUSH突入！"},
+  "preAlertTarget":"図柄揃い",
+  "preAlertSpecial":{"value":"rush100","label":"RUSH確定 100%","guarantee":"天下無双RUSH突入確定"},
+  "summary":"図柄揃い約1/399.76、傾奇者チャージ約1/2723.4。図柄揃いは払出約1500個（差pt約1400）で50.1%がST143回へ直行、49.9%は殿MODE100回（約1/520.12）。RUSHは約1/99.14・ST143回。通常RUSH中は23.5%で超RUSHへ、超RUSH中は49.5%が払出約6000個＋α。払出200/1500/3000/6000個は差pt180/1400/2800/5600として処理し、追加右打ち削りは0。傾奇者チャージ昇格は公表資料で一部不明のため参考値を使用し、率未公表の＋α・一部直行／継続要素は未加算。"
+ },
  "umaiwa":{
   "name":"うまい棒2",
   "category":"rights",
@@ -2725,6 +2937,7 @@ const ui={
  bulkResults:$('bulkResults'),bulkAvgNet:$('bulkAvgNet'),bulkWinRate:$('bulkWinRate'),
  bulkPayoutRate:$('bulkPayoutRate'),bulkAvgMy:$('bulkAvgMy'),bulkResultGrid:$('bulkResultGrid'),
  bulkRateBody:$('bulkRateBody'),bulkResultNote:$('bulkResultNote'),
+ bulkCopyResult:$('bulkCopyResult'),bulkCopyStatus:$('bulkCopyStatus'),
  auditScope:$('auditScope'),auditDays:$('auditDays'),auditRun:$('auditRun'),auditCancel:$('auditCancel'),
  auditProgressWrap:$('auditProgressWrap'),auditProgressText:$('auditProgressText'),
  auditElapsed:$('auditElapsed'),auditProgress:$('auditProgress'),auditResults:$('auditResults'),
@@ -3424,11 +3637,11 @@ const GLOBAL_ACHIEVEMENT_GROUP={
   {key:'day_plus50000',category:'honor',stars:4,icon:'🚀',name:'大勝＋50,000pt',desc:'1プレー中に差pt＋50,000ptへ到達する'},
   {key:'day_plus75000',category:'honor',stars:5,icon:'🌌',name:'爆勝＋75,000pt',desc:'1プレー中に差pt＋75,000ptへ到達する'},
   {key:'day_plus95000',category:'honor',stars:5,icon:'👑',name:'極勝＋95,000pt',desc:'1プレー中に差pt＋95,000ptへ到達する'},
-  {key:'all_played',category:'honor',stars:3,icon:'🗺️',name:'全機種制覇',desc:'28機種すべてを1回以上プレーする'},
-  {key:'all_hit',category:'honor',stars:4,icon:'🎯',name:'全機種初当たり',desc:'28機種すべてで図柄系初当たりを記録する'},
-  {key:'all_chain5',category:'honor',stars:4,icon:'🔥',name:'全機種5連達成',desc:'28機種すべてで最高5連以上を記録する'},
-  {key:'all_chain10',category:'honor',stars:5,icon:'🌠',name:'全機種10連達成',desc:'28機種すべてで最高10連以上を記録する'},
-  {key:'all_complete',category:'honor',stars:5,icon:'🏆',name:'全機種MYチャレンジ',desc:'28機種すべてで機種別MYチャレンジを解除する'},
+  {key:'all_played',category:'honor',stars:3,icon:'🗺️',name:'全機種制覇',desc:'32機種すべてを1回以上プレーする'},
+  {key:'all_hit',category:'honor',stars:4,icon:'🎯',name:'全機種初当たり',desc:'32機種すべてで図柄系初当たりを記録する'},
+  {key:'all_chain5',category:'honor',stars:4,icon:'🔥',name:'全機種5連達成',desc:'32機種すべてで最高5連以上を記録する'},
+  {key:'all_chain10',category:'honor',stars:5,icon:'🌠',name:'全機種10連達成',desc:'32機種すべてで最高10連以上を記録する'},
+  {key:'all_complete',category:'honor',stars:5,icon:'🏆',name:'全機種MYチャレンジ',desc:'32機種すべてで機種別MYチャレンジを解除する'},
 
   {key:'hamari1500',category:'dishonor',stars:4,icon:'🫥',name:'1,500回転ハマり',desc:'いずれかの機種で1,500回転までハマる'},
   {key:'hamari2000',category:'dishonor',stars:5,icon:'🪦',name:'2,000回転ハマり',desc:'いずれかの機種で2,000回転までハマる'},
@@ -4075,6 +4288,10 @@ const NORMAL_EFFECTS={
  eva17_hajimari:{reach:['警報予告','目標反応を検知…'],super:['作戦開始！','決戦リーチへ'],hot:['シンクロ率急上昇！','激アツ演出']},
  drum_denonbu:{reach:['ドラム予告','ビートが加速…'],super:['電音部チャンス！','リズムが重なる'],hot:['超ドラ熱予告！','激アツ演出']},
  otome7:{reach:['乙女予告','戦場に気配あり…'],super:['乙女集結！','関ヶ原決戦へ'],hot:['萌えカットイン！','激アツ演出']},
+ keiji_cloud:{reach:['桜吹雪連続','戦国の気配あり…'],super:['朱槍が閃く！','もののふ系へ'],hot:['キセル予告！','激アツ演出']},
+ keiji_zan:{reach:['桜吹雪連続','戦国の気配あり…'],super:['朱槍が閃く！','もののふ系へ'],hot:['キセル予告！','激アツ演出']},
+ keiji_shikkoku:{reach:['法螺貝予告','漆黒の気配あり…'],super:['朱槍が閃く！','一騎駆けへ'],hot:['キセル予告！','激アツ演出']},
+ keiji_gold:{reach:['法螺貝予告','戦場に気配あり…'],super:['朱槍が閃く！','城門突破へ'],hot:['キセル予告！','激アツ演出']},
  bofuri:{reach:['メイプル予告','盾が光り始める…'],super:['NewWorld Online！','ギルド決戦へ'],hot:['FULL BURST！','激アツ演出']},
  isekai_maou:{reach:['召喚予告','魔力が高まる…'],super:['魔王覚醒！','召喚決戦へ'],hot:['魔王級演出！','激アツ演出']},
  umaiwa:{reach:['輪っか予告','権利獲得の気配…'],super:['うまい輪チャンス','輪が重なれば大当たり'],hot:['おかわり接近','激アツ演出']}
@@ -4165,6 +4382,10 @@ const HIT_ROUTES={
  eva17_hajimari:[{weight:20,type:'direct',start:'緊急警報',finish:'大当たり！',sub:'直撃で大当たり'},{weight:55,type:'super',start:'作戦発令',develop:'最終防衛作戦！',finish:'目標撃破！',sub:'作戦成功で大当たり'},{weight:25,type:'revival',start:'活動限界接近',develop:'ラストアタック！',miss:'作戦失敗……',finish:'再起動！',sub:'復活大当たり'}],
  drum_denonbu:[{weight:20,type:'direct',start:'ドラムフラッシュ',finish:'金7揃い！',sub:'超ドラ熱ATTACK直行'},{weight:55,type:'super',start:'リズム上昇',develop:'電音部ジャッジ！',finish:'図柄揃い！',sub:'大当たり'},{weight:25,type:'revival',start:'ビート停止',develop:'ラストPUSH！',miss:'リズム途切れる……',finish:'アンコール復活！',sub:'復活大当たり'}],
  otome7:[{weight:20,type:'direct',start:'乙女ランプ点灯',finish:'真乙女BONUS！',sub:'直撃で大当たり'},{weight:55,type:'super',start:'乙女集結',develop:'関ヶ原決戦！',finish:'乙女勝利！',sub:'決戦勝利で大当たり'},{weight:25,type:'revival',start:'戦況劣勢',develop:'最後の一閃！',miss:'刃が届かない……',finish:'乙女復活！',sub:'逆転大当たり'}],
+ keiji_cloud:[{weight:18,type:'direct',start:'桜吹雪が舞う',finish:'聚楽第！',sub:'15R確変'},{weight:57,type:'super',start:'朱槍が閃く',develop:'もののふ系リーチ！',finish:'傾奇御免！',sub:'大当たり'},{weight:25,type:'revival',start:'キセル予告',develop:'最終傾奇決戦！',miss:'刃が届かない……',finish:'だが、それがいい！',sub:'復活大当たり'}],
+ keiji_zan:[{weight:18,type:'direct',start:'桜吹雪が舞う',finish:'聚楽第！',sub:'プレミア大当たり'},{weight:57,type:'super',start:'朱槍が閃く',develop:'もののふ系リーチ！',finish:'傾奇御免！',sub:'大当たり'},{weight:25,type:'revival',start:'キセル予告',develop:'最終傾奇決戦！',miss:'刃が届かない……',finish:'だが、それがいい！',sub:'復活大当たり'}],
+ keiji_shikkoku:[{weight:20,type:'direct',start:'法螺貝が鳴り響く',finish:'前田慶次郎利益BONUS！',sub:'七図柄なら確変'},{weight:55,type:'super',start:'朱槍が閃く',develop:'一騎駆け決戦！',finish:'傾奇御免！',sub:'6R大当たり'},{weight:25,type:'revival',start:'キセル予告',develop:'最終傾奇決戦！',miss:'刃が届かない……',finish:'だが、それがいい！',sub:'復活大当たり'}],
+ keiji_gold:[{weight:20,type:'direct',start:'法螺貝が鳴り響く',finish:'花の慶次BONUS！',sub:'傾奇者、見参'},{weight:55,type:'super',start:'朱槍が閃く',develop:'城門突破演出！',finish:'天下無双の一撃！',sub:'大当たり'},{weight:25,type:'revival',start:'キセル予告',develop:'最終傾奇決戦！',miss:'刃が届かない……',finish:'だが、それがいい！',sub:'復活大当たり'}],
  bofuri:[{weight:20,type:'direct',start:'メイプルインパクト',finish:'図柄揃い！',sub:'NewWorld Onlineへ'},{weight:55,type:'super',start:'防御力MAX',develop:'NewWorld決戦！',finish:'完全防御！',sub:'決戦勝利で大当たり'},{weight:25,type:'revival',start:'HPピンチ',develop:'ラストガード！',miss:'防御突破……',finish:'絶対防御・復活！',sub:'逆転大当たり'}],
  isekai_maou:[{weight:20,type:'direct',start:'魔王紋章点灯',finish:'魔王直撃！',sub:'召喚成功で大当たり'},{weight:55,type:'super',start:'魔力解放',develop:'魔王級決戦！',finish:'魔王勝利！',sub:'決戦勝利で大当たり'},{weight:25,type:'revival',start:'魔力枯渇',develop:'最終召喚！',miss:'召喚失敗……',finish:'魔術反転・復活！',sub:'逆転大当たり'}],
  umaiwa:[{weight:20,type:'direct',start:'輪ランプ点灯',finish:'権利獲得！',sub:'一発告知で大当たり'},{weight:55,type:'super',start:'輪っか接近',develop:'うまい輪チャンス！',finish:'うまい輪BONUS！',sub:'輪が重なって大当たり'},{weight:25,type:'revival',start:'輪が外れる',develop:'最後のおかわり！',miss:'権利獲得ならず……',finish:'逆転・権利獲得！',sub:'復活大当たり'}]
@@ -4255,6 +4476,10 @@ const MISS_ROUTES={
  eva17_hajimari:[{weight:66,type:'normal',start:'警報予告',finish:'反応消失……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'作戦開始',develop:'防衛決戦',finish:'目標離脱',sub:'決戦リーチハズレ'},{weight:7,type:'hot',start:'シンクロ率急上昇',develop:'最終作戦',finish:'あと一撃届かず……',sub:'激アツ演出ハズレ'}],
  drum_denonbu:[{weight:66,type:'normal',start:'ドラム予告',finish:'ビート停止……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'電音部チャンス',develop:'リズムジャッジ',finish:'ジャッジ失敗',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'超ドラ熱予告',develop:'最終PUSH',finish:'PUSH失敗……',sub:'激アツ演出ハズレ'}],
  otome7:[{weight:66,type:'normal',start:'乙女予告',finish:'戦況変わらず……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'乙女集結',develop:'関ヶ原決戦',finish:'決戦敗北',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'萌えカットイン',develop:'最終決戦',finish:'あと一歩届かず……',sub:'激アツ演出ハズレ'}],
+ keiji_cloud:[{weight:66,type:'normal',start:'桜吹雪連続',finish:'戦況変わらず……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'朱槍が閃く',develop:'もののふ系リーチ',finish:'届かず……',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'キセル予告',develop:'最終傾奇決戦',finish:'あと一歩届かず……',sub:'激アツ演出ハズレ'}],
+ keiji_zan:[{weight:66,type:'normal',start:'桜吹雪連続',finish:'戦況変わらず……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'朱槍が閃く',develop:'もののふ系リーチ',finish:'届かず……',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'キセル予告',develop:'最終傾奇決戦',finish:'あと一歩届かず……',sub:'激アツ演出ハズレ'}],
+ keiji_shikkoku:[{weight:66,type:'normal',start:'法螺貝予告',finish:'戦況変わらず……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'朱槍が閃く',develop:'一騎駆け決戦',finish:'突破ならず',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'キセル予告',develop:'最終傾奇決戦',finish:'あと一歩届かず……',sub:'激アツ演出ハズレ'}],
+ keiji_gold:[{weight:66,type:'normal',start:'法螺貝予告',finish:'戦況変わらず……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'朱槍が閃く',develop:'城門突破演出',finish:'城門突破ならず',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'キセル予告',develop:'最終傾奇決戦',finish:'あと一歩届かず……',sub:'激アツ演出ハズレ'}],
  bofuri:[{weight:66,type:'normal',start:'盾予告',finish:'イベント終了……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'防御力上昇',develop:'NewWorld決戦',finish:'クエスト失敗',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'FULL BURST',develop:'最終防衛',finish:'防御突破……',sub:'激アツ演出ハズレ'}],
  isekai_maou:[{weight:66,type:'normal',start:'召喚予告',finish:'魔力消散……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'魔王覚醒',develop:'召喚決戦',finish:'術式不発',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'魔王級演出',develop:'最終召喚',finish:'召喚失敗……',sub:'激アツ演出ハズレ'}],
  umaiwa:[{weight:66,type:'normal',start:'輪っか予告',finish:'輪が通り過ぎた……',sub:'ノーマルリーチハズレ'},{weight:27,type:'super',start:'輪っか接近',develop:'うまい輪チャンス',finish:'権利獲得ならず',sub:'発展リーチハズレ'},{weight:7,type:'hot',start:'おかわり接近',develop:'最後の一輪',finish:'輪が外れた……',sub:'激アツ演出ハズレ'}]
@@ -4306,9 +4531,9 @@ function validateMachineRegistry(){
  }
 
  if(errors.length){
-  console.error('[v10.24.24 MACHINE_REGISTRY] 検証エラー',errors);
+  console.error('[v10.29 MACHINE_REGISTRY] 検証エラー',errors);
  }else{
-  console.info(`[v10.24.24 MACHINE_REGISTRY] ${MACHINE_ORDER.length}機種の共通登録を確認`);
+  console.info(`[v10.29 MACHINE_REGISTRY] ${MACHINE_ORDER.length}機種の共通登録を確認`);
  }
  return errors;
 }
@@ -4582,6 +4807,51 @@ function updateStage(){
  if(s.mode==='right'&&s.right){
   if(s.right.kind==='gold'){
    setStage('rush','黄金LT待機','「LT中ボーナス抽選」で大当たりを狙え');
+   return;
+  }
+  if(s.right.kind==='keijiCloudBattle'){
+   setStage('rush','次回まで','初代・戦モード／確変1/39.93・左打ち電サポ');
+   return;
+  }
+  if(s.right.kind==='keijiCloudTonoHigh'){
+   const elapsed=Math.max(0,Number(s.right.segmentSpins)||0);
+   if(elapsed<100)setStage('rush',`${100-elapsed} 回`,'初代・殿モード／内部確変1/39.93・100回を超えても電サポ継続',elapsed);
+   else setStage('rush','100回超','内部確変確定・次回大当たりまで電サポ継続');
+   return;
+  }
+  if(s.right.kind==='keijiCloudTonoTime'){
+   const remain=Math.max(0,Number(s.right.remaining)||0);
+   setStage('rush',`${remain} 回`,'初代・殿モード／2R通常・時短1/399.25',100*(1-remain/KEIJI_CLOUD_SUPPORT));
+   return;
+  }
+  if(s.right.kind==='keijiZanKaku'){
+   setStage('rush','次回まで','真戦モード・確変1/39.93');
+   return;
+  }
+  if(s.right.kind==='keijiZanKaku100'){
+   const remain=Math.max(0,Number(s.right.remaining)||0);
+   setStage('rush',`${remain} 回`,'殿モード・2R確変B／高確率1/39.93',100*(1-remain/KEIJI_ZAN_SUPPORT));
+   return;
+  }
+  if(s.right.kind==='keijiZanTime'){
+   const remain=Math.max(0,Number(s.right.remaining)||0);
+   setStage('rush',`${remain} 回`,'殿モード・2R通常／通常確率1/399.25',100*(1-remain/KEIJI_ZAN_SUPPORT));
+   return;
+  }
+  if(s.right.kind==='keijiBlackRush'){
+   const remain=Math.max(0,Number(s.right.supportRemaining)||0);
+   if(remain>0)setStage('rush',`${remain} 回`,'高確率1/145.31／転落1/270.8・100回までは電サポ保証',100*(1-remain/KEIJI_BLACK_SUPPORT));
+   else setStage('rush','決着ゾーン','確変継続中・大当たり or 転落まで');
+   return;
+  }
+  if(s.right.kind==='keijiBlackFallen'){
+   const remain=Math.max(0,Number(s.right.remaining)||0);
+   setStage('rush',`${remain} 回`,'転落後・通常確率1/319.68／100回まで時短',100*(1-remain/KEIJI_BLACK_SUPPORT));
+   return;
+  }
+  if(s.right.kind==='keijiBlackTime'){
+   const remain=Math.max(0,Number(s.right.remaining)||0);
+   setStage('rush',`${remain} 回`,'傾奇RUSH・通常確率1/319.68',100*(1-remain/KEIJI_BLACK_SUPPORT));
    return;
   }
   if(s.right.kind==='horn'){
@@ -5266,7 +5536,7 @@ function decidePreAlert(ev){
   if(s.sp.type==='sao_yozora')qualifies=!!ev.rush;
   if(s.sp.type==='eva17_hajimari')qualifies=!!ev.x?.direct;
   if(s.sp.type==='drum_denonbu')qualifies=ev.x?.kind==='direct';
-  if(s.sp.type==='otome7'||s.sp.type==='bofuri'||s.sp.type==='isekai_maou')qualifies=!!ev.rush;
+  if(s.sp.type==='otome7'||s.sp.type==='bofuri'||s.sp.type==='isekai_maou'||s.sp.type==='keiji_gold'||s.sp.type==='keiji_zan'||s.sp.type==='keiji_cloud')qualifies=!!ev.rush;
   if(s.sp.type==='kakugan'||s.sp.type==='guard'||s.sp.type==='fulldrive')qualifies=!!ev.rush;
 
   return qualifies&&passesOccupancy();
@@ -5762,6 +6032,7 @@ function debugAutoStep(){
 }
 
 function startDebugAuto(batchSize=10){
+ if(!DEBUG_SPEED_UNLOCKS)return;
  if(!s||s.finished||debugAuto.active)return;
  stopOneSpinAuto('DEBUG AUTO開始');
  clearTimeout(debugAuto.holdTimer);
@@ -6163,6 +6434,9 @@ function normalDetail(){
  if(s.sp.type==='eva17_hajimari')return `大当り約1/349.9／図柄揃い＋チャージ昇格 約1/399.9／ST 約1/99.6`;
  if(s.sp.type==='drum_denonbu')return '大当たり 約1/259.0／チャレンジ・ATTACK・救済 約1/2.0';
  if(s.sp.type==='otome7')return '図柄系BONUS 約1/399.6／強カワチャージ 約1/399.6／RUSH 約1/97.0';
+ if(s.sp.type==='keiji_cloud')return '初代・大当たり 約1/399.25／小当たり 約1/319.4／傾奇ゾーンは潜伏確変の可能性あり';
+ if(s.sp.type==='keiji_zan')return '大当たり 約1/399.25／小当たり 約1/319.4／傾奇ゾーンは潜伏確変の可能性あり';
+ if(s.sp.type==='keiji_gold')return `図柄揃い 約1/399.76／傾奇者チャージ 約1/2723.4（昇格検証${(KEIJI_GOLD_CHARGE_PROMOTION_RATE*100).toFixed(1)}%）／RUSH 約1/99.14`;
  if(s.sp.type==='bofuri')return `図柄揃い 約1/399.6／トレジャー 約1/399.6（昇格暫定${(BOFURI_TREASURE_PROMOTION_RATE*100).toFixed(2)}%）／NWO 約1/84.7`;
  if(s.sp.type==='isekai_maou')return '大当たり 約1/319.6／魔王PLAYモード 実質1/1・V-STOCK方式';
  if(s.sp.type==='umaiwa')return '大当たり 約1/38.4／おまけチャンス 約1/2.2（内部1/2.255）・残保留4個';
@@ -6601,6 +6875,275 @@ function awardOtome7RightLoop(){
  else if(bonuses===2)s.otomeRight2Units=(s.otomeRight2Units||0)+1;
  else s.otomeRight3Plus=(s.otomeRight3Plus||0)+1;
  return {bonuses,total:bonuses*OTOME_NET_RIGHT_UNIT,adds};
+}
+const KEIJI_OLD_LEFT_SUPPORT_LOSS_PER_SPIN=0.5; // DEBUG仮定。釘・止め打ち依存で固定実機値ではない。
+const KEIJI_CLOUD_LOW_DEN=399.25;
+const KEIJI_CLOUD_HIGH_DEN=39.93;
+const KEIJI_CLOUD_SMALL_DEN=319.4;
+const KEIJI_CLOUD_SUPPORT=100;
+const KEIJI_CLOUD_PAYOUTS={
+ r15:{gross:1890,net:1620,label:'15R確変・実獲得約1620pt'},
+ rub16:{gross:640,net:550,label:'RUB16回・実獲得約550pt'},
+ rub32:{gross:1280,net:1100,label:'RUB32回・実獲得約1100pt'},
+ rub48:{gross:1890,net:1660,label:'RUB48回・実獲得約1660pt'}
+};
+function applyOldKeijiLeftSupportLoss(){
+ s.rightLoss+=KEIJI_OLD_LEFT_SUPPORT_LOSS_PER_SPIN;
+}
+function rollKeijiCloudHit(){
+ return weighted([
+  {p:45,kind:'r15',kaku:true,...KEIJI_CLOUD_PAYOUTS.r15},
+  {p:19,kind:'rub16',kaku:true,...KEIJI_CLOUD_PAYOUTS.rub16},
+  {p:3,kind:'rub32',kaku:true,...KEIJI_CLOUD_PAYOUTS.rub32},
+  {p:3,kind:'rub48',kaku:true,...KEIJI_CLOUD_PAYOUTS.rub48},
+  {p:10,kind:'2rKaku',kaku:true,gross:0,net:0,label:'2R確変'},
+  {p:20,kind:'2rNormal',kaku:false,gross:0,net:0,label:'2R通常'}
+ ]);
+}
+function countKeijiCloudOutcome(x){
+ const key={r15:'R15',rub16:'Rub16',rub32:'Rub32',rub48:'Rub48','2rKaku':'2rKaku','2rNormal':'2rNormal'}[x.kind];
+ if(key)s[`keijiCloud${key}`]=(s[`keijiCloud${key}`]||0)+1;
+ s.keijiCloudBigHitCount=(s.keijiCloudBigHitCount||0)+1;
+}
+function awardKeijiCloudHit(x,forceSupport=false){
+ if(!x.net)return 0;
+ award(x.net,payoutSeconds(x.gross),x.label,forceSupport,x.gross);
+ s.keijiCloudBigHitPaid=(s.keijiCloudBigHitPaid||0)+x.net;
+ if(x.kind==='rub48')unlockMachineAchievement('special','keiji_cloud');
+ return x.net;
+}
+function closeKeijiCloudToNormal(result,hiddenHigh=false){
+ s.keijiCloudHigh=!!hiddenHigh;
+ closeHit(result);
+ s.sinceHit=0;
+ if(!bulkSimulation.active){
+  normalMode(hiddenHigh?`${result}。傾奇ゾーンへ（内部確変・電サポなし）。`:`${result}。通常時へ。`);
+  update();
+ }
+}
+function startKeijiCloudSupport(kind='battle',message='戦モード'){
+ s.keijiCloudHigh=false;
+ if(kind==='tonoHigh'){
+  s.keijiCloudTonoHighEntries=(s.keijiCloudTonoHighEntries||0)+1;
+  rightMode('keijiCloudTonoHigh',0,'殿モード','内部確変1/39.93・次回大当たりまで電サポ継続',{total:0});
+ }else{
+  s.keijiCloudBattleEntries=(s.keijiCloudBattleEntries||0)+1;
+  rightMode('keijiCloudBattle',0,'戦モード','確変1/39.93・次回大当たりまで',{total:0});
+ }
+ if(!bulkSimulation.active&&message)ui.message.textContent=message;
+}
+function applyKeijiCloudOutcome(x,fromSupport=false){
+ if(x.kind==='r15'||x.kind.startsWith('rub')){
+  if(!fromSupport)s.rushEntries++;
+  startKeijiCloudSupport('battle',`${x.label}！ 戦モードへ`);
+  return;
+ }
+ if(x.kind==='2rKaku'){
+  if(fromSupport){
+   startKeijiCloudSupport('tonoHigh','2R確変・殿モードへ（確変＋電サポ次回まで）');
+  }else{
+   s.keijiCloudPotentialEntries=(s.keijiCloudPotentialEntries||0)+1;
+   closeKeijiCloudToNormal('2R確変・潜伏',true);
+  }
+  return;
+ }
+ // 2R通常
+ s.keijiCloudHigh=false;
+ if(fromSupport){
+  s.keijiCloudTimeEntries=(s.keijiCloudTimeEntries||0)+1;
+  rightMode('keijiCloudTonoTime',KEIJI_CLOUD_SUPPORT,'殿モード','2R通常・通常確率1/399.25・時短100回',{total:KEIJI_CLOUD_SUPPORT});
+ }else{
+  closeKeijiCloudToNormal('2R通常',false);
+ }
+}
+function startKeijiCloud(ev){
+ const x=ev.x||rollKeijiCloudHit();
+ countKeijiCloudOutcome(x);
+ awardKeijiCloudHit(x,false);
+ s.pending={type:'keiji_cloud',x,fromHigh:!!ev.fromHigh,step:0};
+ const state=ev.fromHigh?'潜伏中の大当たり':'通常時の大当たり';
+ judgeMode('初代 花の慶次 大当たり',`${s.pendingSpin}回転で${state}！ ${x.label}`,'結果を見る');
+}
+function startKeijiCloudSmall(){
+ s.keijiCloudSmallHits=(s.keijiCloudSmallHits||0)+1;
+ if(bulkSimulation.active)return;
+ ui.message.textContent='傾奇者図柄停止・小当たり。内部状態は変化なし。';
+ setStage('super','傾奇ゾーン','小当たり・潜伏期待演出',55);
+ update();
+}
+
+const KEIJI_ZAN_LOW_DEN=399.25;
+const KEIJI_ZAN_HIGH_DEN=39.93;
+const KEIJI_ZAN_SMALL_DEN=319.4;
+const KEIJI_ZAN_SUPPORT=100;
+const KEIJI_ZAN_LEFT_SUPPORT_LOSS_PER_SPIN=KEIJI_OLD_LEFT_SUPPORT_LOSS_PER_SPIN;
+const KEIJI_ZAN_PAYOUTS={
+ r16:{gross:1792,net:1550,label:'16R確変・実獲得約1550pt'},
+ rub16:{gross:640,net:550,label:'RUB16回・実獲得約550pt'},
+ rub32:{gross:1280,net:1100,label:'RUB32回・実獲得約1100pt'},
+ rub48:{gross:1700,net:1470,label:'RUB48回・実獲得約1470pt'},
+ rubAlpha:{gross:1792,net:1580,label:'RUBα・実獲得約1580pt'}
+};
+function rollKeijiZanHit(){
+ return weighted([
+  {p:47,kind:'r16',kaku:true,support:'next',...KEIJI_ZAN_PAYOUTS.r16},
+  {p:15,kind:'rub16',kaku:true,support:'next',...KEIJI_ZAN_PAYOUTS.rub16},
+  {p:3,kind:'rub32',kaku:true,support:'next',...KEIJI_ZAN_PAYOUTS.rub32},
+  {p:3,kind:'rub48',kaku:true,support:'next',...KEIJI_ZAN_PAYOUTS.rub48},
+  {p:2,kind:'rubAlpha',kaku:true,support:'next',...KEIJI_ZAN_PAYOUTS.rubAlpha},
+  {p:5,kind:'2rA',kaku:true,support:'a',gross:0,net:0,label:'2R確変A'},
+  {p:5,kind:'2rB',kaku:true,support:'b',gross:0,net:0,label:'2R確変B'},
+  {p:20,kind:'2rNormal',kaku:false,support:'time',gross:0,net:0,label:'2R通常'}
+ ]);
+}
+function countKeijiZanOutcome(x){
+ const key={r16:'R16',rub16:'Rub16',rub32:'Rub32',rub48:'Rub48',rubAlpha:'RubAlpha','2rA':'2rA','2rB':'2rB','2rNormal':'2rNormal'}[x.kind];
+ if(key)s[`keijiZan${key}`]=(s[`keijiZan${key}`]||0)+1;
+ s.keijiZanBigHitCount=(s.keijiZanBigHitCount||0)+1;
+}
+function awardKeijiZanHit(x,forceRight=false){
+ if(!x.net)return 0;
+ award(x.net,payoutSeconds(x.gross),x.label,forceRight,x.gross);
+ s.keijiZanBigHitPaid=(s.keijiZanBigHitPaid||0)+x.net;
+ if(x.kind==='rubAlpha')unlockMachineAchievement('special','keiji_zan');
+ return x.net;
+}
+function closeKeijiZanToNormal(result,hiddenHigh=false){
+ s.keijiZanHigh=!!hiddenHigh;
+ closeHit(result);
+ s.sinceHit=0;
+ if(!bulkSimulation.active){
+  normalMode(hiddenHigh?`${result}。傾奇ゾーンへ（内部状態は非告知）。`:`${result}。通常時へ。`);
+  update();
+ }
+}
+function applyKeijiZanOutcome(x,fromSupport=false){
+ if(x.kind==='r16'||x.kind.startsWith('rub')){
+  if(!fromSupport)s.rushEntries++;
+  s.keijiZanHigh=false;
+  rightMode('keijiZanKaku',0,'真戦モード','確変1/39.93・次回大当たりまで',{total:0});
+  return;
+ }
+ if(x.kind==='2rA'){
+  if(fromSupport){
+   s.keijiZanHigh=false;
+   rightMode('keijiZanKaku',0,'真戦／殿モード','2R確変A・電サポ次回まで',{total:0});
+  }else{
+   s.keijiZanPotentialEntries=(s.keijiZanPotentialEntries||0)+1;
+   closeKeijiZanToNormal('2R確変A・潜伏',true);
+  }
+  return;
+ }
+ if(x.kind==='2rB'){
+  if(fromSupport){
+   s.keijiZanHigh=false;
+   s.keijiZanKaku100Entries=(s.keijiZanKaku100Entries||0)+1;
+   rightMode('keijiZanKaku100',KEIJI_ZAN_SUPPORT,'殿モード','2R確変B・高確率1/39.93・電サポ100回',{total:KEIJI_ZAN_SUPPORT});
+  }else{
+   s.keijiZanPotentialEntries=(s.keijiZanPotentialEntries||0)+1;
+   closeKeijiZanToNormal('2R確変B・潜伏',true);
+  }
+  return;
+ }
+ // 2R通常
+ s.keijiZanHigh=false;
+ if(fromSupport){
+  s.keijiZanTimeEntries=(s.keijiZanTimeEntries||0)+1;
+  rightMode('keijiZanTime',KEIJI_ZAN_SUPPORT,'殿モード','2R通常・通常確率1/399.25・時短100回',{total:KEIJI_ZAN_SUPPORT});
+ }else{
+  closeKeijiZanToNormal('2R通常',false);
+ }
+}
+function startKeijiZan(ev){
+ const x=ev.x||rollKeijiZanHit();
+ countKeijiZanOutcome(x);
+ awardKeijiZanHit(x,false);
+ s.pending={type:'keiji_zan',x,fromHigh:!!ev.fromHigh,step:0};
+ const state=ev.fromHigh?'潜伏中の大当たり':'通常時の大当たり';
+ judgeMode('慶次〜斬 大当たり',`${s.pendingSpin}回転で${state}！ ${x.label}`,'結果を見る');
+}
+function startKeijiZanSmall(){
+ s.keijiZanSmallHits=(s.keijiZanSmallHits||0)+1;
+ if(bulkSimulation.active)return;
+ ui.message.textContent='傾奇者図柄停止・小当たり。内部状態は変化なし。';
+ setStage('super','傾奇ゾーン','小当たり・潜伏期待演出',55);
+ update();
+}
+
+const KEIJI_BLACK_NORMAL_DEN=319.68;
+const KEIJI_BLACK_HIGH_DEN=145.31;
+const KEIJI_BLACK_DROP_DEN=270.8;
+const KEIJI_BLACK_SUPPORT=100;
+const KEIJI_BLACK_INITIAL_GROSS=900;
+const KEIJI_BLACK_INITIAL_NET=840;
+const KEIJI_BLACK_RIGHT_GROSS=2400;
+const KEIJI_BLACK_RIGHT_NET=2240;
+
+function rollKeijiBlackInitial(){
+ const kaku=Math.random()<.55;
+ return {kaku,gross:KEIJI_BLACK_INITIAL_GROSS,net:KEIJI_BLACK_INITIAL_NET,label:kaku?'6R確変・真RUSH':'6R通常・時短100回'};
+}
+function startKeijiBlackRushSegment(message='真・RUSH'){
+ s.keijiBlackRushSegmentsStarted=(s.keijiBlackRushSegmentsStarted||0)+1;
+ rightMode('keijiBlackRush',KEIJI_BLACK_SUPPORT,'真・RUSH','高確率1/145.31／転落1/270.8・最低100回保証',{total:KEIJI_BLACK_SUPPORT,supportRemaining:KEIJI_BLACK_SUPPORT});
+ if(!bulkSimulation.active&&message)ui.message.textContent=message;
+}
+function finishKeijiBlackSegment(success){
+ if(success)s.keijiBlackRushSegmentsSucceeded=(s.keijiBlackRushSegmentsSucceeded||0)+1;
+ else s.keijiBlackRushSegmentsFailed=(s.keijiBlackRushSegmentsFailed||0)+1;
+}
+function awardKeijiBlackRight(){
+ award(KEIJI_BLACK_RIGHT_NET,payoutSeconds(KEIJI_BLACK_RIGHT_GROSS),'16R・払出2400個（実獲得約2240pt）',true,KEIJI_BLACK_RIGHT_GROSS);
+ s.keijiBlackRightBonusCount=(s.keijiBlackRightBonusCount||0)+1;
+ s.keijiBlackRightBonusPaid=(s.keijiBlackRightBonusPaid||0)+KEIJI_BLACK_RIGHT_NET;
+ unlockMachineAchievement('special','keiji_shikkoku');
+}
+
+const KEIJI_GOLD_FIGURE_DEN=399.76;
+const KEIJI_GOLD_CHARGE_DEN=2723.4;
+const KEIJI_GOLD_TIME_DEN=520.12;
+const KEIJI_GOLD_RUSH_DEN=99.14;
+// DMM保存ページはチャージ昇格を「一部」とのみ記載。業界スペック資料の約8%をDEBUG参考検証値として使用。
+const KEIJI_GOLD_CHARGE_PROMOTION_RATE=.08;
+// 画像・DMMでは「稀に」とだけ記載され正確な率がないため、未知率は勝手に置かない。
+const KEIJI_GOLD_TIME_SUPER_RATE=0;
+const KEIJI_GOLD_SUPER_REENTRY_RATE=0;
+const KEIJI_GOLD_GROSS_UNIT=1500;
+const KEIJI_GOLD_NET_UNIT=1400;
+const KEIJI_GOLD_CHARGE_GROSS=200;
+const KEIJI_GOLD_CHARGE_NET=180;
+function rollKeijiGoldInitial(){
+ const direct=Math.random()<.501;
+ return {direct,gross:1500,net:1400,label:direct?'花の慶次BONUS・天下無双RUSH':'花舞台BONUS・殿MODE100回'};
+}
+function rollKeijiGoldTimeHit(){
+ return Math.random()<.008
+  ?{units:2,super:false,kind:'3000',label:'払出約3000個＋α・天下無双RUSH'}
+  :{units:1,super:false,kind:'1500',label:'払出約1500個・天下無双RUSH'};
+}
+function rollKeijiGoldRushHit(){
+ return weighted([
+  {p:18.6,units:2,super:true,kind:'3000_super',label:'払出約3000個＋α・超天下無双RUSH'},
+  {p:31.0,units:2,super:false,kind:'3000_normal',label:'払出約3000個＋α・天下無双RUSH'},
+  {p:4.9,units:1,super:true,kind:'1500_super',label:'払出約1500個・超天下無双RUSH'},
+  {p:45.5,units:1,super:false,kind:'1500_normal',label:'払出約1500個・天下無双RUSH'}
+ ]);
+}
+function rollKeijiGoldSuperHit(){
+ return Math.random()<.495
+  ?{units:4,super:Math.random()<KEIJI_GOLD_SUPER_REENTRY_RATE,kind:'6000',label:'黄金の一撃BONUS・払出約6000個＋α'}
+  :{units:1,super:false,kind:'1500',label:'払出約1500個・天下無双RUSH'};
+}
+function awardKeijiGoldUnits(units){
+ let total=0;
+ for(let i=0;i<units;i++){
+  if(i>0)addRightHitToChain();
+  award(KEIJI_GOLD_NET_UNIT,payoutSeconds(KEIJI_GOLD_GROSS_UNIT),`払出約${fmt(KEIJI_GOLD_GROSS_UNIT)}個（差pt約${fmt(KEIJI_GOLD_NET_UNIT)}）`,true,KEIJI_GOLD_GROSS_UNIT);
+  total+=KEIJI_GOLD_NET_UNIT;
+ }
+ s.keijiGoldRightEvents=(s.keijiGoldRightEvents||0)+1;
+ s.keijiGoldRightPaid=(s.keijiGoldRightPaid||0)+total;
+ return total;
 }
 function rollIsekaiMaouInitial(){
  const rush=Math.random()<.56;
@@ -7219,6 +7762,52 @@ function normalEvent(){
    if(r<a*2){const x=rollBofuriInitial('treasure');return {kind:'charge',x,rush:x.rush};}
    return null;
   }
+  case'keiji_cloud':{
+   const hiddenHigh=!!s.keijiCloudHigh;
+   if(hiddenHigh)s.keijiCloudHiddenHighSpins=(s.keijiCloudHiddenHighSpins||0)+1;
+   else s.keijiCloudLowSpins=(s.keijiCloudLowSpins||0)+1;
+   const hitDen=hiddenHigh?KEIJI_CLOUD_HIGH_DEN:KEIJI_CLOUD_LOW_DEN;
+   const smallHit=chance(KEIJI_CLOUD_SMALL_DEN);
+   if(smallHit)s.keijiCloudSmallLotteryHits=(s.keijiCloudSmallLotteryHits||0)+1;
+   if(chance(hitDen)){
+    if(hiddenHigh)s.keijiCloudHiddenHighHits=(s.keijiCloudHiddenHighHits||0)+1;
+    else s.keijiCloudLowHits=(s.keijiCloudLowHits||0)+1;
+    const x=rollKeijiCloudHit();
+    return {kind:'figure',x,rush:x.kaku&&['r15','rub16','rub32','rub48'].includes(x.kind),fromHigh:hiddenHigh};
+   }
+   if(smallHit)return {kind:'small'};
+   return null;
+  }
+  case'keiji_zan':{
+   const hiddenHigh=!!s.keijiZanHigh;
+   if(hiddenHigh)s.keijiZanHiddenHighSpins=(s.keijiZanHiddenHighSpins||0)+1;
+   else s.keijiZanLowSpins=(s.keijiZanLowSpins||0)+1;
+   const hitDen=hiddenHigh?KEIJI_ZAN_HIGH_DEN:KEIJI_ZAN_LOW_DEN;
+   const smallHit=chance(KEIJI_ZAN_SMALL_DEN);
+   if(smallHit)s.keijiZanSmallLotteryHits=(s.keijiZanSmallLotteryHits||0)+1;
+   if(chance(hitDen)){
+    if(hiddenHigh)s.keijiZanHiddenHighHits=(s.keijiZanHiddenHighHits||0)+1;
+    else s.keijiZanLowHits=(s.keijiZanLowHits||0)+1;
+    const x=rollKeijiZanHit();
+    return {kind:'figure',x,rush:x.kaku&&['r16','rub16','rub32','rub48','rubAlpha'].includes(x.kind),fromHigh:hiddenHigh};
+   }
+   if(smallHit)return {kind:'small'};
+   return null;
+  }
+  case'keiji_shikkoku':{
+   if(!chance(KEIJI_BLACK_NORMAL_DEN))return null;
+   const x=rollKeijiBlackInitial();
+   return {kind:'figure',x,rush:x.kaku};
+  }
+  case'keiji_gold':{
+   const r=Math.random(),a=1/KEIJI_GOLD_FIGURE_DEN,b=1/KEIJI_GOLD_CHARGE_DEN;
+   if(r<a){const x=rollKeijiGoldInitial();return {kind:'figure',x,rush:x.direct};}
+   if(r<a+b){
+    const rush=Math.random()<KEIJI_GOLD_CHARGE_PROMOTION_RATE;
+    return {kind:'charge',rush};
+   }
+   return null;
+  }
   case'isekai_maou':{
    if(!chance(319.6))return null;
    const x=rollIsekaiMaouInitial();
@@ -7238,6 +7827,14 @@ function beginHit(ev){
  // ここでCZへ直接送ることで、1回転と10回転の処理を完全に共通化する。
  if(ev.kind==='cz'){
   startCrimsonCZ(ev.czPlan,s.sinceHit);
+  return;
+ }
+ if(ev.kind==='small'&&s.sp.type==='keiji_cloud'){
+  startKeijiCloudSmall();
+  return;
+ }
+ if(ev.kind==='small'&&s.sp.type==='keiji_zan'){
+  startKeijiZanSmall();
   return;
  }
 
@@ -7278,6 +7875,10 @@ function beginHit(ev){
   case'drum_denonbu':startDenonbu(ev);break;
   case'otome7':startOtome7(ev);break;
   case'bofuri':startBofuri(ev);break;
+  case'keiji_cloud':startKeijiCloud(ev);break;
+  case'keiji_zan':startKeijiZan(ev);break;
+  case'keiji_shikkoku':startKeijiShikkoku(ev);break;
+  case'keiji_gold':startKeijiGold(ev);break;
   case'isekai_maou':startIsekaiMaou(ev);break;
   case'umaiwa':startUmaiwa(ev);break;
  }
@@ -7779,6 +8380,30 @@ function startBofuri(ev){
   x.rush?'NewWorld Onlineへ':'通常へ戻る'
  );
 }
+function startKeijiShikkoku(ev){
+ const x=ev.x||rollKeijiBlackInitial();
+ if(x.kaku)s.keijiBlackInitialKaku=(s.keijiBlackInitialKaku||0)+1;
+ else s.keijiBlackInitialTime=(s.keijiBlackInitialTime||0)+1;
+ award(KEIJI_BLACK_INITIAL_NET,payoutSeconds(KEIJI_BLACK_INITIAL_GROSS),'6R・払出900個（実獲得約840pt）',false,KEIJI_BLACK_INITIAL_GROSS);
+ s.pending={type:'keiji_shikkoku',x,step:0};
+ judgeMode(x.kaku?'前田慶次郎利益BONUS':'一夢庵／悪魔の馬BONUS',`${s.pendingSpin}回転で6R・実獲得約840pt！ ${x.kaku?'確変55%・真RUSHへ':'通常45%・時短100回へ'}`,x.kaku?'真・RUSHへ':'傾奇RUSHへ');
+}
+function startKeijiGold(ev){
+ if(ev.kind==='charge'){
+  s.keijiGoldChargeEvents=(s.keijiGoldChargeEvents||0)+1;
+  if(ev.rush)s.keijiGoldChargePromotions=(s.keijiGoldChargePromotions||0)+1;
+  award(KEIJI_GOLD_CHARGE_NET,payoutSeconds(KEIJI_GOLD_CHARGE_GROSS),'傾奇者チャージ・払出約200個（差pt約180）',false,KEIJI_GOLD_CHARGE_GROSS);
+  s.pending={type:'keiji_gold',source:'charge',rush:!!ev.rush,step:0};
+  judgeMode('傾奇者チャージ',`${s.pendingSpin}回転で払出約200個（差pt +${KEIJI_GOLD_CHARGE_NET}）！`,ev.rush?'天下無双RUSHへ':'通常へ戻る');
+  return;
+ }
+ const x=ev.x||rollKeijiGoldInitial();
+ if(x.direct)s.keijiGoldInitialDirect=(s.keijiGoldInitialDirect||0)+1;
+ else s.keijiGoldInitialTime=(s.keijiGoldInitialTime||0)+1;
+ award(x.net,payoutSeconds(x.gross),'払出約1500個（差pt約1400）',false,x.gross);
+ s.pending={type:'keiji_gold',source:'figure',x,step:0};
+ judgeMode(x.direct?'花の慶次BONUS':'花舞台BONUS',`${s.pendingSpin}回転で払出約1500個（差pt +${x.net}）！`,x.direct?'天下無双RUSHへ':'殿MODEへ');
+}
 function startIsekaiMaou(ev){
  const x=ev.x||rollIsekaiMaouInitial();
  award(x.payout);
@@ -8197,6 +8822,46 @@ function doJudge(){
   }else closeHit('トレジャーチャンス300pt・NWO非昇格');
   return;
  }
+ if(p.type==='keiji_cloud'){
+  applyKeijiCloudOutcome(p.x,false);
+  return;
+ }
+ if(p.type==='keiji_zan'){
+  applyKeijiZanOutcome(p.x,false);
+  return;
+ }
+
+ if(p.type==='keiji_shikkoku'){
+  if(p.x.kaku){
+   s.rushEntries++;
+   s.keijiBlackDirectRushEntries=(s.keijiBlackDirectRushEntries||0)+1;
+   startKeijiBlackRushSegment('真・RUSH突入！ 最低100回保証・転落まで継続');
+  }else{
+   s.keijiBlackTimeEntries=(s.keijiBlackTimeEntries||0)+1;
+   rightMode('keijiBlackTime',KEIJI_BLACK_SUPPORT,'傾奇RUSH','通常確率1/319.68・時短100回',{total:KEIJI_BLACK_SUPPORT});
+  }
+  return;
+ }
+
+ if(p.type==='keiji_gold'){
+  if(p.source==='charge'){
+   if(p.rush){
+    s.rushEntries++;
+    s.keijiGoldChargeRushEntries=(s.keijiGoldChargeRushEntries||0)+1;
+    rightMode('keijiGoldRush',143,'天下無双RUSH','約1/99.14・ST143回／大当たりの23.5%で超RUSH',{total:143});
+   }else closeHit('傾奇者チャージ・払出約200個（差pt +180）・通常へ');
+   return;
+  }
+  if(p.x.direct){
+   s.rushEntries++;
+   s.keijiGoldDirectRushEntries=(s.keijiGoldDirectRushEntries||0)+1;
+   rightMode('keijiGoldRush',143,'天下無双RUSH','約1/99.14・ST143回／大当たりの23.5%で超RUSH',{total:143});
+  }else{
+   s.keijiGoldTimeEntries=(s.keijiGoldTimeEntries||0)+1;
+   rightMode('keijiGoldTime',100,'殿MODE','約1/520.12・時短100回／大当たりで天下無双RUSH',{total:100});
+  }
+  return;
+ }
  if(p.type==='isekai_maou'){
   if(p.x.rush){
    s.rushEntries++;
@@ -8507,10 +9172,11 @@ function doRight(n){
 
   const rightSeconds=1.5+Math.random()*1.8;
   const rightMinimumShots=r.kind==='marine'?MARINE_SUPPORT_COST_PER_SPIN:1;
+  const oldKeijiLeftSupport=['keijiCloudBattle','keijiCloudTonoHigh','keijiCloudTonoTime','keijiZanKaku','keijiZanKaku100','keijiZanTime'].includes(r.kind);
   const rightActivity=advanceShotActivity(
    rightSpinShotsForSeconds(rightSeconds,rightMinimumShots),
    rightSeconds,
-   'right'
+   oldKeijiLeftSupport?'normal':'right'
   );
   if(!rightActivity.complete){
    record();
@@ -8520,6 +9186,161 @@ function doRight(n){
   s.totalSpins++;r.segmentSpins++;
   if(r.kind==='saoLower')s.saoLowerSpins=(s.saoLowerSpins||0)+1;
   else if(r.kind==='saoUpper')s.saoUpperSpins=(s.saoUpperSpins||0)+1;
+
+  // 初代CR花の慶次：戦／確変殿は次回まで、2R通常は殿100回時短。
+  if(r.kind==='keijiCloudBattle'||r.kind==='keijiCloudTonoHigh'){
+   applyOldKeijiLeftSupportLoss();
+   s.keijiCloudSupportSpins=(s.keijiCloudSupportSpins||0)+1;
+   if(r.kind==='keijiCloudBattle')s.keijiCloudBattleSpins=(s.keijiCloudBattleSpins||0)+1;
+   else s.keijiCloudTonoHighSpins=(s.keijiCloudTonoHighSpins||0)+1;
+   if(chance(KEIJI_CLOUD_SMALL_DEN))s.keijiCloudSmallLotteryHits=(s.keijiCloudSmallLotteryHits||0)+1;
+   record();
+   if(chance(KEIJI_CLOUD_HIGH_DEN)){
+    if(r.kind==='keijiCloudBattle')s.keijiCloudBattleHits=(s.keijiCloudBattleHits||0)+1;
+    else s.keijiCloudTonoHighHits=(s.keijiCloudTonoHighHits||0)+1;
+    rightHit();
+    return;
+   }
+   continue;
+  }
+  if(r.kind==='keijiCloudTonoTime'){
+   r.remaining--;
+   applyOldKeijiLeftSupportLoss();
+   s.keijiCloudSupportSpins=(s.keijiCloudSupportSpins||0)+1;
+   s.keijiCloudTimeSpins=(s.keijiCloudTimeSpins||0)+1;
+   if(chance(KEIJI_CLOUD_SMALL_DEN))s.keijiCloudSmallLotteryHits=(s.keijiCloudSmallLotteryHits||0)+1;
+   record();
+   if(chance(KEIJI_CLOUD_LOW_DEN)){
+    s.keijiCloudTimeHits=(s.keijiCloudTimeHits||0)+1;
+    s.keijiCloudTimeRecoveries=(s.keijiCloudTimeRecoveries||0)+1;
+    rightHit();
+    return;
+   }
+   if(r.remaining<=0){
+    closeKeijiCloudToNormal('殿モード100回終了',false);
+    return;
+   }
+   continue;
+  }
+
+  // CR花の慶次〜斬：次回まで確変／2R確変Bの100回限定サポ／2R通常時短。
+  if(r.kind==='keijiZanKaku'){
+   applyOldKeijiLeftSupportLoss();
+   s.keijiZanKakuSpins=(s.keijiZanKakuSpins||0)+1;
+   if(chance(KEIJI_ZAN_SMALL_DEN))s.keijiZanSmallLotteryHits=(s.keijiZanSmallLotteryHits||0)+1;
+   record();
+   if(chance(KEIJI_ZAN_HIGH_DEN)){
+    s.keijiZanKakuHits=(s.keijiZanKakuHits||0)+1;
+    rightHit();
+    return;
+   }
+   continue;
+  }
+  if(r.kind==='keijiZanKaku100'){
+   r.remaining--;
+   applyOldKeijiLeftSupportLoss();
+   s.keijiZanKaku100Spins=(s.keijiZanKaku100Spins||0)+1;
+   if(chance(KEIJI_ZAN_SMALL_DEN))s.keijiZanSmallLotteryHits=(s.keijiZanSmallLotteryHits||0)+1;
+   record();
+   if(chance(KEIJI_ZAN_HIGH_DEN)){
+    s.keijiZanKaku100Hits=(s.keijiZanKaku100Hits||0)+1;
+    rightHit();
+    return;
+   }
+   if(r.remaining<=0){
+    s.keijiZanKaku100ToPotential=(s.keijiZanKaku100ToPotential||0)+1;
+    s.keijiZanPotentialEntries=(s.keijiZanPotentialEntries||0)+1;
+    closeKeijiZanToNormal('殿モード100回終了・潜伏確変',true);
+    return;
+   }
+   continue;
+  }
+  if(r.kind==='keijiZanTime'){
+   r.remaining--;
+   applyOldKeijiLeftSupportLoss();
+   s.keijiZanTimeSpins=(s.keijiZanTimeSpins||0)+1;
+   if(chance(KEIJI_ZAN_SMALL_DEN))s.keijiZanSmallLotteryHits=(s.keijiZanSmallLotteryHits||0)+1;
+   record();
+   if(chance(KEIJI_ZAN_LOW_DEN)){
+    s.keijiZanTimeHits=(s.keijiZanTimeHits||0)+1;
+    rightHit();
+    return;
+   }
+   if(r.remaining<=0){
+    closeKeijiZanToNormal('殿モード100回終了',false);
+    return;
+   }
+   continue;
+  }
+
+  // 漆黒：転落型確変＋100回の電サポ保証。
+  if(r.kind==='keijiBlackRush'){
+   if(r.supportRemaining>0)r.supportRemaining--;
+   r.remaining=Math.max(0,r.supportRemaining);
+   s.keijiBlackHighSpins=(s.keijiBlackHighSpins||0)+1;
+   record();
+   if(chance(KEIJI_BLACK_HIGH_DEN)){
+    s.keijiBlackHighHits=(s.keijiBlackHighHits||0)+1;
+    finishKeijiBlackSegment(true);
+    rightHit();
+    return;
+   }
+   s.keijiBlackDropTrials=(s.keijiBlackDropTrials||0)+1;
+   if(chance(KEIJI_BLACK_DROP_DEN)){
+    s.keijiBlackDrops=(s.keijiBlackDrops||0)+1;
+    if(r.supportRemaining>0){
+     s.keijiBlackDropsInSupport=(s.keijiBlackDropsInSupport||0)+1;
+     r.kind='keijiBlackFallen';
+     r.remaining=r.supportRemaining;
+     if(!bulkSimulation.active){
+      ui.mode.textContent='真・RUSH 転落後時短';
+      ui.detail.textContent=`転落発生・残り${r.remaining}回は通常確率1/319.68`;
+      ui.message.textContent=`確変転落… ただし100回までは時短継続。残り${r.remaining}回`;
+      update();
+     }
+     continue;
+    }
+    s.keijiBlackDropsAfterSupport=(s.keijiBlackDropsAfterSupport||0)+1;
+    finishKeijiBlackSegment(false);
+    closeHit(s.chain===1?'真・RUSH転落':`${s.chain}連・真・RUSH転落`);
+    return;
+   }
+   continue;
+  }
+  if(r.kind==='keijiBlackFallen'){
+   r.remaining--;
+   s.keijiBlackFallenSpins=(s.keijiBlackFallenSpins||0)+1;
+   record();
+   if(chance(KEIJI_BLACK_NORMAL_DEN)){
+    s.keijiBlackFallenHits=(s.keijiBlackFallenHits||0)+1;
+    finishKeijiBlackSegment(true);
+    rightHit();
+    return;
+   }
+   if(r.remaining<=0){
+    finishKeijiBlackSegment(false);
+    closeHit(s.chain===1?'転落後時短100回終了':`${s.chain}連・転落後時短終了`);
+    return;
+   }
+   continue;
+  }
+  if(r.kind==='keijiBlackTime'){
+   r.remaining--;
+   s.keijiBlackTimeSpins=(s.keijiBlackTimeSpins||0)+1;
+   record();
+   if(chance(KEIJI_BLACK_NORMAL_DEN)){
+    s.keijiBlackTimeHits=(s.keijiBlackTimeHits||0)+1;
+    s.keijiBlackTimeRecoveries=(s.keijiBlackTimeRecoveries||0)+1;
+    s.rushEntries++;
+    rightHit();
+    return;
+   }
+   if(r.remaining<=0){
+    closeHit('時短100回・引き戻しなし');
+    return;
+   }
+   continue;
+  }
 
   // 次回大当たりまで続く確変ループ。
   // 共通処理ですでに「1回転分の時間・発射・総回転」を加算済みなので、ここでは二重加算しない。
@@ -8672,6 +9493,8 @@ function doRight(n){
   else if(r.kind==='eva17ST')den=99.6;
   else if(r.kind==='otomeTime')den=399.6;
   else if(r.kind==='otomeRush')den=97.0;
+  else if(r.kind==='keijiGoldTime')den=KEIJI_GOLD_TIME_DEN;
+  else if(r.kind==='keijiGoldRush'||r.kind==='keijiGoldSuper')den=KEIJI_GOLD_RUSH_DEN;
   else if(r.kind==='bofuriNwo'||r.kind==='bofuriLt')den=84.7;
   else if(r.kind==='isekaiStock')den=1;
   else if(r.kind==='denonbuChallenge'||r.kind==='denonbuAttack'||r.kind==='denonbuYutime')den=2.0;
@@ -8687,6 +9510,9 @@ function doRight(n){
   else if(r.kind==='eva17ST')s.eva17STSpins=(s.eva17STSpins||0)+1;
   else if(r.kind==='otomeTime')s.otomeTimeSpins=(s.otomeTimeSpins||0)+1;
   else if(r.kind==='otomeRush')s.otomeRushSpins=(s.otomeRushSpins||0)+1;
+  else if(r.kind==='keijiGoldTime')s.keijiGoldTimeSpins=(s.keijiGoldTimeSpins||0)+1;
+  else if(r.kind==='keijiGoldRush')s.keijiGoldRushSpins=(s.keijiGoldRushSpins||0)+1;
+  else if(r.kind==='keijiGoldSuper')s.keijiGoldSuperSpins=(s.keijiGoldSuperSpins||0)+1;
   else if(r.kind==='denonbuChallenge')s.denonChallengeTrials=(s.denonChallengeTrials||0)+1;
   else if(r.kind==='denonbuAttack')s.denonAttackTrials=(s.denonAttackTrials||0)+1;
   else if(r.kind==='denonbuYutime')s.denonYutimeSpins=(s.denonYutimeSpins||0)+1;
@@ -8697,6 +9523,9 @@ function doRight(n){
    else if(r.kind==='eva17ST')s.eva17STHits=(s.eva17STHits||0)+1;
    else if(r.kind==='otomeTime')s.otomeTimeHits=(s.otomeTimeHits||0)+1;
    else if(r.kind==='otomeRush')s.otomeRushHits=(s.otomeRushHits||0)+1;
+   else if(r.kind==='keijiGoldTime')s.keijiGoldTimeHits=(s.keijiGoldTimeHits||0)+1;
+   else if(r.kind==='keijiGoldRush')s.keijiGoldRushHits=(s.keijiGoldRushHits||0)+1;
+   else if(r.kind==='keijiGoldSuper')s.keijiGoldSuperHits=(s.keijiGoldSuperHits||0)+1;
    else if(r.kind==='denonbuChallenge')s.denonChallengeHits=(s.denonChallengeHits||0)+1;
    else if(r.kind==='denonbuAttack')s.denonAttackHits=(s.denonAttackHits||0)+1;
    else if(r.kind==='denonbuYutime')s.denonYutimeHits=(s.denonYutimeHits||0)+1;
@@ -8722,7 +9551,7 @@ function doRight(n){
    }
    const result=r.kind==='symphFinal'?'最終決戦敗北':
     r.kind==='oniEntry'?'蒼剣RUSH突破ならず':
-    r.kind==='bousouTime'||r.kind==='strikeTime'||r.kind==='oceanTime'||r.kind==='yokaiTime'||r.kind==='fullTime'||r.kind==='eva17Chance'||r.kind==='otomeTime'
+    r.kind==='bousouTime'||r.kind==='strikeTime'||r.kind==='oceanTime'||r.kind==='yokaiTime'||r.kind==='fullTime'||r.kind==='eva17Chance'||r.kind==='otomeTime'||r.kind==='keijiGoldTime'
      ?'時短引き戻しなし':r.kind==='denonbuChallenge'?'りむるしか勝たんチャレンジ失敗':r.kind==='denonbuAttack'?'超ドラ熱ATTACK終了':r.kind==='soccerChallenge'?'頂上チャレンジ失敗':r.kind==='worldstarBoost'?'ワールドダイスターRUSH終了':r.kind==='umaiwaZone'?'おかわりゾーン終了'
      :s.chain===1?'駆け抜け':`${s.chain}連終了`;
    closeHit(result);
@@ -8730,7 +9559,27 @@ function doRight(n){
   }
  }
 
- if(s.right?.kind==='horn'){
+ if(s.right?.kind==='keijiCloudBattle'){
+  ui.message.textContent=`${n}回転消化。戦モード継続中。`;
+ }else if(s.right?.kind==='keijiCloudTonoHigh'){
+  ui.message.textContent=`${n}回転消化。殿モード内部確変・電サポ継続中。`;
+ }else if(s.right?.kind==='keijiCloudTonoTime'){
+  ui.message.textContent=`${n}回転消化。殿モード時短 残り${s.right.remaining}回。`;
+ }else if(s.right?.kind==='keijiZanKaku'){
+  ui.message.textContent=`${n}回転消化。真戦モード継続中。`;
+ }else if(s.right?.kind==='keijiZanKaku100'){
+  ui.message.textContent=`${n}回転消化。殿モード（2R確変B）残り${s.right.remaining}回。`;
+ }else if(s.right?.kind==='keijiZanTime'){
+  ui.message.textContent=`${n}回転消化。殿モード（2R通常）残り${s.right.remaining}回。`;
+ }else if(s.right?.kind==='keijiBlackRush'){
+  ui.message.textContent=s.right.supportRemaining>0
+   ?`${n}回転消化。真・RUSH継続・100回保証まで残り${s.right.supportRemaining}回。`
+   :`${n}回転消化。決着ゾーン継続中（大当たり or 転落まで）。`;
+ }else if(s.right?.kind==='keijiBlackFallen'){
+  ui.message.textContent=`${n}回転消化。転落後時短 残り${s.right.remaining}回。`;
+ }else if(s.right?.kind==='keijiBlackTime'){
+  ui.message.textContent=`${n}回転消化。傾奇RUSH 残り${s.right.remaining}回。`;
+ }else if(s.right?.kind==='horn'){
   ui.message.textContent=`${n}回転消化。転落せず継続中。`;
  }else{
   ui.message.textContent=`${n}回転消化。残り${s.right.remaining}回${lossBatch?`｜削り -${lossBatch}pt`:''}`;
@@ -8962,6 +9811,85 @@ function rightHit(){
  addRightHitToChain();
  if(r.kind==='marine'){startMarine(true);return}
 
+ if(r.kind==='keijiCloudBattle'||r.kind==='keijiCloudTonoHigh'||r.kind==='keijiCloudTonoTime'){
+  const fromTime=r.kind==='keijiCloudTonoTime';
+  const x=rollKeijiCloudHit();
+  countKeijiCloudOutcome(x);
+  awardKeijiCloudHit(x,true);
+  applyKeijiCloudOutcome(x,true);
+  if(!bulkSimulation.active){
+   ui.message.textContent=`${x.label}！ ${s.chain}連${fromTime?'・殿モード引き戻し':''}`;
+   playFx(x.net?'hit':'charge',x.label,x.kaku?'確変継続／状態移行':'時短へ');
+  }
+  return;
+ }
+
+ if(r.kind==='keijiZanKaku'||r.kind==='keijiZanKaku100'||r.kind==='keijiZanTime'){
+  const fromTime=r.kind==='keijiZanTime';
+  const x=rollKeijiZanHit();
+  countKeijiZanOutcome(x);
+  awardKeijiZanHit(x,true);
+  if(fromTime)s.keijiZanTimeRecoveries=(s.keijiZanTimeRecoveries||0)+1;
+  applyKeijiZanOutcome(x,true);
+  if(!bulkSimulation.active){
+   ui.message.textContent=`${x.label}！ ${s.chain}連`;
+   playFx(x.net?'hit':'charge',x.label,x.kaku?'確変継続／状態移行':'時短へ');
+  }
+  return;
+ }
+
+ if(r.kind==='keijiBlackRush'||r.kind==='keijiBlackFallen'||r.kind==='keijiBlackTime'){
+  const fromTime=r.kind==='keijiBlackTime';
+  const fromFallen=r.kind==='keijiBlackFallen';
+  awardKeijiBlackRight();
+  startKeijiBlackRushSegment(
+   fromTime?`時短100回で引き戻し！ 16R・実獲得約2240pt・真RUSHへ`
+   :fromFallen?`転落後時短から復活！ 16R・実獲得約2240pt・真RUSH再突入`
+   :`16R・実獲得約2240pt！ ${s.chain}連・真RUSH継続`
+  );
+  return;
+ }
+
+ if(r.kind==='keijiGoldTime'){
+  s.keijiGoldTimeRecoveries=(s.keijiGoldTimeRecoveries||0)+1;
+  const x=rollKeijiGoldTimeHit();
+  const netTotal=awardKeijiGoldUnits(x.units);
+  if(x.units===2)s.keijiGoldTime3000=(s.keijiGoldTime3000||0)+1;
+  else s.keijiGoldTime1500=(s.keijiGoldTime1500||0)+1;
+  s.rushEntries++;
+  const rareSuper=Math.random()<KEIJI_GOLD_TIME_SUPER_RATE;
+  if(rareSuper)s.keijiGoldTimeSuperEntries=(s.keijiGoldTimeSuperEntries||0)+1;
+  rightMode(rareSuper?'keijiGoldSuper':'keijiGoldRush',143,rareSuper?'超天下無双RUSH':'天下無双RUSH','約1/99.14・ST143回',{total:143});
+  ui.message.textContent=`殿MODE引き戻し！ ${x.label}（差pt +${fmt(netTotal)}）・${s.chain}連`;
+  playFx('rush','天下無双RUSH突入！',`${fmt(netTotal)}pt・${s.chain}連`);
+  return;
+ }
+ if(r.kind==='keijiGoldRush'){
+  const x=rollKeijiGoldRushHit();
+  const netTotal=awardKeijiGoldUnits(x.units);
+  if(x.kind==='3000_super')s.keijiGoldRush3000Super=(s.keijiGoldRush3000Super||0)+1;
+  else if(x.kind==='3000_normal')s.keijiGoldRush3000Normal=(s.keijiGoldRush3000Normal||0)+1;
+  else if(x.kind==='1500_super')s.keijiGoldRush1500Super=(s.keijiGoldRush1500Super||0)+1;
+  else s.keijiGoldRush1500Normal=(s.keijiGoldRush1500Normal||0)+1;
+  if(x.super)s.keijiGoldSuperEntries=(s.keijiGoldSuperEntries||0)+1;
+  rightMode(x.super?'keijiGoldSuper':'keijiGoldRush',143,x.super?'超天下無双RUSH':'天下無双RUSH','約1/99.14・ST143回',{total:143});
+  ui.message.textContent=`${x.label}（差pt +${fmt(netTotal)}）！ ${s.chain}連`;
+  playFx(x.super?'rush':'hit',x.super?'超天下無双RUSH突入！':'天下無双BONUS！',`${fmt(netTotal)}pt・${s.chain}連`);
+  return;
+ }
+ if(r.kind==='keijiGoldSuper'){
+  const x=rollKeijiGoldSuperHit();
+  const netTotal=awardKeijiGoldUnits(x.units);
+  if(x.units===4){
+   s.keijiGoldSuper6000=(s.keijiGoldSuper6000||0)+1;
+   unlockMachineAchievement('special','keiji_gold');
+  }else s.keijiGoldSuper1500=(s.keijiGoldSuper1500||0)+1;
+  if(x.super)s.keijiGoldSuperReentries=(s.keijiGoldSuperReentries||0)+1;
+  rightMode(x.super?'keijiGoldSuper':'keijiGoldRush',143,x.super?'超天下無双RUSH':'天下無双RUSH','約1/99.14・ST143回',{total:143});
+  ui.message.textContent=`${x.label}（差pt +${fmt(netTotal)}）！ ${s.chain}連${x.super?'・超RUSH継続':''}`;
+  playFx(x.units===4?'rush':'hit',x.units===4?'黄金の一撃BONUS！':'天下無双BONUS！',`${fmt(netTotal)}pt・${s.chain}連`);
+  return;
+ }
  if(r.kind==='otomeTime'||r.kind==='otomeRush'){
   const fromTime=r.kind==='otomeTime';
   const loop=awardOtome7RightLoop();
@@ -9984,7 +10912,9 @@ function drawResultGraph(){
  ui.resultGraphEndText.textContent=`終了時 ${signed(finalNet)}pt`;
  ui.resultGraphCostNote.textContent=s.sp.type==='marine'
   ?'折れ線は通常投入と電サポ中消費を差し引いた推移です。'
-  :'折れ線は通常投入と右打ち削りを差し引いた推移です。';
+  :(s.sp.type==='keiji_cloud'||s.sp.type==='keiji_zan')
+   ?'折れ線は通常投入と旧式左打ち電サポ消費を差し引いた推移です。'
+   :'折れ線は通常投入と右打ち削りを差し引いた推移です。';
  ui.resultGraphCostNote.textContent+=` 総発射${fmt(numberOrZero(s.shotsFired))}発（上限${fmt(MAX_SHOTS_PER_DAY)}発）。`;
 }
 function formatSavedDate(value){
@@ -10034,7 +10964,7 @@ function makeSessionRecord(reason){
   worldstar5050Count:s.worldstar5050Count||0,
   invested:s.invested,
   supportCost:s.rightLoss,
-  supportCostLabel:s.sp.type==='marine'?'電サポ中消費':'右打ち削り',
+  supportCostLabel:s.sp.type==='marine'?'電サポ中消費':(s.sp.type==='keiji_cloud'||s.sp.type==='keiji_zan')?'左打ち電サポ消費':'右打ち削り',
   paid:s.paid,
   maxHamari:s.maxHamari,
   maxFigureHamari:s.maxFigureHamari,
@@ -10053,6 +10983,107 @@ function makeSessionRecord(reason){
   czSuccesses:s.czSuccesses||0,
   bofuriTreasureEntries:s.bofuriTreasureEntries||0,
   bofuriTreasurePromotions:s.bofuriTreasurePromotions||0,
+  keijiCloudLowSpins:s.keijiCloudLowSpins||0,
+  keijiCloudLowHits:s.keijiCloudLowHits||0,
+  keijiCloudHiddenHighSpins:s.keijiCloudHiddenHighSpins||0,
+  keijiCloudHiddenHighHits:s.keijiCloudHiddenHighHits||0,
+  keijiCloudSmallHits:s.keijiCloudSmallHits||0,
+  keijiCloudSmallLotteryHits:s.keijiCloudSmallLotteryHits||0,
+  keijiCloudBigHitCount:s.keijiCloudBigHitCount||0,
+  keijiCloudBigHitPaid:s.keijiCloudBigHitPaid||0,
+  keijiCloudR15:s.keijiCloudR15||0,
+  keijiCloudRub16:s.keijiCloudRub16||0,
+  keijiCloudRub32:s.keijiCloudRub32||0,
+  keijiCloudRub48:s.keijiCloudRub48||0,
+  keijiCloud2rKaku:s.keijiCloud2rKaku||0,
+  keijiCloud2rNormal:s.keijiCloud2rNormal||0,
+  keijiCloudPotentialEntries:s.keijiCloudPotentialEntries||0,
+  keijiCloudBattleEntries:s.keijiCloudBattleEntries||0,
+  keijiCloudBattleSpins:s.keijiCloudBattleSpins||0,
+  keijiCloudBattleHits:s.keijiCloudBattleHits||0,
+  keijiCloudTonoHighEntries:s.keijiCloudTonoHighEntries||0,
+  keijiCloudTonoHighSpins:s.keijiCloudTonoHighSpins||0,
+  keijiCloudTonoHighHits:s.keijiCloudTonoHighHits||0,
+  keijiCloudTimeEntries:s.keijiCloudTimeEntries||0,
+  keijiCloudTimeSpins:s.keijiCloudTimeSpins||0,
+  keijiCloudTimeHits:s.keijiCloudTimeHits||0,
+  keijiCloudTimeRecoveries:s.keijiCloudTimeRecoveries||0,
+  keijiCloudSupportSpins:s.keijiCloudSupportSpins||0,
+  keijiZanLowSpins:s.keijiZanLowSpins||0,
+  keijiZanLowHits:s.keijiZanLowHits||0,
+  keijiZanHiddenHighSpins:s.keijiZanHiddenHighSpins||0,
+  keijiZanHiddenHighHits:s.keijiZanHiddenHighHits||0,
+  keijiZanSmallHits:s.keijiZanSmallHits||0,
+  keijiZanSmallLotteryHits:s.keijiZanSmallLotteryHits||0,
+  keijiZanBigHitCount:s.keijiZanBigHitCount||0,
+  keijiZanBigHitPaid:s.keijiZanBigHitPaid||0,
+  keijiZanR16:s.keijiZanR16||0,
+  keijiZanRub16:s.keijiZanRub16||0,
+  keijiZanRub32:s.keijiZanRub32||0,
+  keijiZanRub48:s.keijiZanRub48||0,
+  keijiZanRubAlpha:s.keijiZanRubAlpha||0,
+  keijiZan2rA:s.keijiZan2rA||0,
+  keijiZan2rB:s.keijiZan2rB||0,
+  keijiZan2rNormal:s.keijiZan2rNormal||0,
+  keijiZanPotentialEntries:s.keijiZanPotentialEntries||0,
+  keijiZanKakuSpins:s.keijiZanKakuSpins||0,
+  keijiZanKakuHits:s.keijiZanKakuHits||0,
+  keijiZanKaku100Entries:s.keijiZanKaku100Entries||0,
+  keijiZanKaku100Spins:s.keijiZanKaku100Spins||0,
+  keijiZanKaku100Hits:s.keijiZanKaku100Hits||0,
+  keijiZanKaku100ToPotential:s.keijiZanKaku100ToPotential||0,
+  keijiZanTimeEntries:s.keijiZanTimeEntries||0,
+  keijiZanTimeSpins:s.keijiZanTimeSpins||0,
+  keijiZanTimeHits:s.keijiZanTimeHits||0,
+  keijiZanTimeRecoveries:s.keijiZanTimeRecoveries||0,
+  keijiBlackInitialKaku:s.keijiBlackInitialKaku||0,
+  keijiBlackInitialTime:s.keijiBlackInitialTime||0,
+  keijiBlackDirectRushEntries:s.keijiBlackDirectRushEntries||0,
+  keijiBlackTimeEntries:s.keijiBlackTimeEntries||0,
+  keijiBlackTimeSpins:s.keijiBlackTimeSpins||0,
+  keijiBlackTimeHits:s.keijiBlackTimeHits||0,
+  keijiBlackTimeRecoveries:s.keijiBlackTimeRecoveries||0,
+  keijiBlackHighSpins:s.keijiBlackHighSpins||0,
+  keijiBlackHighHits:s.keijiBlackHighHits||0,
+  keijiBlackDropTrials:s.keijiBlackDropTrials||0,
+  keijiBlackDrops:s.keijiBlackDrops||0,
+  keijiBlackDropsInSupport:s.keijiBlackDropsInSupport||0,
+  keijiBlackDropsAfterSupport:s.keijiBlackDropsAfterSupport||0,
+  keijiBlackFallenSpins:s.keijiBlackFallenSpins||0,
+  keijiBlackFallenHits:s.keijiBlackFallenHits||0,
+  keijiBlackRushSegmentsStarted:s.keijiBlackRushSegmentsStarted||0,
+  keijiBlackRushSegmentsSucceeded:s.keijiBlackRushSegmentsSucceeded||0,
+  keijiBlackRushSegmentsFailed:s.keijiBlackRushSegmentsFailed||0,
+  keijiBlackRightBonusCount:s.keijiBlackRightBonusCount||0,
+  keijiBlackRightBonusPaid:s.keijiBlackRightBonusPaid||0,
+  keijiGoldChargeEvents:s.keijiGoldChargeEvents||0,
+  keijiGoldChargePromotions:s.keijiGoldChargePromotions||0,
+  keijiGoldChargeRushEntries:s.keijiGoldChargeRushEntries||0,
+  keijiGoldInitialDirect:s.keijiGoldInitialDirect||0,
+  keijiGoldInitialTime:s.keijiGoldInitialTime||0,
+  keijiGoldDirectRushEntries:s.keijiGoldDirectRushEntries||0,
+  keijiGoldTimeEntries:s.keijiGoldTimeEntries||0,
+  keijiGoldTimeSpins:s.keijiGoldTimeSpins||0,
+  keijiGoldTimeHits:s.keijiGoldTimeHits||0,
+  keijiGoldTimeRecoveries:s.keijiGoldTimeRecoveries||0,
+  keijiGoldTime1500:s.keijiGoldTime1500||0,
+  keijiGoldTime3000:s.keijiGoldTime3000||0,
+  keijiGoldTimeSuperEntries:s.keijiGoldTimeSuperEntries||0,
+  keijiGoldRushSpins:s.keijiGoldRushSpins||0,
+  keijiGoldRushHits:s.keijiGoldRushHits||0,
+  keijiGoldRush1500Normal:s.keijiGoldRush1500Normal||0,
+  keijiGoldRush3000Normal:s.keijiGoldRush3000Normal||0,
+  keijiGoldRush1500Super:s.keijiGoldRush1500Super||0,
+  keijiGoldRush3000Super:s.keijiGoldRush3000Super||0,
+  keijiGoldSuperEntries:s.keijiGoldSuperEntries||0,
+  keijiGoldSuperSpins:s.keijiGoldSuperSpins||0,
+  keijiGoldSuperHits:s.keijiGoldSuperHits||0,
+  keijiGoldSuper1500:s.keijiGoldSuper1500||0,
+  keijiGoldSuper6000:s.keijiGoldSuper6000||0,
+  keijiGoldSuperReentries:s.keijiGoldSuperReentries||0,
+  keijiGoldRightEvents:s.keijiGoldRightEvents||0,
+  keijiGoldRightPaid:s.keijiGoldRightPaid||0,
+
   czSpins:s.czSpins||0,
   czInvested:s.czInvested||0,
   elapsedSeconds:s.elapsed||0,
@@ -10869,7 +11900,7 @@ function showRecoveredFinishResult(reason,error){
    ['総発射数',`${fmt(numberOrZero(s.shotsFired))}発`],
    ['平均発射ペース',`${averageShotsPerMinute().toFixed(1)}発/分`],
    ['発射稼働率',`${shotUtilizationPercent().toFixed(1)}%（理論上限${fmt(MAX_SHOTS_PER_DAY)}発/12時間）`],
-   ['発射内訳',shotBreakdownText()]
+   ['発射内訳',shotBreakdownText()],
   ];
   ui.stats.innerHTML=rows.map(
    ([a,b])=>`<div class="muted">${a}</div><div style="text-align:right;font-weight:700">${b}</div>`
@@ -10975,13 +12006,13 @@ function finishCore(reason){
   ['最大ハマり',`${fmt(s.maxHamari)}回`],
   ['最高連チャン',`${s.maxChain}連`],['実測回転率',`${formatObservedRate(actual,s.sp.type)}回/250pt`],
   ['通常投入',`${fmt(s.invested)}pt`],
-  [s.sp.type==='marine'?'電サポ中消費':s.sp.type==='ocean'?'追加右打ち削り':'右打ち削り',`${fmt(s.rightLoss)}pt`],
+  [(s.sp.type==='keiji_cloud'||s.sp.type==='keiji_zan')?'左打ち電サポ消費':s.sp.type==='marine'?'電サポ中消費':s.sp.type==='ocean'?'追加右打ち削り':'右打ち削り',`${fmt(s.rightLoss)}pt`],
   ['総獲得',`${fmt(s.paid)}pt`],['最大MY',`${fmt(currentPositiveMY())}pt`],
   ['総発射数',`${fmt(numberOrZero(s.shotsFired))}発`],
   ['平均発射ペース',`${averageShotsPerMinute().toFixed(1)}発/分`],
   ['発射稼働率',`${shotUtilizationPercent().toFixed(1)}%（理論上限${fmt(MAX_SHOTS_PER_DAY)}発/12時間）`],
   ['発射内訳',shotBreakdownText()],
-  ['大当たり消化時間',`${Math.floor(s.roundTime/60)}分${Math.round(s.roundTime%60)}秒`]
+  ['大当たり消化時間',`${Math.floor(s.roundTime/60)}分${Math.round(s.roundTime%60)}秒`],
  ];
  ui.stats.innerHTML=rows.map(([a,b])=>`<div class="muted">${a}</div><div style="text-align:right;font-weight:700">${b}</div>`).join('');
 
@@ -11079,7 +12110,7 @@ function initializeBulkSimulationControls(){
   ).join('');
   return `<optgroup label="${group.label}">${options}</optgroup>`;
  }).join('');
- ui.bulkMachine.value='otome7';
+ ui.bulkMachine.value='keiji_shikkoku';
  if(ui.bulkDays)ui.bulkDays.value='10000';
  syncBulkRateToMachine();
 }
@@ -11175,6 +12206,106 @@ function makeBulkSessionRecord(reason){
   czSuccesses:s.czSuccesses||0,
   bofuriTreasureEntries:s.bofuriTreasureEntries||0,
   bofuriTreasurePromotions:s.bofuriTreasurePromotions||0,
+  keijiCloudLowSpins:s.keijiCloudLowSpins||0,
+  keijiCloudLowHits:s.keijiCloudLowHits||0,
+  keijiCloudHiddenHighSpins:s.keijiCloudHiddenHighSpins||0,
+  keijiCloudHiddenHighHits:s.keijiCloudHiddenHighHits||0,
+  keijiCloudSmallHits:s.keijiCloudSmallHits||0,
+  keijiCloudSmallLotteryHits:s.keijiCloudSmallLotteryHits||0,
+  keijiCloudBigHitCount:s.keijiCloudBigHitCount||0,
+  keijiCloudBigHitPaid:s.keijiCloudBigHitPaid||0,
+  keijiCloudR15:s.keijiCloudR15||0,
+  keijiCloudRub16:s.keijiCloudRub16||0,
+  keijiCloudRub32:s.keijiCloudRub32||0,
+  keijiCloudRub48:s.keijiCloudRub48||0,
+  keijiCloud2rKaku:s.keijiCloud2rKaku||0,
+  keijiCloud2rNormal:s.keijiCloud2rNormal||0,
+  keijiCloudPotentialEntries:s.keijiCloudPotentialEntries||0,
+  keijiCloudBattleEntries:s.keijiCloudBattleEntries||0,
+  keijiCloudBattleSpins:s.keijiCloudBattleSpins||0,
+  keijiCloudBattleHits:s.keijiCloudBattleHits||0,
+  keijiCloudTonoHighEntries:s.keijiCloudTonoHighEntries||0,
+  keijiCloudTonoHighSpins:s.keijiCloudTonoHighSpins||0,
+  keijiCloudTonoHighHits:s.keijiCloudTonoHighHits||0,
+  keijiCloudTimeEntries:s.keijiCloudTimeEntries||0,
+  keijiCloudTimeSpins:s.keijiCloudTimeSpins||0,
+  keijiCloudTimeHits:s.keijiCloudTimeHits||0,
+  keijiCloudTimeRecoveries:s.keijiCloudTimeRecoveries||0,
+  keijiCloudSupportSpins:s.keijiCloudSupportSpins||0,
+  keijiZanLowSpins:s.keijiZanLowSpins||0,
+  keijiZanLowHits:s.keijiZanLowHits||0,
+  keijiZanHiddenHighSpins:s.keijiZanHiddenHighSpins||0,
+  keijiZanHiddenHighHits:s.keijiZanHiddenHighHits||0,
+  keijiZanSmallHits:s.keijiZanSmallHits||0,
+  keijiZanSmallLotteryHits:s.keijiZanSmallLotteryHits||0,
+  keijiZanBigHitCount:s.keijiZanBigHitCount||0,
+  keijiZanBigHitPaid:s.keijiZanBigHitPaid||0,
+  keijiZanR16:s.keijiZanR16||0,
+  keijiZanRub16:s.keijiZanRub16||0,
+  keijiZanRub32:s.keijiZanRub32||0,
+  keijiZanRub48:s.keijiZanRub48||0,
+  keijiZanRubAlpha:s.keijiZanRubAlpha||0,
+  keijiZan2rA:s.keijiZan2rA||0,
+  keijiZan2rB:s.keijiZan2rB||0,
+  keijiZan2rNormal:s.keijiZan2rNormal||0,
+  keijiZanPotentialEntries:s.keijiZanPotentialEntries||0,
+  keijiZanKakuSpins:s.keijiZanKakuSpins||0,
+  keijiZanKakuHits:s.keijiZanKakuHits||0,
+  keijiZanKaku100Entries:s.keijiZanKaku100Entries||0,
+  keijiZanKaku100Spins:s.keijiZanKaku100Spins||0,
+  keijiZanKaku100Hits:s.keijiZanKaku100Hits||0,
+  keijiZanKaku100ToPotential:s.keijiZanKaku100ToPotential||0,
+  keijiZanTimeEntries:s.keijiZanTimeEntries||0,
+  keijiZanTimeSpins:s.keijiZanTimeSpins||0,
+  keijiZanTimeHits:s.keijiZanTimeHits||0,
+  keijiZanTimeRecoveries:s.keijiZanTimeRecoveries||0,
+  keijiBlackInitialKaku:s.keijiBlackInitialKaku||0,
+  keijiBlackInitialTime:s.keijiBlackInitialTime||0,
+  keijiBlackDirectRushEntries:s.keijiBlackDirectRushEntries||0,
+  keijiBlackTimeEntries:s.keijiBlackTimeEntries||0,
+  keijiBlackTimeSpins:s.keijiBlackTimeSpins||0,
+  keijiBlackTimeHits:s.keijiBlackTimeHits||0,
+  keijiBlackTimeRecoveries:s.keijiBlackTimeRecoveries||0,
+  keijiBlackHighSpins:s.keijiBlackHighSpins||0,
+  keijiBlackHighHits:s.keijiBlackHighHits||0,
+  keijiBlackDropTrials:s.keijiBlackDropTrials||0,
+  keijiBlackDrops:s.keijiBlackDrops||0,
+  keijiBlackDropsInSupport:s.keijiBlackDropsInSupport||0,
+  keijiBlackDropsAfterSupport:s.keijiBlackDropsAfterSupport||0,
+  keijiBlackFallenSpins:s.keijiBlackFallenSpins||0,
+  keijiBlackFallenHits:s.keijiBlackFallenHits||0,
+  keijiBlackRushSegmentsStarted:s.keijiBlackRushSegmentsStarted||0,
+  keijiBlackRushSegmentsSucceeded:s.keijiBlackRushSegmentsSucceeded||0,
+  keijiBlackRushSegmentsFailed:s.keijiBlackRushSegmentsFailed||0,
+  keijiBlackRightBonusCount:s.keijiBlackRightBonusCount||0,
+  keijiBlackRightBonusPaid:s.keijiBlackRightBonusPaid||0,
+  keijiGoldChargeEvents:s.keijiGoldChargeEvents||0,
+  keijiGoldChargePromotions:s.keijiGoldChargePromotions||0,
+  keijiGoldChargeRushEntries:s.keijiGoldChargeRushEntries||0,
+  keijiGoldInitialDirect:s.keijiGoldInitialDirect||0,
+  keijiGoldInitialTime:s.keijiGoldInitialTime||0,
+  keijiGoldDirectRushEntries:s.keijiGoldDirectRushEntries||0,
+  keijiGoldTimeEntries:s.keijiGoldTimeEntries||0,
+  keijiGoldTimeSpins:s.keijiGoldTimeSpins||0,
+  keijiGoldTimeHits:s.keijiGoldTimeHits||0,
+  keijiGoldTimeRecoveries:s.keijiGoldTimeRecoveries||0,
+  keijiGoldTime1500:s.keijiGoldTime1500||0,
+  keijiGoldTime3000:s.keijiGoldTime3000||0,
+  keijiGoldTimeSuperEntries:s.keijiGoldTimeSuperEntries||0,
+  keijiGoldRushSpins:s.keijiGoldRushSpins||0,
+  keijiGoldRushHits:s.keijiGoldRushHits||0,
+  keijiGoldRush1500Normal:s.keijiGoldRush1500Normal||0,
+  keijiGoldRush3000Normal:s.keijiGoldRush3000Normal||0,
+  keijiGoldRush1500Super:s.keijiGoldRush1500Super||0,
+  keijiGoldRush3000Super:s.keijiGoldRush3000Super||0,
+  keijiGoldSuperEntries:s.keijiGoldSuperEntries||0,
+  keijiGoldSuperSpins:s.keijiGoldSuperSpins||0,
+  keijiGoldSuperHits:s.keijiGoldSuperHits||0,
+  keijiGoldSuper1500:s.keijiGoldSuper1500||0,
+  keijiGoldSuper6000:s.keijiGoldSuper6000||0,
+  keijiGoldSuperReentries:s.keijiGoldSuperReentries||0,
+  keijiGoldRightEvents:s.keijiGoldRightEvents||0,
+  keijiGoldRightPaid:s.keijiGoldRightPaid||0,
   otomeCompletedCycles:s.otomeCompletedCycles||0,
   otomeCyclePaid:s.otomeCyclePaid||0,
   otomeFigureCycles:s.otomeFigureCycles||0,
@@ -11290,6 +12421,22 @@ function emptyBulkAggregate(){
   normalSpins:0,totalSpins:0,initialHits:0,charges:0,rushEntries:0,rightHits:0,rightPaid:0,worldstar300Count:0,worldstar5050Count:0,
   shotsFired:0,normalShotsFired:0,rightShotsFired:0,bonusShotsFired:0,firingSeconds:0,nonFiringSeconds:0,
   maxMY:0,maxChain:0,maxHamari:0,czEntries:0,czSuccesses:0,bofuriTreasureEntries:0,bofuriTreasurePromotions:0,
+  keijiCloudLowSpins:0,keijiCloudLowHits:0,keijiCloudHiddenHighSpins:0,keijiCloudHiddenHighHits:0,keijiCloudSmallHits:0,keijiCloudSmallLotteryHits:0,keijiCloudBigHitCount:0,keijiCloudBigHitPaid:0,
+  keijiCloudR15:0,keijiCloudRub16:0,keijiCloudRub32:0,keijiCloudRub48:0,keijiCloud2rKaku:0,keijiCloud2rNormal:0,keijiCloudPotentialEntries:0,
+  keijiCloudBattleEntries:0,keijiCloudBattleSpins:0,keijiCloudBattleHits:0,keijiCloudTonoHighEntries:0,keijiCloudTonoHighSpins:0,keijiCloudTonoHighHits:0,
+  keijiCloudTimeEntries:0,keijiCloudTimeSpins:0,keijiCloudTimeHits:0,keijiCloudTimeRecoveries:0,keijiCloudSupportSpins:0,
+  keijiZanLowSpins:0,keijiZanLowHits:0,keijiZanHiddenHighSpins:0,keijiZanHiddenHighHits:0,keijiZanSmallHits:0,keijiZanSmallLotteryHits:0,keijiZanBigHitCount:0,keijiZanBigHitPaid:0,
+  keijiZanR16:0,keijiZanRub16:0,keijiZanRub32:0,keijiZanRub48:0,keijiZanRubAlpha:0,keijiZan2rA:0,keijiZan2rB:0,keijiZan2rNormal:0,keijiZanPotentialEntries:0,
+  keijiZanKakuSpins:0,keijiZanKakuHits:0,keijiZanKaku100Entries:0,keijiZanKaku100Spins:0,keijiZanKaku100Hits:0,keijiZanKaku100ToPotential:0,keijiZanTimeEntries:0,keijiZanTimeSpins:0,keijiZanTimeHits:0,keijiZanTimeRecoveries:0,
+  keijiBlackInitialKaku:0,keijiBlackInitialTime:0,keijiBlackDirectRushEntries:0,
+  keijiBlackTimeEntries:0,keijiBlackTimeSpins:0,keijiBlackTimeHits:0,keijiBlackTimeRecoveries:0,
+  keijiBlackHighSpins:0,keijiBlackHighHits:0,keijiBlackDropTrials:0,keijiBlackDrops:0,keijiBlackDropsInSupport:0,keijiBlackDropsAfterSupport:0,
+  keijiBlackFallenSpins:0,keijiBlackFallenHits:0,keijiBlackRushSegmentsStarted:0,keijiBlackRushSegmentsSucceeded:0,keijiBlackRushSegmentsFailed:0,
+  keijiBlackRightBonusCount:0,keijiBlackRightBonusPaid:0,
+  keijiGoldChargeEvents:0,keijiGoldChargePromotions:0,keijiGoldChargeRushEntries:0,keijiGoldInitialDirect:0,keijiGoldInitialTime:0,keijiGoldDirectRushEntries:0,
+  keijiGoldTimeEntries:0,keijiGoldTimeSpins:0,keijiGoldTimeHits:0,keijiGoldTimeRecoveries:0,keijiGoldTime1500:0,keijiGoldTime3000:0,keijiGoldTimeSuperEntries:0,
+  keijiGoldRushSpins:0,keijiGoldRushHits:0,keijiGoldRush1500Normal:0,keijiGoldRush3000Normal:0,keijiGoldRush1500Super:0,keijiGoldRush3000Super:0,keijiGoldSuperEntries:0,
+  keijiGoldSuperSpins:0,keijiGoldSuperHits:0,keijiGoldSuper1500:0,keijiGoldSuper6000:0,keijiGoldSuperReentries:0,keijiGoldRightEvents:0,keijiGoldRightPaid:0,
   otomeCompletedCycles:0,otomeCyclePaid:0,otomeFigureCycles:0,otomeFigureCyclePaid:0,otomeChargeCycles:0,otomeChargeCyclePaid:0,
   otomeRushCycles:0,otomeRushCyclePaid:0,otomeRushPostEntryPaid:0,otomeRightLoopEvents:0,otomeRightLoopUnits:0,otomeRightLoopAdds:0,otomeRightLoopPaid:0,
   otomeInitialTime:0,otomeLtFail:0,otomeLtRush:0,otomeLtPlus:0,
@@ -11340,7 +12487,7 @@ function addBulkRecord(agg,record){
  agg.days++;
  if(record.reason==='コンプリート機能作動')agg.completeDays++;
  if(record.finalNet>0)agg.wins++;
- for(const key of ['finalNet','invested','supportCost','paid','normalSpins','totalSpins','initialHits','charges','rushEntries','rightHits','rightPaid','worldstar300Count','worldstar5050Count','shotsFired','normalShotsFired','rightShotsFired','bonusShotsFired','firingSeconds','nonFiringSeconds','maxMY','czEntries','czSuccesses','bofuriTreasureEntries','bofuriTreasurePromotions','otomeCompletedCycles','otomeCyclePaid','otomeFigureCycles','otomeFigureCyclePaid','otomeChargeCycles','otomeChargeCyclePaid','otomeRushCycles','otomeRushCyclePaid','otomeRushPostEntryPaid','otomeRightLoopEvents','otomeRightLoopUnits','otomeRightLoopAdds','otomeRightLoopPaid','otomeInitialTime','otomeLtFail','otomeLtRush','otomeLtPlus','otomeTimeEntries','otomeTimeSpins','otomeTimeHits','otomeTimeRecoveries','otomeRushSpins','otomeRushHits','otomeRight1Unit','otomeRight2Units','otomeRight3Plus','bofuriCompletedCycles','bofuriCyclePaid','bofuriFigureCycles','bofuriFigureCyclePaid','bofuriTreasureCycles','bofuriTreasureCyclePaid','bofuriLtCycles','bofuriLtCyclePaid','bofuriLtEntryPaid','bofuriLtPostEntryPaid','bofuriRightBonusCount','bofuriRightBonusPaid','oniCompletedCycles','oniCyclePaid','oniEntryAttempts','oniEntrySuccesses','oniRightBonusCount','oniRightBonusPaid','oniTurns25','oniTurns45','oniTurns65','oniSegmentComplete25','oniSegmentComplete45','oniSegmentComplete65','oniSegmentSuccess25','oniSegmentSuccess45','oniSegmentSuccess65','oniResidualHits','oniEntryResidualHits','oniRushResidualHits','greedInitialRush','greedInitialNormal','greedRightSmall','greedRightNormal','greedRightBurst','greedBurstEvents','greedBurstAdds','greedBurstJudgements','hornInitial3000Rush','hornInitial450Rush','hornInitial450Normal','hornRightBonusCount','hornRightBonusPaid','hornResidualHits','strikeInitial3000Rush','strikeInitial300Rush','strikeInitial300Time','strikeTimeEntries','strikeTimeSuccesses','strikeRight1500','strikeRight3000','strikeRightInfinite','oceanNormalInitialHits','oceanOutcomeRolls','oceanKakuOutcomes','oceanNormalOutcomes','oceanKakuSpins','oceanKakuHits','oceanTime100Entries','oceanTime100Hits','oceanTime200Entries','oceanTime200Hits','oceanYutimeHits','oceanBonusCount','oceanBonusPaid','fullInitialRolls','figure3000st','figure900st','figure900time','ac300st','ac300normal','fullDirectSTEntries','fullTimeEntries','fullTimeHits','fullSTSpins','fullSTStockHits','fullSTReleasedSets','fullSTStock1','fullSTStock2','fullSTStock3','fullSTStock4','fullSTStock5','fullSTImmediate7500','soccerPressFail','soccerFever210','soccerPressSuccess','soccerSpecial700','soccerChallengeEntries','soccerChallengeSuccesses','soccerEntryAttackAttempts','soccerEntryAttackHits','soccerBattleSpins','soccerBattleHits','soccerBattleDrops','soccerPayoutRolls','soccerPayout1','soccerPayout2','soccerPayout3','soccerPayout4','soccerEgoStrataEntries','soccerEgoStrataLoops','soccerRightBonusEvents','soccerRightBonusPaid','saoInitialHero','saoInitialLower','saoInitialNormal','saoLowerSpins','saoLowerHits','saoLowerBloom','saoLowerBladeSuccess','saoLowerBladeFail','saoLowerBonus','saoUpperSpins','saoUpperHits','saoUpperDrive','saoUpperBonus','saoHeroLoopEvents','saoHeroLoopUnits','saoBloomLoopEvents','saoBloomLoopUnits','saoDriveRolls','saoDrive1500','saoDrive3000','saoDrive4500','saoDrive6000','saoDrive7500','saoDriveBonus','saoDriveRedrive','eva17ChargeNormal','eva17Initial1500ST','eva17Initial300ST','eva17Initial300Time','eva17DirectSTEntries','eva17TimeEntries','eva17TimeSpins','eva17TimeHits','eva17TimeRecoveries','eva17STSpins','eva17STHits','eva17Right2400','eva17Right4800','denonInitialDirect','denonInitialChallenge','denonInitialNormal','denonChallengeTrials','denonChallengeHits','denonAttackTrials','denonAttackHits','denonAttack4500','denonAttack9000','denonYutimeSpins','denonYutimeHits','denonYutimeChallenge','denonYutimeNormal','denonAttackBonusEvents','denonAttackBonusPaid','yutimeEntries','umaiwaCompletedCycles','umaiwaCyclePaid','umaiwaCycleGross','umaiwaCyclesWithHit','umaiwaZoneTrials','umaiwaZoneHits','umaiwaRecharges','umaiwaRecharge1500','umaiwaRecharge3000','umaiwaRecharge4500']){
+ for(const key of ['finalNet','invested','supportCost','paid','normalSpins','totalSpins','initialHits','charges','rushEntries','rightHits','rightPaid','worldstar300Count','worldstar5050Count','shotsFired','normalShotsFired','rightShotsFired','bonusShotsFired','firingSeconds','nonFiringSeconds','maxMY','czEntries','czSuccesses','bofuriTreasureEntries','bofuriTreasurePromotions','keijiCloudLowSpins','keijiCloudLowHits','keijiCloudHiddenHighSpins','keijiCloudHiddenHighHits','keijiCloudSmallHits','keijiCloudSmallLotteryHits','keijiCloudBigHitCount','keijiCloudBigHitPaid','keijiCloudR15','keijiCloudRub16','keijiCloudRub32','keijiCloudRub48','keijiCloud2rKaku','keijiCloud2rNormal','keijiCloudPotentialEntries','keijiCloudBattleEntries','keijiCloudBattleSpins','keijiCloudBattleHits','keijiCloudTonoHighEntries','keijiCloudTonoHighSpins','keijiCloudTonoHighHits','keijiCloudTimeEntries','keijiCloudTimeSpins','keijiCloudTimeHits','keijiCloudTimeRecoveries','keijiCloudSupportSpins','keijiZanLowSpins','keijiZanLowHits','keijiZanHiddenHighSpins','keijiZanHiddenHighHits','keijiZanSmallHits','keijiZanSmallLotteryHits','keijiZanBigHitCount','keijiZanBigHitPaid','keijiZanR16','keijiZanRub16','keijiZanRub32','keijiZanRub48','keijiZanRubAlpha','keijiZan2rA','keijiZan2rB','keijiZan2rNormal','keijiZanPotentialEntries','keijiZanKakuSpins','keijiZanKakuHits','keijiZanKaku100Entries','keijiZanKaku100Spins','keijiZanKaku100Hits','keijiZanKaku100ToPotential','keijiZanTimeEntries','keijiZanTimeSpins','keijiZanTimeHits','keijiZanTimeRecoveries','keijiBlackInitialKaku','keijiBlackInitialTime','keijiBlackDirectRushEntries','keijiBlackTimeEntries','keijiBlackTimeSpins','keijiBlackTimeHits','keijiBlackTimeRecoveries','keijiBlackHighSpins','keijiBlackHighHits','keijiBlackDropTrials','keijiBlackDrops','keijiBlackDropsInSupport','keijiBlackDropsAfterSupport','keijiBlackFallenSpins','keijiBlackFallenHits','keijiBlackRushSegmentsStarted','keijiBlackRushSegmentsSucceeded','keijiBlackRushSegmentsFailed','keijiBlackRightBonusCount','keijiBlackRightBonusPaid','keijiGoldChargeEvents','keijiGoldChargePromotions','keijiGoldChargeRushEntries','keijiGoldInitialDirect','keijiGoldInitialTime','keijiGoldDirectRushEntries','keijiGoldTimeEntries','keijiGoldTimeSpins','keijiGoldTimeHits','keijiGoldTimeRecoveries','keijiGoldTime1500','keijiGoldTime3000','keijiGoldTimeSuperEntries','keijiGoldRushSpins','keijiGoldRushHits','keijiGoldRush1500Normal','keijiGoldRush3000Normal','keijiGoldRush1500Super','keijiGoldRush3000Super','keijiGoldSuperEntries','keijiGoldSuperSpins','keijiGoldSuperHits','keijiGoldSuper1500','keijiGoldSuper6000','keijiGoldSuperReentries','keijiGoldRightEvents','keijiGoldRightPaid','otomeCompletedCycles','otomeCyclePaid','otomeFigureCycles','otomeFigureCyclePaid','otomeChargeCycles','otomeChargeCyclePaid','otomeRushCycles','otomeRushCyclePaid','otomeRushPostEntryPaid','otomeRightLoopEvents','otomeRightLoopUnits','otomeRightLoopAdds','otomeRightLoopPaid','otomeInitialTime','otomeLtFail','otomeLtRush','otomeLtPlus','otomeTimeEntries','otomeTimeSpins','otomeTimeHits','otomeTimeRecoveries','otomeRushSpins','otomeRushHits','otomeRight1Unit','otomeRight2Units','otomeRight3Plus','bofuriCompletedCycles','bofuriCyclePaid','bofuriFigureCycles','bofuriFigureCyclePaid','bofuriTreasureCycles','bofuriTreasureCyclePaid','bofuriLtCycles','bofuriLtCyclePaid','bofuriLtEntryPaid','bofuriLtPostEntryPaid','bofuriRightBonusCount','bofuriRightBonusPaid','oniCompletedCycles','oniCyclePaid','oniEntryAttempts','oniEntrySuccesses','oniRightBonusCount','oniRightBonusPaid','oniTurns25','oniTurns45','oniTurns65','oniSegmentComplete25','oniSegmentComplete45','oniSegmentComplete65','oniSegmentSuccess25','oniSegmentSuccess45','oniSegmentSuccess65','oniResidualHits','oniEntryResidualHits','oniRushResidualHits','greedInitialRush','greedInitialNormal','greedRightSmall','greedRightNormal','greedRightBurst','greedBurstEvents','greedBurstAdds','greedBurstJudgements','hornInitial3000Rush','hornInitial450Rush','hornInitial450Normal','hornRightBonusCount','hornRightBonusPaid','hornResidualHits','strikeInitial3000Rush','strikeInitial300Rush','strikeInitial300Time','strikeTimeEntries','strikeTimeSuccesses','strikeRight1500','strikeRight3000','strikeRightInfinite','oceanNormalInitialHits','oceanOutcomeRolls','oceanKakuOutcomes','oceanNormalOutcomes','oceanKakuSpins','oceanKakuHits','oceanTime100Entries','oceanTime100Hits','oceanTime200Entries','oceanTime200Hits','oceanYutimeHits','oceanBonusCount','oceanBonusPaid','fullInitialRolls','figure3000st','figure900st','figure900time','ac300st','ac300normal','fullDirectSTEntries','fullTimeEntries','fullTimeHits','fullSTSpins','fullSTStockHits','fullSTReleasedSets','fullSTStock1','fullSTStock2','fullSTStock3','fullSTStock4','fullSTStock5','fullSTImmediate7500','soccerPressFail','soccerFever210','soccerPressSuccess','soccerSpecial700','soccerChallengeEntries','soccerChallengeSuccesses','soccerEntryAttackAttempts','soccerEntryAttackHits','soccerBattleSpins','soccerBattleHits','soccerBattleDrops','soccerPayoutRolls','soccerPayout1','soccerPayout2','soccerPayout3','soccerPayout4','soccerEgoStrataEntries','soccerEgoStrataLoops','soccerRightBonusEvents','soccerRightBonusPaid','saoInitialHero','saoInitialLower','saoInitialNormal','saoLowerSpins','saoLowerHits','saoLowerBloom','saoLowerBladeSuccess','saoLowerBladeFail','saoLowerBonus','saoUpperSpins','saoUpperHits','saoUpperDrive','saoUpperBonus','saoHeroLoopEvents','saoHeroLoopUnits','saoBloomLoopEvents','saoBloomLoopUnits','saoDriveRolls','saoDrive1500','saoDrive3000','saoDrive4500','saoDrive6000','saoDrive7500','saoDriveBonus','saoDriveRedrive','eva17ChargeNormal','eva17Initial1500ST','eva17Initial300ST','eva17Initial300Time','eva17DirectSTEntries','eva17TimeEntries','eva17TimeSpins','eva17TimeHits','eva17TimeRecoveries','eva17STSpins','eva17STHits','eva17Right2400','eva17Right4800','denonInitialDirect','denonInitialChallenge','denonInitialNormal','denonChallengeTrials','denonChallengeHits','denonAttackTrials','denonAttackHits','denonAttack4500','denonAttack9000','denonYutimeSpins','denonYutimeHits','denonYutimeChallenge','denonYutimeNormal','denonAttackBonusEvents','denonAttackBonusPaid','yutimeEntries','umaiwaCompletedCycles','umaiwaCyclePaid','umaiwaCycleGross','umaiwaCyclesWithHit','umaiwaZoneTrials','umaiwaZoneHits','umaiwaRecharges','umaiwaRecharge1500','umaiwaRecharge3000','umaiwaRecharge4500']){
   const target=key==='finalNet'?'net':key;
   agg[target]+=Number(record[key])||0;
  }
@@ -11389,6 +12536,92 @@ function setBulkControlsRunning(running){
 function bulkPercent(value,total){
  return total?`${(value/total*100).toFixed(2)}%`:'0.00%';
 }
+
+function buildBulkResultCopyText(){
+ if(!ui.bulkResults||ui.bulkResults.classList.contains('hidden'))return '';
+
+ const lines=[];
+ const summaryTitle=ui.bulkResultGrid?.querySelector(':scope > div:nth-child(2)')?.textContent?.trim()||'大量シミュレーション結果';
+ lines.push('【パチンコシミュレーター 大量シミュレーション結果】');
+
+ lines.push(`平均差pt：${ui.bulkAvgNet?.textContent?.trim()||'—'}`);
+ lines.push(`勝率：${ui.bulkWinRate?.textContent?.trim()||'—'}`);
+ lines.push(`推定出率：${ui.bulkPayoutRate?.textContent?.trim()||'—'}`);
+ lines.push(`平均最大MY：${ui.bulkAvgMy?.textContent?.trim()||'—'}`);
+ lines.push('');
+
+ const cells=[...(ui.bulkResultGrid?.children||[])];
+ for(let i=0;i+1<cells.length;i+=2){
+  const label=cells[i]?.textContent?.trim();
+  const value=cells[i+1]?.textContent?.trim();
+  if(label)lines.push(`${label}：${value||'—'}`);
+ }
+
+ const rateRows=[...(ui.bulkRateBody?.querySelectorAll('tr')||[])];
+ if(rateRows.length){
+  lines.push('');
+  lines.push('【到達・損失条件】');
+  rateRows.forEach(tr=>{
+   const td=[...tr.querySelectorAll('td')].map(x=>x.textContent.trim());
+   if(td.length>=3)lines.push(`${td[0]}：${td[1]}（${td[2]}）`);
+  });
+ }
+
+ const note=ui.bulkResultNote?.textContent?.trim();
+ if(note){
+  lines.push('');
+  lines.push(`※${note}`);
+ }
+ return lines.join('\n');
+}
+
+async function copyBulkResultToClipboard(){
+ const text=buildBulkResultCopyText();
+ if(!text){
+  if(ui.bulkCopyStatus)ui.bulkCopyStatus.textContent='コピーする結果がありません';
+  return;
+ }
+
+ let copied=false;
+ try{
+  if(navigator.clipboard&&window.isSecureContext){
+   await navigator.clipboard.writeText(text);
+   copied=true;
+  }
+ }catch(_){}
+
+ if(!copied){
+  const ta=document.createElement('textarea');
+  ta.value=text;
+  ta.setAttribute('readonly','');
+  ta.style.position='fixed';
+  ta.style.left='-9999px';
+  ta.style.top='0';
+  ta.style.opacity='0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  ta.setSelectionRange(0,ta.value.length);
+  try{copied=document.execCommand('copy')}catch(_){copied=false}
+  ta.remove();
+ }
+
+ if(ui.bulkCopyStatus){
+  ui.bulkCopyStatus.textContent=copied?'✅ コピーしました！':'コピーできませんでした';
+  clearTimeout(copyBulkResultToClipboard._timer);
+  copyBulkResultToClipboard._timer=setTimeout(()=>{
+   if(ui.bulkCopyStatus)ui.bulkCopyStatus.textContent='結果をそのまま貼り付けできます';
+  },2200);
+ }
+ if(copied&&ui.bulkCopyResult){
+  const old=ui.bulkCopyResult.textContent;
+  ui.bulkCopyResult.textContent='✅ コピー完了';
+  clearTimeout(copyBulkResultToClipboard._buttonTimer);
+  copyBulkResultToClipboard._buttonTimer=setTimeout(()=>{
+   if(ui.bulkCopyResult)ui.bulkCopyResult.textContent=old||'📋 結果をコピー';
+  },1400);
+ }
+}
 function renderBulkProgress(){
  const done=bulkSimulation.completedDays;
  const total=bulkSimulation.totalDays;
@@ -11398,11 +12631,18 @@ function renderBulkProgress(){
  ui.bulkElapsed.textContent=`${((performance.now()-bulkSimulation.startedAt)/1000).toFixed(1)}秒`;
 }
 function renderBulkResults(type,rate,agg,cancelled=false){
+ if(ui.bulkCopyStatus)ui.bulkCopyStatus.textContent='結果をそのまま貼り付けできます';
+ if(ui.bulkCopyResult)ui.bulkCopyResult.textContent='📋 結果をコピー';
  const days=Math.max(1,agg.days);
  const input=agg.invested+agg.supportCost;
  const avgNet=agg.net/days;
  const avgMy=agg.maxMY/days;
- const figureDen=agg.initialHits?agg.normalSpins/agg.initialHits:null;
+ const figureDen=type==='keiji_cloud'
+  ?(agg.keijiCloudLowHits?agg.keijiCloudLowSpins/agg.keijiCloudLowHits:null)
+  :type==='keiji_zan'
+   ?(agg.keijiZanLowHits?agg.keijiZanLowSpins/agg.keijiZanLowHits:null)
+   :(agg.initialHits?agg.normalSpins/agg.initialHits:null);
+ const figureDenLabel=(type==='keiji_cloud'||type==='keiji_zan')?'実測通常時初当たり':'実測図柄系初当たり';
  const rushRate=agg.initialHits?agg.rushEntries/agg.initialHits*100:null;
  const totalBonus=agg.initialHits+agg.charges+agg.rightHits;
  const avgChainBase=agg.initialHits?agg.rightHits/agg.initialHits+1:null;
@@ -11422,12 +12662,12 @@ function renderBulkResults(type,rate,agg,cancelled=false){
   ['平均通常回転',`${fmt(agg.normalSpins/days)}回/日`],
   ['平均総回転',`${fmt(agg.totalSpins/days)}回/日`],
   ['平均投入',`${fmt(agg.invested/days)}pt/日`],
-  ['平均右打ち削り等',`${fmt(agg.supportCost/days)}pt/日`],
+  [(type==='keiji_cloud'||type==='keiji_zan')?'平均左打ち電サポ消費':'平均右打ち削り等',`${fmt(agg.supportCost/days)}pt/日`],
   ['平均獲得',`${fmt(agg.paid/days)}pt/日`],
   ['平均総発射数',`${fmt(agg.shotsFired/days)}発/日`],
   ['平均発射ペース',`${(agg.shotsFired/Math.max(1,agg.days*DAY/60)).toFixed(1)}発/分`],
   ['平均発射稼働率',`${(agg.shotsFired/Math.max(1,agg.days*MAX_SHOTS_PER_DAY)*100).toFixed(1)}%`],
-  ['実測図柄系初当たり',figureDen?`1/${figureDen.toFixed(2)}`:'当たりなし'],
+  [figureDenLabel,figureDen?`1/${figureDen.toFixed(2)}`:'当たりなし'],
   ['図柄系初当たり',`${fmt(agg.initialHits)}回`],
   ['チャージ',`${fmt(agg.charges)}回`],
   ['RUSH・LT・確変突入',`${fmt(agg.rushEntries)}回${rushRate!==null?`（初当たり比 ${rushRate.toFixed(2)}%）`:''}`],
@@ -11750,6 +12990,167 @@ function renderBulkResults(type,rate,agg,cancelled=false){
   );
  }
  if(type==='crimson')rows.push(['CZ成功率',agg.czEntries?`${bulkPercent(agg.czSuccesses,agg.czEntries)}（${fmt(agg.czSuccesses)}/${fmt(agg.czEntries)}）`:'CZなし']);
+ if(type==='keiji_cloud'){
+  const pct=(v,d)=>d?v/d*100:null;
+  const all=agg.keijiCloudBigHitCount||0;
+  const lowDen=agg.keijiCloudLowHits?agg.keijiCloudLowSpins/agg.keijiCloudLowHits:null;
+  const hiddenDen=agg.keijiCloudHiddenHighHits?agg.keijiCloudHiddenHighSpins/agg.keijiCloudHiddenHighHits:null;
+  const supportSpins=(agg.keijiCloudBattleSpins||0)+(agg.keijiCloudTonoHighSpins||0)+(agg.keijiCloudTimeSpins||0);
+  const smallBaseSpins=(agg.keijiCloudLowSpins||0)+(agg.keijiCloudHiddenHighSpins||0)+supportSpins;
+  const smallDen=agg.keijiCloudSmallLotteryHits?smallBaseSpins/agg.keijiCloudSmallLotteryHits:null;
+  const battleDen=agg.keijiCloudBattleHits?agg.keijiCloudBattleSpins/agg.keijiCloudBattleHits:null;
+  const tonoHighDen=agg.keijiCloudTonoHighHits?agg.keijiCloudTonoHighSpins/agg.keijiCloudTonoHighHits:null;
+  const timeDen=agg.keijiCloudTimeHits?agg.keijiCloudTimeSpins/agg.keijiCloudTimeHits:null;
+  const timeRecover=pct(agg.keijiCloudTimeRecoveries,agg.keijiCloudTimeEntries);
+  const avgPaid=all?agg.keijiCloudBigHitPaid/all:null;
+  const supportLossPerSpin=supportSpins?agg.supportCost/supportSpins:null;
+  rows.push(
+   ['初代慶次・独自ボーダー探索基準',`${compactRate(rate)}回/250pt（18.8青天井10,000日×2＝98.53%／100.06%、合算約99.29% → 18.9再検証）`],
+   ['初代慶次・通常時大当たり',lowDen!==null?`1/${lowDen.toFixed(2)}（設定1/399.25）`:'—'],
+   ['初代慶次・潜伏中大当たり',hiddenDen!==null?`1/${hiddenDen.toFixed(2)}（設定1/39.93）`:'—'],
+   ['初代慶次・小当たり',smallDen!==null?`1/${smallDen.toFixed(2)}（約1/319.4・本抽選と別抽選）`:'—'],
+   ['初代慶次・15R確変',all?`${pct(agg.keijiCloudR15,all).toFixed(2)}%（設定45%）`:'—'],
+   ['初代慶次・RUB16',all?`${pct(agg.keijiCloudRub16,all).toFixed(2)}%（設定19%）`:'—'],
+   ['初代慶次・RUB32',all?`${pct(agg.keijiCloudRub32,all).toFixed(2)}%（設定3%）`:'—'],
+   ['初代慶次・RUB48',all?`${pct(agg.keijiCloudRub48,all).toFixed(2)}%（設定3%）`:'—'],
+   ['初代慶次・2R確変',all?`${pct(agg.keijiCloud2rKaku,all).toFixed(2)}%（設定10%）`:'—'],
+   ['初代慶次・2R通常',all?`${pct(agg.keijiCloud2rNormal,all).toFixed(2)}%（設定20%）`:'—'],
+   ['初代慶次・確変合計',all?`${pct(agg.keijiCloudR15+agg.keijiCloudRub16+agg.keijiCloudRub32+agg.keijiCloudRub48+agg.keijiCloud2rKaku,all).toFixed(2)}%（設定80%）`:'—'],
+   ['初代慶次・出玉あり確変合計',all?`${pct(agg.keijiCloudR15+agg.keijiCloudRub16+agg.keijiCloudRub32+agg.keijiCloudRub48,all).toFixed(2)}%（設定70%）`:'—'],
+   ['初代慶次・戦モード中実測',battleDen!==null?`1/${battleDen.toFixed(2)}（設定1/39.93）`:'—'],
+   ['初代慶次・確変殿モード中実測',tonoHighDen!==null?`1/${tonoHighDen.toFixed(2)}（設定1/39.93・100回超も継続）`:'—'],
+   ['初代慶次・2R通常 時短中実測',timeDen!==null?`1/${timeDen.toFixed(2)}（設定1/399.25）`:'—'],
+   ['初代慶次・2R通常 時短100回引き戻し',timeRecover!==null?`${timeRecover.toFixed(2)}%（理論${((1-Math.pow(1-1/KEIJI_CLOUD_LOW_DEN,100))*100).toFixed(2)}%）`:'—'],
+   ['初代慶次・潜伏移行回数',`${fmt(agg.keijiCloudPotentialEntries)}回`],
+   ['初代慶次・大当たり1回平均実獲得',avgPaid!==null?`${fmt(avgPaid)}pt（設計平均約916pt）`:'—'],
+   ['初代慶次・出玉会計','15R約1620／RUB 550・1100・1660／2R 0pt'],
+   ['初代慶次・左打ち電サポ回転',`${fmt(supportSpins)}回`],
+   ['初代慶次・左打ち電サポ消費',supportLossPerSpin!==null?`${fmt(agg.supportCost)}pt（実装${supportLossPerSpin.toFixed(2)}pt/回・DEBUG仮定）`:'—'],
+   ['初代慶次・電サポ消費の扱い','釘・止め打ち依存のため固定実機値とは扱わない']
+  );
+ }
+
+ if(type==='keiji_zan'){
+  const pct=(v,d)=>d?v/d*100:null;
+  const all=agg.keijiZanBigHitCount||0;
+  const lowDen=agg.keijiZanLowHits?agg.keijiZanLowSpins/agg.keijiZanLowHits:null;
+  const hiddenDen=agg.keijiZanHiddenHighHits?agg.keijiZanHiddenHighSpins/agg.keijiZanHiddenHighHits:null;
+  const zanSupportSpins=(agg.keijiZanKakuSpins||0)+(agg.keijiZanKaku100Spins||0)+(agg.keijiZanTimeSpins||0);
+  const smallBaseSpins=(agg.keijiZanLowSpins||0)+(agg.keijiZanHiddenHighSpins||0)+zanSupportSpins;
+  const smallDen=agg.keijiZanSmallLotteryHits?smallBaseSpins/agg.keijiZanSmallLotteryHits:null;
+  const kakuDen=agg.keijiZanKakuHits?agg.keijiZanKakuSpins/agg.keijiZanKakuHits:null;
+  const kaku100Den=agg.keijiZanKaku100Hits?agg.keijiZanKaku100Spins/agg.keijiZanKaku100Hits:null;
+  const timeDen=agg.keijiZanTimeHits?agg.keijiZanTimeSpins/agg.keijiZanTimeHits:null;
+  const avgPaid=all?agg.keijiZanBigHitPaid/all:null;
+  const support2rBExit=pct(agg.keijiZanKaku100ToPotential,agg.keijiZanKaku100Entries);
+  const timeRecover=pct(agg.keijiZanTimeRecoveries,agg.keijiZanTimeEntries);
+  rows.push(
+   ['慶次斬・独自ボーダー探索基準',`${compactRate(rate)}回/250pt（削りなし18.4・10,000日＝100.32%／左打ち電サポ0.5pt/回を追加して18.8再検証）`],
+   ['慶次斬・通常時大当たり',lowDen!==null?`1/${lowDen.toFixed(2)}（設定1/399.25）`:'—'],
+   ['慶次斬・潜伏中大当たり',hiddenDen!==null?`1/${hiddenDen.toFixed(2)}（設定1/39.93）`:'—'],
+   ['慶次斬・小当たり',smallDen!==null?`1/${smallDen.toFixed(2)}（設定1/319.4・本抽選と別抽選）`:'—'],
+   ['慶次斬・16R確変',all?`${pct(agg.keijiZanR16,all).toFixed(2)}%（設定47%）`:'—'],
+   ['慶次斬・RUB16',all?`${pct(agg.keijiZanRub16,all).toFixed(2)}%（設定15%）`:'—'],
+   ['慶次斬・RUB32',all?`${pct(agg.keijiZanRub32,all).toFixed(2)}%（設定3%）`:'—'],
+   ['慶次斬・RUB48',all?`${pct(agg.keijiZanRub48,all).toFixed(2)}%（設定3%）`:'—'],
+   ['慶次斬・RUBα',all?`${pct(agg.keijiZanRubAlpha,all).toFixed(2)}%（設定2%）`:'—'],
+   ['慶次斬・2R確変A',all?`${pct(agg.keijiZan2rA,all).toFixed(2)}%（設定5%）`:'—'],
+   ['慶次斬・2R確変B',all?`${pct(agg.keijiZan2rB,all).toFixed(2)}%（設定5%）`:'—'],
+   ['慶次斬・2R通常',all?`${pct(agg.keijiZan2rNormal,all).toFixed(2)}%（設定20%）`:'—'],
+   ['慶次斬・確変合計',all?`${pct(agg.keijiZanR16+agg.keijiZanRub16+agg.keijiZanRub32+agg.keijiZanRub48+agg.keijiZanRubAlpha+agg.keijiZan2rA+agg.keijiZan2rB,all).toFixed(2)}%（設定80%）`:'—'],
+   ['慶次斬・次回まで確変中実測',kakuDen!==null?`1/${kakuDen.toFixed(2)}（設定1/39.93）`:'—'],
+   ['慶次斬・2R確変B 100回中実測',kaku100Den!==null?`1/${kaku100Den.toFixed(2)}（設定1/39.93）`:'—'],
+   ['慶次斬・2R確変B 100回抜け潜伏',support2rBExit!==null?`${support2rBExit.toFixed(2)}%（理論${(Math.pow(1-1/KEIJI_ZAN_HIGH_DEN,100)*100).toFixed(2)}%）`:'—'],
+   ['慶次斬・2R通常 時短中実測',timeDen!==null?`1/${timeDen.toFixed(2)}（設定1/399.25）`:'—'],
+   ['慶次斬・2R通常 時短100回引き戻し',timeRecover!==null?`${timeRecover.toFixed(2)}%（理論${((1-Math.pow(1-1/KEIJI_ZAN_LOW_DEN,100))*100).toFixed(2)}%）`:'—'],
+   ['慶次斬・潜伏移行回数',`${fmt(agg.keijiZanPotentialEntries)}回`],
+   ['慶次斬・大当たり1回平均実獲得',avgPaid!==null?`${fmt(avgPaid)}pt（理論約920pt）`:'—'],
+   ['慶次斬・出玉会計','16R約1550／RUB 550・1100・1470・1580／2R 0pt'],
+   ['慶次斬・左打ち電サポ回転',`${fmt(zanSupportSpins)}回`],
+   ['慶次斬・左打ち電サポ消費',zanSupportSpins?`${fmt(agg.supportCost)}pt（実装${(agg.supportCost/zanSupportSpins).toFixed(2)}pt/回・DEBUG仮定）`:'—'],
+   ['慶次斬・電サポ消費の扱い','釘・止め打ち依存のため固定実機値とは扱わない']
+  );
+ }
+
+ if(type==='keiji_shikkoku'){
+  const pct=(v,d)=>d?v/d*100:null;
+  const initialTotal=agg.keijiBlackInitialKaku+agg.keijiBlackInitialTime;
+  const figureDen=agg.initialHits?agg.normalSpins/agg.initialHits:null;
+  const timeDen=agg.keijiBlackTimeHits?agg.keijiBlackTimeSpins/agg.keijiBlackTimeHits:null;
+  const timeRecover=pct(agg.keijiBlackTimeRecoveries,agg.keijiBlackTimeEntries);
+  const highDen=agg.keijiBlackHighHits?agg.keijiBlackHighSpins/agg.keijiBlackHighHits:null;
+  const dropDen=agg.keijiBlackDrops?agg.keijiBlackDropTrials/agg.keijiBlackDrops:null;
+  const pureContinue=pct(agg.keijiBlackHighHits,agg.keijiBlackHighHits+agg.keijiBlackDrops);
+  const fallenRecover=pct(agg.keijiBlackFallenHits,agg.keijiBlackDropsInSupport);
+  const completedSegments=agg.keijiBlackRushSegmentsSucceeded+agg.keijiBlackRushSegmentsFailed;
+  const actualSegmentContinue=pct(agg.keijiBlackRushSegmentsSucceeded,completedSegments);
+  const rightAvg=agg.keijiBlackRightBonusCount?agg.keijiBlackRightBonusPaid/agg.keijiBlackRightBonusCount:null;
+  rows.push(
+   ['慶次漆黒・独自ボーダー探索基準',`${compactRate(rate)}回/250pt（18.0合算約98.00%／18.4合算約100.88% → 中間18.3最終候補）`],
+   ['慶次漆黒・出玉会計','6R：払出900→実獲得約840pt／16R：払出2400→実獲得約2240pt'],
+   ['慶次漆黒・追加右打ち削り',agg.supportCost===0?'なし（0pt）':`要確認：${fmt(agg.supportCost)}pt`],
+   ['慶次漆黒・通常時大当たり',figureDen!==null?`1/${figureDen.toFixed(2)}（設定1/319.68）`:'—'],
+   ['慶次漆黒・ヘソ6R確変',initialTotal?`${pct(agg.keijiBlackInitialKaku,initialTotal).toFixed(2)}%（設定55%）`:'—'],
+   ['慶次漆黒・ヘソ6R通常',initialTotal?`${pct(agg.keijiBlackInitialTime,initialTotal).toFixed(2)}%（設定45%）`:'—'],
+   ['慶次漆黒・通常当たり後 時短100回',timeRecover!==null?`${timeRecover.toFixed(2)}%（理論${((1-Math.pow(1-1/KEIJI_BLACK_NORMAL_DEN,100))*100).toFixed(2)}%）`:'—'],
+   ['慶次漆黒・時短中実測大当たり',timeDen!==null?`1/${timeDen.toFixed(2)}（設定1/319.68）`:'—'],
+   ['慶次漆黒・確変中実測大当たり',highDen!==null?`1/${highDen.toFixed(2)}（設定1/145.31）`:'—'],
+   ['慶次漆黒・転落抽選実測',dropDen!==null?`1/${dropDen.toFixed(2)}（設定1/270.8・大当たりハズレ時に抽選）`:'—'],
+   ['慶次漆黒・確変本体の大当たり先着率',pureContinue!==null?`${pureContinue.toFixed(2)}%（資料の継続約65%に対応）`:'—'],
+   ['慶次漆黒・100回保証内の転落',`${fmt(agg.keijiBlackDropsInSupport)}回`],
+   ['慶次漆黒・101回転以降の転落',`${fmt(agg.keijiBlackDropsAfterSupport)}回`],
+   ['慶次漆黒・転落後時短から復活',fallenRecover!==null?`${fallenRecover.toFixed(2)}%（${fmt(agg.keijiBlackFallenHits)}/${fmt(agg.keijiBlackDropsInSupport)}）`:'—'],
+   ['慶次漆黒・100回保証込みRUSH実継続',actualSegmentContinue!==null?`${actualSegmentContinue.toFixed(2)}%（完結${fmt(completedSegments)}区間）`:'—'],
+   ['慶次漆黒・右16R比率',agg.keijiBlackRightBonusCount?'100.00%（電チュー100%確変16R）':'—'],
+   ['慶次漆黒・右BONUS1回平均実獲得',rightAvg!==null?`${fmt(rightAvg)}pt（設計2240pt）`:'—']
+  );
+ }
+
+ if(type==='keiji_gold'){
+  const pct=(v,d)=>d?v/d*100:null;
+  const combined=agg.initialHits+agg.charges;
+  const figureDen=agg.initialHits?agg.normalSpins/agg.initialHits:null;
+  const chargeDen=agg.charges?agg.normalSpins/agg.charges:null;
+  const combinedDen=combined?agg.normalSpins/combined:null;
+  const initialTotal=agg.keijiGoldInitialDirect+agg.keijiGoldInitialTime;
+  const chargePromote=pct(agg.keijiGoldChargePromotions,agg.keijiGoldChargeEvents);
+  const timeDen=agg.keijiGoldTimeHits?agg.keijiGoldTimeSpins/agg.keijiGoldTimeHits:null;
+  const timeRecover=pct(agg.keijiGoldTimeRecoveries,agg.keijiGoldTimeEntries);
+  const timeOut=agg.keijiGoldTime1500+agg.keijiGoldTime3000;
+  const normalOut=agg.keijiGoldRush1500Normal+agg.keijiGoldRush3000Normal+agg.keijiGoldRush1500Super+agg.keijiGoldRush3000Super;
+  const normalSuper=agg.keijiGoldRush1500Super+agg.keijiGoldRush3000Super;
+  const rushDen=agg.keijiGoldRushHits?agg.keijiGoldRushSpins/agg.keijiGoldRushHits:null;
+  const superDen=agg.keijiGoldSuperHits?agg.keijiGoldSuperSpins/agg.keijiGoldSuperHits:null;
+  const superOut=agg.keijiGoldSuper1500+agg.keijiGoldSuper6000;
+  const rightAvg=agg.keijiGoldRightEvents?agg.keijiGoldRightPaid/agg.keijiGoldRightEvents:null;
+  rows.push(
+   ['慶次黄金・独自ボーダー基準',`${compactRate(rate)}回/250pt（外部ボーダーは参考値のみ）`],
+   ['慶次黄金・独自ボーダー検証','16.5＝98.76%／16.7＝99.45%／16.8＝99.82%（各10,000日）→ 16.8採用'],
+   ['慶次黄金・出玉会計','200→180pt／1500→1400pt／3000→2800pt／6000→5600pt'],
+   ['慶次黄金・追加右打ち削り',agg.supportCost===0?'なし（0pt）':`要確認：${fmt(agg.supportCost)}pt`],
+   ['慶次黄金・図柄揃い実測',figureDen!==null?`1/${figureDen.toFixed(2)}（設定1/399.76）`:'—'],
+   ['慶次黄金・傾奇者チャージ実測',chargeDen!==null?`1/${chargeDen.toFixed(2)}（設定1/2723.4）`:'—'],
+   ['慶次黄金・図柄＋チャージ合算',combinedDen!==null?`1/${combinedDen.toFixed(2)}（理論1/348.59）`:'—'],
+   ['慶次黄金・ヘソ RUSH直行',initialTotal?`${pct(agg.keijiGoldInitialDirect,initialTotal).toFixed(2)}%（設定50.1%）`:'—'],
+   ['慶次黄金・ヘソ 殿MODE',initialTotal?`${pct(agg.keijiGoldInitialTime,initialTotal).toFixed(2)}%（設定49.9%）`:'—'],
+   ['慶次黄金・チャージ昇格',chargePromote!==null?`${chargePromote.toFixed(2)}%（DEBUG参考設定8.0%）`:'—'],
+   ['慶次黄金・殿MODE中実測大当り',timeDen!==null?`1/${timeDen.toFixed(2)}（設定1/520.12）`:'—'],
+   ['慶次黄金・殿MODE100回引き戻し',timeRecover!==null?`${timeRecover.toFixed(2)}%（理論${((1-Math.pow(1-1/KEIJI_GOLD_TIME_DEN,100))*100).toFixed(2)}%）`:'—'],
+   ['慶次黄金・殿MODE 1500個',timeOut?`${pct(agg.keijiGoldTime1500,timeOut).toFixed(2)}%（設定99.2%）`:'—'],
+   ['慶次黄金・殿MODE 3000個＋α',timeOut?`${pct(agg.keijiGoldTime3000,timeOut).toFixed(2)}%（設定0.8%）`:'—'],
+   ['慶次黄金・通常RUSH中実測大当り',rushDen!==null?`1/${rushDen.toFixed(2)}（設定1/99.14）`:'—'],
+   ['慶次黄金・通常RUSH 1500→通常',normalOut?`${pct(agg.keijiGoldRush1500Normal,normalOut).toFixed(2)}%（設定45.5%）`:'—'],
+   ['慶次黄金・通常RUSH 3000→通常',normalOut?`${pct(agg.keijiGoldRush3000Normal,normalOut).toFixed(2)}%（設定31.0%）`:'—'],
+   ['慶次黄金・通常RUSH 1500→超',normalOut?`${pct(agg.keijiGoldRush1500Super,normalOut).toFixed(2)}%（設定4.9%）`:'—'],
+   ['慶次黄金・通常RUSH 3000→超',normalOut?`${pct(agg.keijiGoldRush3000Super,normalOut).toFixed(2)}%（設定18.6%）`:'—'],
+   ['慶次黄金・通常RUSH→超RUSH',normalOut?`${pct(normalSuper,normalOut).toFixed(2)}%（設定23.5%）`:'—'],
+   ['慶次黄金・超RUSH中実測大当り',superDen!==null?`1/${superDen.toFixed(2)}（設定1/99.14）`:'—'],
+   ['慶次黄金・超RUSH 1500個',superOut?`${pct(agg.keijiGoldSuper1500,superOut).toFixed(2)}%（設定50.5%）`:'—'],
+   ['慶次黄金・超RUSH 6000個＋α',superOut?`${pct(agg.keijiGoldSuper6000,superOut).toFixed(2)}%（設定49.5%）`:'—'],
+   ['慶次黄金・右BONUS1回平均差pt',rightAvg!==null?`${fmt(rightAvg)}pt（束ねBONUSを1イベントとして集計）`:'—'],
+   ['慶次黄金・未公表要素','＋α／殿MODEから稀な超RUSH直行／6000後の稀な超RUSH再突入は率未公表のため0で検証']
+  );
+ }
  if(type==='otome7'){
   const figureAvg=agg.otomeFigureCycles?agg.otomeFigureCyclePaid/agg.otomeFigureCycles:null;
   const chargeAvg=agg.otomeChargeCycles?agg.otomeChargeCyclePaid/agg.otomeChargeCycles:null;
@@ -12151,7 +13552,7 @@ function startAuditSimulation(){
 }
 
 const CHANGELOG_STORAGE_KEY='pachiSimulatorChangelogSeenVersionV1';
-const CURRENT_CHANGELOG_VERSION='10.24.24';
+const CURRENT_CHANGELOG_VERSION='10.29';
 
 function changelogSeenVersion(){
  try{return localStorage.getItem(CHANGELOG_STORAGE_KEY)||''}catch(_){return ''}
@@ -12416,6 +13817,7 @@ ui.resetAchievements.addEventListener('click',event=>{
 ui.bulkMachine.addEventListener('change',syncBulkRateToMachine);
 ui.bulkRate.addEventListener('input',updateBulkRateGuide);
 ui.bulkRun.addEventListener('click',startBulkSimulation);
+ui.bulkCopyResult?.addEventListener('click',copyBulkResultToClipboard);
 ui.bulkCancel.addEventListener('click',()=>{
  if(!bulkSimulation.active||auditSimulation.active)return;
  bulkSimulation.cancelRequested=true;
